@@ -1,0 +1,56 @@
+<p-sidebar [(visible)]="visibleSidebar" *ngIf="isVisible"  position="left" [baseZIndex]="10000" [dismissible]="false" [showCloseIcon]="false" >
+    <!-- Logo Section -->
+    <button (click)="closeSidebar()">Close</button>
+    <div class="logo-section">
+      <img src="Scs-logo.png" alt="Logo" class="sidebar-logo" />
+    </div>
+  
+    <!-- Search Section -->
+    <div class="search-section ">
+      <input type="text" pInputText placeholder="Search..."  [(ngModel)]="searchQuery"
+       (input)="filterItems()"  class="sidebar-search" />
+      <!-- <ng-template pTemplate="append"> -->
+        <i class="pi pi-search"></i> <!-- Search icon on the right -->
+      <!-- </ng-template> -->
+    </div>
+  
+    <!-- Menu Items Section -->
+    <ul class="menu-items">
+        <li *ngFor="let item of filteredItems" class="menu-item" routerLinkActive="active">
+            <a [routerLink]="item.route" *ngIf="!item.children" >{{ item.value }}</a>
+            
+            <!-- Parent item with toggle for children -->
+            <div *ngIf="item.children" (click)="toggleChildren(item)" class="parent-item">
+                <i [class]="item.isExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                {{ item.value }}
+            </div>
+
+            <!-- Child items that are toggled -->
+            <ul *ngIf="item.isExpanded">
+                <li *ngFor="let child of item?.children" class="menu-item" >
+                    <a [routerLink]="child.route" (click)="setActive(child, item)"  routerLinkActive="active" 
+                    [ngClass]="child.isActive ? 'active-item' : ''"  [ngClass]="child.isActive ? 'active-item' : ''">{{ child.value }}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+  
+  
+    <!-- User Profile Section -->
+    <div class="user-profile d-flex flex-row">
+        <div class="flex flex-row mt-2">
+
+            <img src="woman.png" height="40px" width="40px" class="me-3" >
+            <p class="user-name">John Doe</p>
+        </div>
+      <div class="flex h-full p-1 justify-end align-items-center me-4">
+        <p-button icon="pi pi-ellipsis-v"  raised="true" [rounded]="true" (click)="menu.toggle($event)" />
+        <!-- <p-toast/> -->
+        <p-tieredmenu #menu [model]="items" [appendTo]="'body'"  [popup]="true" />
+    </div>
+    </div>
+  </p-sidebar>
+  
+  <!-- Button to toggle the sidebar -->
+   <!-- <button pButton icon="pi pi-bars" icon="bx bx-upload" (click)="visibleSidebar = true"></button> 
+   -->

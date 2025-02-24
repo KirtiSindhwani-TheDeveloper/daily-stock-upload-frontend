@@ -1,0 +1,9 @@
+<div class="w-[100vw] h-[10vh] bg-red-50 mx-auto flex justify-between overflow-x-hidden ">
+    <div class="card flex justify-center">
+       
+
+        <!-- Include the sidebar component -->
+        <p-button (click)="visible = true" (click)="sidebar.openSidebar()" icon="pi pi-arrow-right" />
+        <app-sidebar #sidebar></app-sidebar>
+    </div>
+</div>

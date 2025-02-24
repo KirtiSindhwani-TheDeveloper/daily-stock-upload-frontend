@@ -1,0 +1,133 @@
+/* Sidebar styles */
+:host ::ng-deep .p-sidebar {
+    width: 250px;
+    height: 100%;
+    padding-top: 20px;
+  }
+  
+  /* Logo Section */
+  .logo-section {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 3px;
+  }
+  
+  .sidebar-logo {
+    width: 60%;
+    height: auto;
+  }
+  
+  /* Search Section */
+  .search-section {
+    padding: 4px 12px;
+    border: 2px solid black;
+    border-radius: 25px;
+    display: flex
+;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar-search {
+    width: 100%;
+  }
+  
+  /* Menu Items */
+  .menu-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: auto !important;
+  }
+  
+  .menu-item {
+    /* padding: 10px 20px; */
+    padding: 3px 12px;
+    padding-top: 3px;
+    cursor: pointer;
+  }
+  
+  /* .menu-item:hover {
+    background-color: #f1f1f1;
+    width: max-content;
+  } */
+  
+  /* User Profile at the bottom */
+  .user-profile {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+   /* flex-direction: column; */
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+  }
+  
+  .user-profile .user-name {
+    margin-top: 10px;
+  }
+  
+  /* Toggle button */
+  button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 20000;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-1.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-2.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-3.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-4.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .p-sidebar-header .p-sidebar-close {
+    display: none !important;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-2.p-drawer-header.ng-star-inserted{
+    padding: 0px !important
+  }
+
+button{
+    position: unset !important;
+}
+
+li{
+    font-size: 15px !important;
+    width: 250px !important;
+    display: grid !important;
+}
+
+
+.menu-item li a.active-item{
+    background-color: rgb(0 132 255 / 21%);
+    padding-inline: 5px;
+    padding-block: 7px;
+}
+  
+  
