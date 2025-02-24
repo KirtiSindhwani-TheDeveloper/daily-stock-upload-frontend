@@ -1,9 +1,54 @@
-<div class="w-[100vw] h-[10vh] bg-red-50 mx-auto flex justify-between overflow-x-hidden ">
-    <div class="card flex justify-center">
-       <span>sdif</span>
 
-        <!-- Include the sidebar component -->
-        <p-button (click)="visible = true" (click)="sidebar.openSidebar()" icon="pi pi-arrow-right" />
-        <app-sidebar #sidebar></app-sidebar>
+<!-- <div class="w-[100vw] h-[10vh] bg-red-50 mx-auto flex justify-between overflow-x-hidden">
+    <div class="card  w-full">
+      
+      <p-button (click)="sidebar.openSidebar()" icon="pi pi-arrow-right" label="Open Sidebar" />
     </div>
-</div>
+  </div> -->
+  
+  <!-- <div class="flex flex-col">
+
+    <div class="flex flex-row flex-1">
+      <app-sidebar #sidebar class="w-1/4" ></app-sidebar> 
+      
+     
+      <div class="flex-1 ">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>  -->
+  <!-- <div class="flex flex-row w-full h-full">
+   
+    <app-sidebar #sidebar class="w-1/4"></app-sidebar> 
+  
+   
+    <div class="flex-1">
+      <router-outlet></router-outlet>
+    </div>
+  </div> -->
+  
+<!-- 
+  <div class="w-[100vw] h-[10vh] bg-red-50 mx-auto flex justify-between overflow-hidden sticky  top-0 z-10">
+    <div class="card w-full">
+      <p-button (click)="toggleSidebar()" icon="pi pi-arrow-right" label="Open Sidebar" />
+    </div>
+  </div>
+  
+ 
+  <div class="flex flex-row w-full h-full">
+    
+    <app-sidebar 
+      #sidebar
+      [visible]="visibleSidebar" 
+      (visibleChange)="onSidebarVisibilityChange($event)"
+      [ngClass]="{ 'w-1/4': visibleSidebar, 'w-0': !visibleSidebar }"
+      class="transition-all duration-300"
+    ></app-sidebar> 
+  
+   
+    <div class="flex-1 transition-all duration-300" [ngClass]="{ 'ml-1/4': visibleSidebar }">
+      <router-outlet></router-outlet>
+    </div>
+  </div> -->
+  
+  

@@ -10,8 +10,8 @@
 </div> -->
 <app-header></app-header> <!-- Header at the top -->
 
-
-<!-- <div class="flex flex-col">
+<!-- 
+<div class="flex flex-col">
 
   <div class="flex flex-row flex-1">
     <app-sidebar class="w-1/4"></app-sidebar> 
@@ -22,5 +22,20 @@
     </div>
   </div>
 </div> -->
+
+<div class="flex flex-row w-full h-full">
+    
+  <app-sidebar 
+    #sidebar
+    [ngClass]="{ 'w-1/4 sidebar card bg-gray-50 rounded-lg shadow-sm ': visibleSidebar, 'w-0': !visibleSidebar }"
+    class="transition-all duration-300"
+  ></app-sidebar> 
+
+ 
+  <div class="flex-1 transition-all duration-300" [ngClass]="{ 'ml-1/4': visibleSidebar }">
+    <router-outlet></router-outlet>
+  </div>
+</div> 
+
 
 

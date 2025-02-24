@@ -1,0 +1,36 @@
+.card{
+    /* box-shadow:  10px 10px 40px #bebebe38,
+    -40px -40px 40px #FFFFFF;   */
+    /* top: 20vh;  */
+    border:none;
+    background-color: antiquewhite;
+}
+.btn-view{
+    border-radius: 8px;
+    background-color: rgb(221, 221, 118);
+    padding: 5px;
+
+}
+
+:host ::ng-deep button.p-ripple.p-button.p-component.p-fileupload-choose-button.undefined{
+  border: none !important;
+  outline: none !important;
+}
+
+:host ::ng-deep button.p-ripple.p-button.p-component.p-button-secondary{
+    border: none !important;
+  outline: none !important;
+  background-color: rgba(0, 0, 255, 0.164);
+  padding: 8px;
+  border-radius: 4px;
+  
+}
+
+:host ::ng-deep p-button.pb-3{
+    display: flex;
+    justify-content: center;
+}
+:host ::ng-deep p-fileupload.mt-2{
+    border: none !important;
+    outline: none !important;
+}

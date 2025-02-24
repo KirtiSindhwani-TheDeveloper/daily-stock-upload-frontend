@@ -1,1 +1,18 @@
-<p>dealer-location-mapping works!</p>
+<div class="body mt-4 ms-4">
+    <span class="">Dealer Location Mapping</span>
+
+</div>
+                <div class="row col-9 justify-end d-flex !m-0">
+                    <span class="!mb-4 btn-view cursor-pointer" >View Mapping</span>
+                </div>
+                <div class="d-flex !justify-center">
+                    <div class="  w-[80vh]  card !flex !flex-col !gap-6 !justify-center !items-center">
+
+                                     
+                        <p-fileupload #fu class="mt-2 !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept=".xlsx,.csv,.xls" (onUpload)="onUpload($event)" />
+           
+                        <p-button label="Upload" class="" (onClick)="fu.upload()" severity="secondary" class="pb-3" />
+                    </div>
+                </div>
+           
+

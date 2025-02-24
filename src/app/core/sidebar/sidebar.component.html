@@ -1,6 +1,12 @@
-<p-sidebar [(visible)]="visibleSidebar" *ngIf="isVisible"  position="left" [baseZIndex]="10000" [dismissible]="false" [showCloseIcon]="false" >
+<!-- <div class="h-full"> -->
+
+
+<!-- <p-sidebar [(visible)]="isVisible" *ngIf="isVisible"  position="left" [baseZIndex]="10000" [dismissible]="false" [showCloseIcon]="false"  mode="overlay"  > -->
     <!-- Logo Section -->
-    <button (click)="closeSidebar()">Close</button>
+    <!-- <button (click)="closeSidebar()">Close</button> -->
+     <div class=" h-full sidebar">
+
+    
     <div class="logo-section">
       <img src="Scs-logo.png" alt="Logo" class="sidebar-logo" />
     </div>
@@ -27,7 +33,7 @@
 
             <!-- Child items that are toggled -->
             <ul *ngIf="item.isExpanded">
-                <li *ngFor="let child of item?.children" class="menu-item" >
+                <li *ngFor="let child of item?.children" class="menu-item child" >
                     <a [routerLink]="child.route" (click)="setActive(child, item)"  routerLinkActive="active" 
                     [ngClass]="child.isActive ? 'active-item' : ''"  [ngClass]="child.isActive ? 'active-item' : ''">{{ child.value }}</a>
                 </li>
@@ -44,13 +50,14 @@
             <p class="user-name">John Doe</p>
         </div>
       <div class="flex h-full p-1 justify-end align-items-center me-4">
-        <p-button icon="pi pi-ellipsis-v"  raised="true" [rounded]="true" (click)="menu.toggle($event)" />
+        <p-button icon="pi pi-ellipsis-v"   [rounded]="true" (click)="menu.toggle($event)" />
         <!-- <p-toast/> -->
         <p-tieredmenu #menu [model]="items" [appendTo]="'body'"  [popup]="true" />
     </div>
     </div>
-  </p-sidebar>
-  
+</div>
+  <!-- </p-sidebar> -->
+<!-- </div> -->
   <!-- Button to toggle the sidebar -->
    <!-- <button pButton icon="pi pi-bars" icon="bx bx-upload" (click)="visibleSidebar = true"></button> 
    -->

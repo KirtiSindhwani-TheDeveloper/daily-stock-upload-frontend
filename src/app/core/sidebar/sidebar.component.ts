@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, output, ViewEncapsulation } from '@angular/core';
 import { PrimengModuleModule } from '../../shared/primeng-module/primeng-module.module';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,11 +17,13 @@ import { RouterModule } from '@angular/router';
 })
 export class SidebarComponent {
  
+  @Input() visible: boolean = false; 
+  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   items: MenuItem[] | undefined;
   visibleSidebar: boolean = true;
   searchQuery: string = '';
   activeIndex:any;
-  isVisible: boolean = false;
+  isVisible: boolean = true;
   sidebarItems = [
     {id: 1, value: "Mapping", children: [
         {id: 2, value: "Stock Upload Mapping", route: 'mapping/stock-upload',isActive: false},
@@ -78,6 +80,10 @@ export class SidebarComponent {
       this.isVisible = true;
     }
   
+    toggleSidebar() {
+      this.visible = !this.visible;
+      this.visibleChange.emit(this.visible);  // Notify the parent about the visibility change
+    }
     // Method to close the sidebar
     closeSidebar() {
       this.isVisible = false;

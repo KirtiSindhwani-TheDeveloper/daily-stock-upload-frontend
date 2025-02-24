@@ -3,8 +3,17 @@
     width: 250px;
     height: 100%;
     padding-top: 20px;
+    
   }
-  
+  :host ::ng-deep .sidebar {
+    width: 250px;
+    padding-top: 20px;
+    width: min-content;
+    background: red;
+    height: 90vh;
+    
+  }
+
   /* Logo Section */
   .logo-section {
     display: flex;
@@ -13,7 +22,7 @@
   }
   
   .sidebar-logo {
-    width: 60%;
+    width: 60% !important;
     height: auto;
   }
   
@@ -27,6 +36,7 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: 10px;
+    /* width: 80%; */
   }
   
   .sidebar-search {
@@ -46,6 +56,7 @@
     padding: 3px 12px;
     padding-top: 3px;
     cursor: pointer;
+    /* margin-left: 13px; */
   }
   
   /* .menu-item:hover {
@@ -118,9 +129,13 @@ button{
 }
 
 li{
-    font-size: 15px !important;
-    width: 250px !important;
+    font-size: 12px !important;
+    width: 240px !important;
     display: grid !important;
+}
+
+:host ::ng-deep li.menu-item.child .ng-star-inserted{
+    margin-left: 13px;
 }
 
 
@@ -128,6 +143,49 @@ li{
     background-color: rgb(0 132 255 / 21%);
     padding-inline: 5px;
     padding-block: 7px;
+    text-decoration: none !important;
 }
+
+.menu-item li a:hover{
   
+    text-decoration: none !important;
+}
+
+/* :host ::ng-deep .p-sidebar-mask{
+    display: none !important;
+} */
+
+/* This will make sure the sidebar floats over the content without blocking it */
+.ui-sidebar.ui-sidebar-visible {
+    z-index: 10000;  /* Sidebar should float above other content */
+    position: fixed; /* Make the sidebar fixed over the screen */
+    left: 0; /* Sidebar should stay on the left */
+    top: 0;
+    height: 100%; /* Full height */
+  }
+  
+  /* Ensuring that the content behind the sidebar remains accessible */
+  body {
+    overflow-x: hidden; /* To prevent horizontal scrolling if the sidebar is overlaying */
+  }
+  
+  .content-container {
+    transition: margin-left 0.3s ease;
+  }
+  
+  /* This rule ensures the sidebar is over the content when opened */
+  .ui-sidebar.ui-sidebar-visible ~ .content-container .main-content {
+    z-index: 1;
+    position: relative;
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  /* Optional styling for sidebar content */
+  .sidebar-logo {
+    width: 100%;
+    margin: 20px 0;
+  }
   

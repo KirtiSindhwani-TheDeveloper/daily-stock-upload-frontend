@@ -5,13 +5,14 @@ import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
-import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
 import { AvatarModule } from 'primeng/avatar';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { ToastModule } from 'primeng/toast';
 import { DrawerModule } from 'primeng/drawer';
+import { FileUploadModule } from 'primeng/fileupload';
+import { DropdownModule } from 'primeng/dropdown';
 const modules:any=[
   MultiSelectModule,
   ButtonModule,
@@ -25,7 +26,8 @@ const modules:any=[
     AvatarModule,
     TieredMenuModule,
     ToastModule,
-    DrawerModule
+    DrawerModule,
+    DropdownModule
    
 ]
 

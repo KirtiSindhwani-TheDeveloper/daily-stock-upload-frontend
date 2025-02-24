@@ -11,4 +11,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .p-drawer-close {
     display: none !important;
   }
-  
+   .p-drawer.p-component{
+    /* position: fixed !important;
+    top: 10vh !important; /* Below the header */
+    /* left: 0;
+    height: 90vh; */ 
+  }
+   .p-overlay-mask{
+    background: none;
+   
+  }
+  /*
+  .p-sidebar-mask{
+    display: none !important;
+  }   */
+
+  .f-15{
+    font-size: 15px;
+  }
+
