@@ -23,18 +23,35 @@
   </div>
 </div> -->
 
-<div class="flex flex-row w-full h-full">
-    
-  <app-sidebar 
-    #sidebar
-    [ngClass]="{ 'w-1/4 sidebar card bg-gray-50 rounded-lg shadow-sm ': visibleSidebar, 'w-0': !visibleSidebar }"
-    class="transition-all duration-300"
-  ></app-sidebar> 
+<!-- <div class="flex flex-row w-full "> -->
+    <div class="row flex-row">
+     <div class="col-2">
+      <app-sidebar 
+      #sidebar
+      [ngClass]="{ 'w-1/4 sidebar card bg-gray-50 rounded-lg shadow-sm ': visibleSidebar, 'w-0': !visibleSidebar }"
+      class="transition-all duration-300 h-[100vh] fixed"
+    ></app-sidebar> 
+     </div>
+     <div class="col ">
+     
+        <!-- <div class="d-flex justify-content-center align-items-center" >
+          
+          <router-outlet></router-outlet>
+
+        </div> -->
+        <img src="Background_image.png" alt="Background Image"  class="w-[100vw] h-[100vh] img-fluid fixed -z-10">
+        <div class="d-flex justify-content-center align-items-center">
+         
+          <router-outlet></router-outlet>
+        </div>
+        
+   
+     </div>
+    <!-- </div> -->
+ 
 
  
-  <div class="flex-1 transition-all duration-300" [ngClass]="{ 'ml-1/4': visibleSidebar }">
-    <router-outlet></router-outlet>
-  </div>
+ 
 </div> 
 
 

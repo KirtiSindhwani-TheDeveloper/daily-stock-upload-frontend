@@ -15,15 +15,29 @@ export class StockUploadMappingComponent {
   selectedBrand:any;
   brands:any=[]
   stMappingForm:FormGroup;
-  isMappingForBothOlder = new FormControl(false);
+  isMappingForBothOlder :boolean=false;
+  visible: boolean = false;
 
+  isViewMappingForBothStocks:boolean=false;
   constructor(private fb:FormBuilder){
     this.stMappingForm=this.fb.group({
       mappingForBothStock:[''],
       brands:['']
     })
   }
+ 
+
+    showDialog() {
+        this.visible = true;
+    }
   onUpload(event:any){
 
+  }
+  onCheckboxChangeInView(event:Event){
+    this.isViewMappingForBothStocks = (event.target as HTMLInputElement).checked;
+  }
+  
+  onCheckboxChange(event: Event) {
+    this.isMappingForBothOlder = (event.target as HTMLInputElement).checked;
   }
 }
