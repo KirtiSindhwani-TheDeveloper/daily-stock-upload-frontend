@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PrimengModuleModule } from '../../shared/primeng-module/primeng-module.module';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { MenuItem, MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
+import { TieredMenu } from 'primeng/tieredmenu';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,6 +18,7 @@ import { RouterModule } from '@angular/router';
 })
 export class SidebarComponent {
  
+  @ViewChild('menu') menu:TieredMenu |null=  null;
   @Input() visible: boolean = false; 
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   items: MenuItem[] | undefined;
@@ -87,6 +89,10 @@ export class SidebarComponent {
     // Method to close the sidebar
     closeSidebar() {
       this.isVisible = false;
+    }
+    onButtonClick(event: any) {
+      console.log('Button clicked');
+      this.menu?.toggle(event);
     }
     
     

@@ -1,0 +1,10 @@
+:root{
+    --primary-color: #49505757;
+}
+
+.custom-icon {
+    position: absolute;
+    font-size: 3rem;
+    color: #ccc; /* You can adjust the color */
+    animation: spin 1s infinite linear;
+}

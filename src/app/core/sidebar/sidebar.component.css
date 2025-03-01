@@ -158,7 +158,7 @@ li{
 /* This will make sure the sidebar floats over the content without blocking it */
 .ui-sidebar.ui-sidebar-visible {
     z-index: 10000;  /* Sidebar should float above other content */
-    position: fixed; /* Make the sidebar fixed over the screen */
+    position: fixed; 
     left: 0; /* Sidebar should stay on the left */
     top: 0;
     height: 100%; /* Full height */

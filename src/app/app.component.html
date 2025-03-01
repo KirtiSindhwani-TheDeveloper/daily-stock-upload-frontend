@@ -24,11 +24,13 @@
 </div> -->
 
 <!-- <div class="flex flex-row w-full "> -->
+  <!-- w-1/4 added in ngclass of app-sidebar-->
     <div class="row flex-row">
      <div class="col-2">
       <app-sidebar 
       #sidebar
-      [ngClass]="{ 'w-1/4 sidebar card bg-gray-50 rounded-lg shadow-sm ': visibleSidebar, 'w-0': !visibleSidebar }"
+      
+      [ngClass]="{ ' sidebar card bg-gray-50 rounded-lg shadow-sm ': visibleSidebar, 'w-0': !visibleSidebar }"
       class="transition-all duration-300 h-[100vh] fixed"
     ></app-sidebar> 
      </div>
@@ -39,7 +41,7 @@
           <router-outlet></router-outlet>
 
         </div> -->
-        <img src="Background_image.png" alt="Background Image"  class="w-[100vw] h-[100vh] img-fluid fixed -z-10">
+        <img src="Background_image.png" alt="Background Image"  class="w-[100vw]  h-[100vh] img-fluid fixed -z-50">
         <div class="d-flex justify-content-center align-items-center">
          
           <router-outlet></router-outlet>

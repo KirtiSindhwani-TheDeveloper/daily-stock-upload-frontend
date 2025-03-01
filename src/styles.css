@@ -2,6 +2,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import './global.css';
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .p-drawer-header {
@@ -19,7 +21,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
    .p-overlay-mask{
     background: none;
-   
+    /* display: flex !important;
+    justify-content: center !important;
+    align-items: center !important; */
   }
   /*
   .p-sidebar-mask{
@@ -30,3 +34,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-size: 15px;
   }
 
+  :host ::ng-deep .p-blockui-mask-document.p-blockui.p-blockui-mask.p-overlay-mask{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }

@@ -3,7 +3,7 @@
     -40px -40px 40px #FFFFFF;   */
     /* top: 20vh;  */
     border:none;
-    background-color: antiquewhite;
+    background-color: var(--primary-color);
 }
 .btn-view{
     border-radius: 8px;
@@ -23,6 +23,7 @@
   background-color: rgba(0, 0, 255, 0.164);
   padding: 8px;
   border-radius: 4px;
+  z-index: auto;
   
 }
 
@@ -33,4 +34,11 @@
 :host ::ng-deep p-fileupload.mt-2{
     border: none !important;
     outline: none !important;
+}
+
+.add-mapping-card{
+    border:none;
+    /* background-color: antiquewhite; */
+    background-color: var(--primary-color);
+    border-radius: 6px;
 }

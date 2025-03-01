@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { DrawerModule } from 'primeng/drawer';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DropdownModule } from 'primeng/dropdown';
+import { BlockUIModule } from 'primeng/blockui';
 const modules:any=[
   MultiSelectModule,
   ButtonModule,
@@ -22,12 +23,13 @@ const modules:any=[
   FileUploadModule,
     SidebarModule,
     InputTextModule,
-    ButtonModule,
+
     AvatarModule,
     TieredMenuModule,
     ToastModule,
     DrawerModule,
-    DropdownModule
+    DropdownModule,
+    BlockUIModule
    
 ]
 
