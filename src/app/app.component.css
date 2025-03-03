@@ -40,4 +40,13 @@ box-shadow:  20px 20px 60px #BEBEBE,
   .card{
     border: none;
   }
+
+  :host ::ng-deep .loader .p-overlay-mask{
+    /* background: red; */
+    position: absolute;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: inherit !important;
+  }
   

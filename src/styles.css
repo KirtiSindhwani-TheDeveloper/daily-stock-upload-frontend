@@ -20,10 +20,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     height: 90vh; */ 
   }
    .p-overlay-mask{
-    background: none;
-    /* display: flex !important;
+    /* background: none;
+    display: flex !important;
     justify-content: center !important;
     align-items: center !important; */
+    /* z-index: inherit !important; */
+   
   }
   /*
   .p-sidebar-mask{

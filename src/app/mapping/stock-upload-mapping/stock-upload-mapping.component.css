@@ -71,7 +71,8 @@ span{
 }
 
 :host ::ng-deep .dropdown{
-    border: 2px solid #00000030 !important
+    border: 2px solid #00000030 !important;
+    margin-bottom: 10px !important;
 }
 
 :host ::ng-deep button.p-ripple.p-button.p-component.p-fileupload-choose-button.undefined{
@@ -100,5 +101,6 @@ span{
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    z-index: 11102 !important;
   }
 

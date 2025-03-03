@@ -4,7 +4,11 @@
 
 .custom-icon {
     position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 3rem;
-    color: #ccc; /* You can adjust the color */
+    color: #ccc;
+    /* color: red; */
     animation: spin 1s infinite linear;
 }

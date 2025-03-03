@@ -23,7 +23,7 @@ export class StockUploadMappingService {
     return this.http.post(`${this.url}st-mapping/edit`,data);
   }
 
-  alreadyExistedMapping(data:any):Observable<any>{
-    return this.http.post(`${this.url}st-mapping/already-existed`,data);
+  alreadyExistedMapping():Observable<any>{
+    return this.http.get(`${this.url}st-mapping/all-existed-mapping`);
   }
 }

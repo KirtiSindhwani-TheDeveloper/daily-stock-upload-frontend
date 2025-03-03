@@ -64,7 +64,7 @@
   </ul>
 
   <!-- User Profile Section -->
-  <div class="user-profile d-flex flex-row">
+  <div class="user-profile d-flex flex-row justify-between me-5 pe-3">
     <div class="flex flex-row mt-2" >
       <img src="woman.png" height="40px" width="40px" class="me-3" />
       <p class="user-name">John Doe</p>
@@ -72,18 +72,18 @@
     
     <div
    
-    class="cursor-pointer pi pi-ellipsis-v "
+    class="cursor-pointer pi pi-ellipsis-v mt-1"
     (click)="onButtonClick($event)"
   ></div>
-    <div class="flex h-full p-1 justify-end align-items-center me-4  ">
-      <!-- <button
-        icon="pi pi-ellipsis-v"
-        class="cursor-pointer pi pi-ellipsis-v"
-        (onClick)="onButtonClick($event)"
-      ></button> -->
-      <p-tieredmenu #menu [model]="items" [appendTo]="'body'" [popup]="true" />
-    </div>
-  </div>
+</div>
+<div class="flex h-full p-1  align-items-center me-4  ">
+  <!-- <button
+    icon="pi pi-ellipsis-v"
+    class="cursor-pointer pi pi-ellipsis-v"
+    (onClick)="onButtonClick($event)"
+  ></button> -->
+  <p-tieredmenu #menu [model]="items" [appendTo]="'body'" [popup]="true" />
+</div>
 </div>
 <!-- </p-sidebar> -->
 <!-- </div> -->

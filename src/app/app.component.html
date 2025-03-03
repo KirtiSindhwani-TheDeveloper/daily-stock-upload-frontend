@@ -25,7 +25,7 @@
 
 <!-- <div class="flex flex-row w-full "> -->
   <!-- w-1/4 added in ngclass of app-sidebar-->
-    <div class="row flex-row">
+    <!-- <div class="row flex-row">
      <div class="col-2">
       <app-sidebar 
       #sidebar
@@ -36,11 +36,6 @@
      </div>
      <div class="col ">
      
-        <!-- <div class="d-flex justify-content-center align-items-center" >
-          
-          <router-outlet></router-outlet>
-
-        </div> -->
         <img src="Background_image.png" alt="Background Image"  class="w-[100vw]  h-[100vh] img-fluid fixed -z-50">
         <div class="d-flex justify-content-center align-items-center">
          
@@ -49,12 +44,37 @@
         
    
      </div>
-    <!-- </div> -->
+  
  
 
  
  
-</div> 
+</div>  -->
+
+<img src="Background_image.png" alt="Background Image" class="w-[100vw] h-[100vh] img-fluid fixed -z-50">
+<p-blockUI #blockUI [blocked]="blocked" [style]="{ 'z-index': '9999' }" [ngClass]="isLoading?'loader':''">
+  <div class="d-flex !justify-center !align-items-center">
+    <i class="bx bx-loader-circle fa-spin custom-icon fa-spinner"></i>
+  </div>
+ 
+</p-blockUI>
+<div class="row flex-row">
+ 
+  <div class="col-3">
+    <app-sidebar
+      #sidebar
+      [ngClass]="{ 'sidebar card bg-gray-50 rounded-lg shadow-sm': visibleSidebar, 'w-0': !visibleSidebar }"
+      class="transition-all duration-300 h-[100vh] fixed"
+    ></app-sidebar>
+  </div>
+  <div class="col">
+    
+    <div class="d-flex  align-items-center">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
 
 
 
