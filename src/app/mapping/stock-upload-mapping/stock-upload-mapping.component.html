@@ -261,6 +261,7 @@
       <input
         type="checkbox"
         class="cursor-pointer w-4 h-4"
+        [(ngModel)]="isViewMappingForBothStocks"
         (change)="onCheckboxChangeInView($event)"
       />
       <span class="f-15 !ms-2"
@@ -291,7 +292,7 @@
             name="demo[]"
             url="https://www.primefaces.org/cdn/api/upload.php"
             accept=".xlsx,.csv,.xls"
-            (onUpload)="onUpload($event,'Current')"
+            (onUpload)="onUpload($event,'Edit Current')"
             class="btn-file-upload"
           />
 
@@ -384,7 +385,7 @@
               name="demo[]"
               url="https://www.primefaces.org/cdn/api/upload.php"
               accept=".xlsx,.csv,.xls"
-              (onUpload)="onUpload($event,'Older')"
+              (onUpload)="onUpload($event,'Edit Older')"
             />
 
             <div class="d-flex justify-end">
@@ -454,17 +455,23 @@
     </div>
   </div>
   <ng-template #footer>
-    <p-button
+    <p-button *ngIf="!editCurrentDaysStock && !editOlderDaysStock"
+      label="Ok"
+      [text]="true"
+      severity="secondary"
+      (click)="visible = false"
+    />
+    <p-button *ngIf="editCurrentDaysStock || editOlderDaysStock"
       label="Cancel"
       [text]="true"
       severity="secondary"
       (click)="visible = false"
     />
-    <p-button
+    <p-button *ngIf="editCurrentDaysStock || editOlderDaysStock"
       label="Save"
       [outlined]="true"
       severity="secondary"
-      (click)="visible = false"
+       (click)="editMappingWithViewEditBtn()"
     />
   </ng-template>
 </p-dialog>
@@ -524,7 +531,7 @@
         <ng-template #body let-rowData let-i="rowIndex">
           <tr>
             <td style="font-size: 11px;">{{rowData.brandName}}</td>
-            <td style="font-size: 11px;" class="text-center"><i [ngClass]="rowData.current_data_exists?'pi pi-check':'pi pi-times'" style="color: slateblue" class="cursor-pointer"(click)="showEditStock('current',rowData.current_data_exists)"></i></td>
+            <td style="font-size: 11px;" class="text-center"><i [ngClass]="rowData.current_data_exists?'pi pi-check':'pi pi-times'" style="color: slateblue" class="cursor-pointer"(click)="showEditStock('current',rowData.current_data_exists,rowData)"></i></td>
             <td style="font-size: 11px;">
                 {{rowData.current_added_on}}
             </td>
@@ -532,7 +539,7 @@
                 <!-- {{rowData.current_added_by}} -->
                 Kirti
             </td>
-            <td style="font-size: 11px;" class="text-center"><i [ngClass]="rowData.older_data_exists?'pi pi-check':'pi pi-times'" style="color: slateblue" class="cursor-pointer" (click)="showEditStock('older',rowData.older_data_exists)"></i></td>
+            <td style="font-size: 11px;" class="text-center"><i [ngClass]="rowData.older_data_exists?'pi pi-check':'pi pi-times'" style="color: slateblue" class="cursor-pointer" (click)="showEditStock('older',rowData.older_data_exists,rowData)"></i></td>
             <td style="font-size: 11px;">
                 {{rowData.older_added_on}}
             </td>
@@ -581,7 +588,7 @@
                 name="demo[]"
                 url="https://www.primefaces.org/cdn/api/upload.php"
                 accept=".xlsx,.csv,.xls"
-                (onUpload)="onUpload($event,'Current')"
+                (onUpload)="onUpload($event,'Edit Current')"
                 class="btn-file-upload"
               />
     
@@ -602,7 +609,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editCurrentStockColumns"
+                    [options]="showCurrentStockColumnsInTable"
                     formControlName="partNumber"
                 
                     placeholder="Select"
@@ -619,7 +626,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editCurrentStockColumns"
+                    [options]="showCurrentStockColumnsInTable"
                     formControlName="location"
                    
                     placeholder="Select"
@@ -636,7 +643,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editCurrentStockColumns"
+                    [options]="showCurrentStockColumnsInTable"
                     formControlName="stockQty"
                    
                     placeholder="Select"
@@ -661,7 +668,7 @@
             <form [formGroup]="editOlderDaysStockForm">
               <div
                 class="d-flex flex-row justify-between mt-3"
-                *ngIf="editOlderStock"
+                *ngIf="editOlderDaysStock"
               >
                 <!-- <span>Add Mapping for Current Days Stock Upload :  </span> -->
                 <p-fileupload
@@ -674,7 +681,7 @@
                   name="demo[]"
                   url="https://www.primefaces.org/cdn/api/upload.php"
                   accept=".xlsx,.csv,.xls"
-                  (onUpload)="onUpload($event,'Older')"
+                  (onUpload)="onUpload($event,'Edit Older')"
                 />
     
                 <div class="d-flex justify-end">
@@ -693,7 +700,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editOlderStockColumns"
+                    [options]="showCurrentStockColumnsInTable"
                    
                     placeholder="Select"
                     formControlName="partNumber"
@@ -711,7 +718,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editOlderStockColumns"
+                    [options]="showCurrentStockColumnsInTable"
                    
                     placeholder="Select"
                     formControlName="location"
@@ -728,7 +735,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editOlderStockColumns"
+                    [options]="showCurrentStockColumnsInTable"
                     
                     placeholder="Select"
                     formControlName="stockQty"
@@ -748,19 +755,22 @@
         label="Ok"
         [text]="true"
         severity="secondary"
-        (click)="visible = false"
+        *ngIf="!editOlderDaysStock || !editCurrentDaysStock"
+        (click)="visibleViewEditPopUp = false"
       />
         <p-button
           label="Cancel"
           [text]="true"
           severity="secondary"
-          (click)="visible = false"
+          (click)="visibleViewEditPopUp = false"
+          *ngIf="editOlderDaysStock || editCurrentDaysStock"
         />
         <p-button
           label="Save"
           [outlined]="true"
           severity="secondary"
-          (click)="visible = false"
+          (click)="editFromTable(editCurrentDaysStock,editOlderDaysStock)"
+          *ngIf="editOlderDaysStock || editCurrentDaysStock"
         />
       </ng-template>
 </p-dialog>
@@ -808,14 +818,14 @@
                 />
               </div>
             </div>
-            <form [formGroup]="editCurrentDayStockForm">
+            <form [formGroup]="currentStockForm">
               <div class="row">
                 <div class="col-6 d-flex  align-items-center mt-2">
                   <span>Part Number:</span>
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editCurrentStockColumns"
+                    [options]="currentStockColumns"
                     formControlName="partNumber"
                 
                     placeholder="Select"
@@ -823,8 +833,8 @@
                   />
                 </div>
               </div>
-              <div  class="  mt-1" *ngIf="editCurrentDayStockForm.get('partNumber')?.touched && editCurrentDayStockForm?.get('partNumber')?.invalid " >
-                <small *ngIf="editCurrentDayStockForm?.get('partNumber')?.hasError('required')" style="color: red; font-size: 12px;">Part Number is required.</small> 
+              <div  class="  mt-1" *ngIf="currentStockForm.get('partNumber')?.touched && currentStockForm?.get('partNumber')?.invalid " >
+                <small *ngIf="currentStockForm?.get('partNumber')?.hasError('required')" style="color: red; font-size: 12px;">Part Number is required.</small> 
                </div>
               <div class="row">
                 <div class="col-6 d-flex  align-items-center mt-2">
@@ -832,7 +842,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editCurrentStockColumns"
+                    [options]="currentStockColumns"
                     formControlName="location"
                    
                     placeholder="Select"
@@ -840,8 +850,8 @@
                   />
                 </div>
               </div>
-              <div class="  mt-1" *ngIf="editCurrentDayStockForm.get('location')?.touched && editCurrentDayStockForm?.get('location')?.invalid " >
-                <small *ngIf="editCurrentDayStockForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
+              <div class="  mt-1" *ngIf="currentStockForm.get('location')?.touched && currentStockForm?.get('location')?.invalid " >
+                <small *ngIf="currentStockForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
                </div>
               <div class="row">
                 <div class="col-6 d-flex  align-items-center mt-2">
@@ -849,7 +859,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editCurrentStockColumns"
+                    [options]="currentStockColumns"
                     formControlName="stockQty"
                    
                     placeholder="Select"
@@ -857,8 +867,8 @@
                   />
                 </div>
               </div>
-              <div class="  mt-1" *ngIf="editCurrentDayStockForm.get('stockQty')?.touched && editCurrentDayStockForm?.get('stockQty')?.invalid " >
-                <small *ngIf="editCurrentDayStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
+              <div class="  mt-1" *ngIf="currentStockForm.get('stockQty')?.touched && currentStockForm?.get('stockQty')?.invalid " >
+                <small *ngIf="currentStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
                </div>
             </form>
           </div>
@@ -869,7 +879,7 @@
               <span class="font-semibold">Mapping For Older Stocks</span>
              
             </div>
-            <form [formGroup]="editOlderDaysStockForm">
+            <form [formGroup]="olderStockForm">
               <div
                 class="d-flex flex-row justify-between mt-3"
                 *ngIf="editOlderStock"
@@ -904,7 +914,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editOlderStockColumns"
+                    [options]="olderStockColumns"
                    
                     placeholder="Select"
                     formControlName="partNumber"
@@ -912,8 +922,8 @@
                   />
                 </div>
               </div>
-              <div class="  mt-1" *ngIf="editOlderDaysStockForm.get('partNumber')?.touched && editOlderDaysStockForm?.get('partNumber')?.invalid " >
-                <small *ngIf="editOlderDaysStockForm?.get('partNumber')?.hasError('required')" style="color: red; font-size: 12px;">Part Number is required.</small> 
+              <div class="  mt-1" *ngIf="olderStockForm.get('partNumber')?.touched && olderStockForm?.get('partNumber')?.invalid " >
+                <small *ngIf="olderStockForm?.get('partNumber')?.hasError('required')" style="color: red; font-size: 12px;">Part Number is required.</small> 
                </div>
     
               <div class="row">
@@ -922,7 +932,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editOlderStockColumns"
+                    [options]="olderStockColumns"
                    
                     placeholder="Select"
                     formControlName="location"
@@ -930,8 +940,8 @@
                   />
                 </div>
               </div>
-              <div class="  mt-1" *ngIf="editOlderDaysStockForm.get('location')?.touched && editOlderDaysStockForm?.get('location')?.invalid " >
-                <small *ngIf="editOlderDaysStockForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
+              <div class="  mt-1" *ngIf="olderStockForm.get('location')?.touched && olderStockForm?.get('location')?.invalid " >
+                <small *ngIf="olderStockForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
                </div>
               <div class="row">
                 <div class="col-6 d-flex  align-items-center mt-2">
@@ -939,7 +949,7 @@
                 </div>
                 <div class="col-6">
                   <p-select
-                    [options]="editOlderStockColumns"
+                    [options]="olderStockColumns"
                     
                     placeholder="Select"
                     formControlName="stockQty"
@@ -947,8 +957,8 @@
                   />
                 </div>
               </div>
-              <div class="  mt-1" *ngIf="editOlderDaysStockForm.get('stockQty')?.touched && editOlderDaysStockForm?.get('stockQty')?.invalid " >
-                <small *ngIf="editOlderDaysStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
+              <div class="  mt-1" *ngIf="olderStockForm.get('stockQty')?.touched && olderStockForm?.get('stockQty')?.invalid " >
+                <small *ngIf="olderStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
                </div>
             </form>
           </div>
@@ -966,7 +976,7 @@
           label="Save"
           [outlined]="true"
           severity="secondary"
-          (click)="visible = false"
+          (click)="addMappingFromTable(showAddCurrentData,showAddOlderData)"
         />
       </ng-template>
 </p-dialog>
