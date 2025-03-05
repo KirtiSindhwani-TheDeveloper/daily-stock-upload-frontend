@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { PrimengModuleModule } from '../../shared/primeng-module/primeng-module.module';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
@@ -16,6 +16,7 @@ import { StockUploadMappingService } from '../../services/stock-upload-mapping.s
 import { MessageService } from 'primeng/api';
 import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import * as XLSX from 'xlsx';
+import { FileUpload } from 'primeng/fileupload';
 @Component({
   selector: 'app-stock-upload-mapping',
   imports: [
@@ -30,8 +31,10 @@ import * as XLSX from 'xlsx';
   styleUrl: './stock-upload-mapping.component.css',
 })
 export class StockUploadMappingComponent {
+  @ViewChild('fu') fileUpload: FileUpload|null =null;
   selectedBrand: any;
   brands: any = [];
+  formData = new FormData()
   stMappingForm: FormGroup;
   isMappingForBothOlder: boolean = false;
   visible: boolean = false;
@@ -64,6 +67,8 @@ export class StockUploadMappingComponent {
   showAddOlderData: boolean = false;
   visibleAddPopUp: boolean = false;
   rowData:any=[];
+  selectedFile:any;
+  selectedFileName:any;
   constructor(
     private fb: FormBuilder,
     private utilitiesService: UtilitiesService,
@@ -210,7 +215,7 @@ export class StockUploadMappingComponent {
       };
     });
     this.tableData = finalResult;
-     console.log(this.tableData);
+    //  console.log(this.tableData);
   }
 
   formatDate(dateString: string): string {
@@ -237,19 +242,24 @@ export class StockUploadMappingComponent {
   
 
   showAddMapping() {
+    this.clearSelectedFiles()
     this.isAddMapping = true;
     this.showTable = false;
   }
 
   exportTableData() {
+    // ['Added By for Current Days Stock']: item.current_added_by,
+    // ['Added By for Older Days Stock']: item.older_added_by,
     const modifiedData = this.tableData.map((item: any) => ({
       ['Brand']: item.brandName,
       ['Current Days Stock']: item.current_data_exists ? 'Yes' : 'No',
       ['Added On for Current Days Stock']: item.current_added_on,
-      ['Added By for Current Days Stock']: item.current_added_by,
+      ['Added By for Current Days Stock']: 'Kirti',
       ['Older Days Stock']: item.older_data_exists ? 'Yes' : 'No',
       ['Added On for Older Days Stock']: item.older_added_on,
-      ['Added By for Older Days Stock']: item.older_added_on,
+      ['Added By for Older Days Stock']:'Kirti'
+     
+
     }));
     const ws = XLSX.utils.json_to_sheet(modifiedData);
 
@@ -264,6 +274,7 @@ export class StockUploadMappingComponent {
   showDialog() {
     // this.editOlderDaysStockForm.reset();
     // this.editCurrentDayStockForm.reset();
+    this.clearSelectedFiles()
     this.editCurrentDaysStock = false;
     this.editOlderDaysStock = false;
     this.editOlderDaysStockForm.get('partNumber')?.disable();
@@ -278,12 +289,25 @@ export class StockUploadMappingComponent {
 
   showEditStock(stockType: any, dataExist: any,rowData:any) {
     // console.log("rowdata ",rowData)
+    this.clearSelectedFiles()
     this.rowData=rowData;
+    this.editCurrentDaysStock=false;
+    this.editOlderDaysStock=false;
+    this.editOlderDaysStockForm.get('partNumber')?.disable();
+    this.editOlderDaysStockForm.get('stockQty')?.disable();
+    this.editOlderDaysStockForm.get('location')?.disable();
+
+    this.editCurrentDayStockForm.get('partNumber')?.disable();
+    this.editCurrentDayStockForm.get('stockQty')?.disable();
+    this.editCurrentDayStockForm.get('location')?.disable();
     if (stockType == 'current') {
       if (dataExist) {
+        // console.log("data exist",dataExist)
         this.visibleViewEditPopUp = true;
         this.showforEditCurrentData = true;
         this.showforEditOlderData = false;
+        // this.editCurrentDaysStock=true;
+        // this.editOlderDaysStock=false;
         this.showCurrentStockColumnsInTable=JSON.parse(rowData.currentBrandColumns);
         this.editCurrentDayStockForm.patchValue({
           partNumber: rowData.current_part_number,
@@ -299,12 +323,18 @@ export class StockUploadMappingComponent {
        this.editCurrentDaysStock=false;
         this.showAddCurrentData = true;
         this.showAddOlderData = false;
+        this.selectedFile='';
+        this.formData=new FormData();
+        this.selectedFileName='';
+        this.clearSelectedFiles()
       }
     } else {
       if (dataExist) {
         this.visibleViewEditPopUp = true;
         this.showforEditCurrentData = false;
         this.showforEditOlderData = true;
+        // this.editCurrentDaysStock=false;
+        // this.editOlderDaysStock=true;
         this.showCurrentStockColumnsInTable=JSON.parse(rowData.olderBrandColumns);
         this.editOlderDaysStockForm.patchValue({
           partNumber: rowData.older_part_number,
@@ -319,7 +349,11 @@ export class StockUploadMappingComponent {
         this.editOlderDaysStock=false;
         this.showAddOlderData = true;
         this.showAddCurrentData = false;
+        this.selectedFile='';
+        this.formData=new FormData();
+        this.selectedFileName='';
         this.olderStockForm.reset();
+        this.clearSelectedFiles();
       }
     }
   }
@@ -327,11 +361,14 @@ export class StockUploadMappingComponent {
   editFromTable(isCurrent:any,isOlder:any){
     if (isCurrent) {
       if (this.editCurrentDayStockForm.valid) {
+        if(this.showCurrentStockColumnsInTable.length==0){
+          this.showCurrentStockColumnsInTable=JSON.stringify(this.rowData.currentBrandColumns);
+        }
         this.stockUploadMappingService
           .editColumnMapping({
             brandId: this.rowData?.brand_id,
             values: this.editCurrentDayStockForm.value,
-            brandColumns: this.editCurrentStockColumns,
+            brandColumns: this.showCurrentStockColumnsInTable,
             userId: 1,
             stockType: 'current',
             id: this.rowData.current_id,
@@ -355,7 +392,8 @@ export class StockUploadMappingComponent {
             },
             () => {
               this.globalBlockUIService.stopLoading();
-              this.visible=false
+              this.visibleViewEditPopUp=false
+              this.clearSelectedFiles();
             }
           );
       }
@@ -369,11 +407,15 @@ export class StockUploadMappingComponent {
     
     if(isOlder){
       if (this.editCurrentDayStockForm.valid) {
+
+        if(this.showOlderStockColumnsInTable.length==0){
+          this.showOlderStockColumnsInTable=JSON.stringify(this.rowData.olderBrandColumns)
+        }
         this.stockUploadMappingService
           .editColumnMapping({
             brandId: this.rowData?.brand_id,
             values: this.editOlderDaysStockForm.value,
-            brandColumns: this.editOlderDaysStockForm,
+            brandColumns: this.showOlderStockColumnsInTable,
             userId: 1,
             stockType: 'older',
             id: this.rowData.older_id,
@@ -397,7 +439,8 @@ export class StockUploadMappingComponent {
             },
             () => {
               this.globalBlockUIService.stopLoading();
-              this.visible=false
+              this.visibleViewEditPopUp=false
+              this.clearSelectedFiles();
             }
           );
       }
@@ -418,6 +461,8 @@ export class StockUploadMappingComponent {
 
   addMappingFromTable(isCurrent:any,isOlder:any){
 
+    this.selectedFile=''
+    this.selectedFileName=''
    // console.log("row data ",this.rowData)
     if(isCurrent){
       if(this.currentStockForm.valid){
@@ -443,6 +488,7 @@ export class StockUploadMappingComponent {
           });
         },()=>{
           this.globalBlockUIService.stopLoading();
+          this.clearSelectedFiles()
           this.visibleAddPopUp=false;
         })
       }
@@ -478,6 +524,7 @@ export class StockUploadMappingComponent {
         },()=>{
           this.globalBlockUIService.stopLoading();
           this.visibleAddPopUp=false;
+          this.clearSelectedFiles()
         })
       }
       else{
@@ -507,6 +554,7 @@ export class StockUploadMappingComponent {
               })
               .subscribe(
                 (res: any) => {
+                  this.viewAllExistingMapping();
                   this.messageService.add({
                     severity: 'success',
                     summary: 'Mapping has been successfully updated !!',
@@ -524,6 +572,7 @@ export class StockUploadMappingComponent {
                 () => {
                   this.globalBlockUIService.stopLoading();
                   this.visible=false
+                  this.clearSelectedFiles()
                 }
               );
           }
@@ -550,6 +599,7 @@ export class StockUploadMappingComponent {
             },()=>{
               this.globalBlockUIService.stopLoading();
               this.visible=false;
+              this.clearSelectedFiles()
             })
           }
         } else {
@@ -576,6 +626,7 @@ export class StockUploadMappingComponent {
               })
               .subscribe(
                 (res: any) => {
+                  this.viewAllExistingMapping();
                   // this.messageService.add({severity:'success',summary:'Mapping has been successfully updated !!',life:10000})
                 },
                 (error: any) => {
@@ -588,7 +639,7 @@ export class StockUploadMappingComponent {
                 },
                 () => {
                   this.globalBlockUIService.stopLoading();
-
+                  this.clearSelectedFiles()
                   this.visible=false;
                 }
               );
@@ -616,6 +667,7 @@ export class StockUploadMappingComponent {
             },()=>{
               this.globalBlockUIService.stopLoading();
               this.visible=false;
+              this.clearSelectedFiles()
             })
           }
         } else {
@@ -657,6 +709,7 @@ export class StockUploadMappingComponent {
             () => {
               this.globalBlockUIService.stopLoading();
               this.visible=false;
+              this.clearSelectedFiles()
             }
           );
       }
@@ -711,23 +764,35 @@ export class StockUploadMappingComponent {
       );
   }
 
-  onUpload(event: any, stockType: any) {
+  onSelect(event:any){
+    this.selectedFile = event.files[0];
+    this.selectedFileName=this.selectedFile.name;
+  }
+  onUpload(stockType: any) {
     // console.log("event ",event)
-    let file = event.files[0];
-    let brandId = this.stMappingForm.value.brands;
-    const formData = new FormData();
-    formData.append('excelFile', file, file.name);
-    formData.append('brand_id', brandId.toString());
-    // if (this.stMappingForm.value.brands == '') {
-    //   this.messageService.add({
-    //     severity: 'error',
-    //     summary: 'Select the brand',
-    //   });
-    //   return;
-    // }
-    if (stockType == 'Current') {
+    // let file = event.files[0];
+    let brandId ;
+    if(stockType=='Edit Current From Table'|| stockType=='Edit Older From Table'
+       || stockType=='Add Current From Table' || stockType=='Add Older From Table'){
+      brandId=this.rowData.brand_id;
+    }
+    else{
+      brandId = this.stMappingForm.value.brands;
+      if (this.stMappingForm.value.brands == '') {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Select the brand',
+        });
+        return;
+      }
+    }
+     
+    this.formData.append('excelFile', this.selectedFile, this.selectedFileName);
+    this.formData.append('brand_id', brandId.toString());
+   
+    if (stockType == 'Current' || stockType=='Add Current From Table') {
       this.globalBlockUIService.startLoading();
-      this.utilitiesService.singleUploadFile(formData).subscribe(
+      this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.currentStockColumns = res.data;
         },
@@ -740,12 +805,14 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
+          
+          // this.clearSelectedFiles()
         }
       );
-    } else if (stockType == 'Older') {
+    } else if (stockType == 'Older' || stockType=='Add Older From Table') {
       this.globalBlockUIService.startLoading();
 
-      this.utilitiesService.singleUploadFile(formData).subscribe(
+      this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.olderStockColumns = res.data;
         },
@@ -758,11 +825,12 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
+          // this.clearSelectedFiles()
         }
       );
     } else if (stockType == 'Edit Current') {
       this.editCurrentStockColumns = [];
-      this.utilitiesService.singleUploadFile(formData).subscribe(
+      this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.editCurrentStockColumns = res.data;
           // console.log('edit current ', this.editCurrentStockColumns);
@@ -776,11 +844,12 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
+          // this.clearSelectedFiles()
         }
       );
     } else if (stockType == 'Edit Older') {
       this.editOlderStockColumns = [];
-      this.utilitiesService.singleUploadFile(formData).subscribe(
+      this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.editOlderStockColumns = res.data;
         },
@@ -793,11 +862,55 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
+          // this.clearSelectedFiles()
+        }
+      );
+    }
+    else if (stockType == 'Edit Current From Table') {
+      this.showCurrentStockColumnsInTable = [];
+      this.utilitiesService.singleUploadFile(this.formData).subscribe(
+        (res: any) => {
+          this.showCurrentStockColumnsInTable = res.data;
+           console.log('edit current ', this.showCurrentStockColumnsInTable);
+        },
+        (error: any) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error in uploading the file !!',
+            life: 300000,
+          });
+        },
+        () => {
+          this.globalBlockUIService.stopLoading();
+       
+        }
+      );
+    } else if (stockType == 'Edit Older From Table') {
+      this.showOlderStockColumnsInTable = [];
+      this.utilitiesService.singleUploadFile(this.formData).subscribe(
+        (res: any) => {
+          this.showOlderStockColumnsInTable = res.data;
+        },
+        (error: any) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error in uploading the file !!',
+            life: 300000,
+          });
+        },
+        () => {
+          this.globalBlockUIService.stopLoading();
+         
         }
       );
     }
   }
 
+  clearSelectedFiles() {
+    if (this.fileUpload) {
+      this.fileUpload.clear();  // Clear the file input from the p-fileupload component
+    }
+  }
   onCheckboxChangeInView(event: Event) {
     this.isViewMappingForBothStocks = (
       event.target as HTMLInputElement
@@ -860,6 +973,7 @@ export class StockUploadMappingComponent {
           })
           .subscribe(
             (res: any) => {
+             
               this.stMappingForm.reset();
               this.currentStockForm.reset();
               this.currentStockColumns = [];
@@ -873,6 +987,7 @@ export class StockUploadMappingComponent {
                 })
                 .subscribe(
                   (res: any) => {
+                    
                     this.stMappingForm.reset();
                     this.olderStockForm.reset();
                     this.olderStockColumns = [];
@@ -911,6 +1026,7 @@ export class StockUploadMappingComponent {
             },
             () => {
               this.globalBlockUIService.stopLoading();
+              this.clearSelectedFiles()
             }
           );
       }
@@ -954,6 +1070,7 @@ export class StockUploadMappingComponent {
             },
             () => {
               this.globalBlockUIService.stopLoading();
+              this.clearSelectedFiles();
             }
           );
       }

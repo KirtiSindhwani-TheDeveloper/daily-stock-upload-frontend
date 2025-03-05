@@ -71,16 +71,16 @@
                 chooseIcon="pi pi-upload"
                 name="demo[]"
                 class="btn-file-upload"
-                url="https://www.primefaces.org/cdn/api/upload.php"
+                [auto]="false"
                 accept=".xlsx,.csv,.xls"
-                (onUpload)="onUpload($event,'Current')"
+                (onSelect)="onSelect($event)"
               />
     
               <div class="d-flex justify-end">
                 <p-button
                   label="Upload"
                   class="btn-upload"
-                  (onClick)="fu.upload()"
+                  (onClick)="onUpload('Current')"
                   severity="secondary"
                   class="pb-3"
                 />
@@ -162,20 +162,22 @@
                 chooseLabel="Choose"
                 chooseIcon="pi pi-upload"
                 name="demo[]"
-                url="https://www.primefaces.org/cdn/api/upload.php"
+                [auto]="false"
                 accept=".xlsx,.csv,.xls"
-                (onUpload)="onUpload($event,'Older')"
+                (onSelect)="onSelect($event)"
               />
     
               <div class="d-flex justify-end">
                 <p-button
                   label="Upload"
                   class="btn-upload"
-                  (onClick)="fu.upload()"
+                  (onClick)="onUpload('Older')"
                   severity="secondary"
                   class="pb-3"
                 />
               </div>
+
+            
             </div>
             <div
               class="card mapping-card d-flex justify-center"
@@ -290,9 +292,9 @@
             chooseLabel="Choose"
             chooseIcon="pi pi-upload"
             name="demo[]"
-            url="https://www.primefaces.org/cdn/api/upload.php"
+            [auto]="false"
             accept=".xlsx,.csv,.xls"
-            (onUpload)="onUpload($event,'Edit Current')"
+            (onSelect)="onSelect($event)"
             class="btn-file-upload"
           />
 
@@ -300,7 +302,7 @@
             <p-button
               label="Upload"
               class="btn-upload"
-              (onClick)="fu.upload()"
+              (onClick)="onUpload('Edit Current')"
               severity="secondary"
               class="pb-3"
             />
@@ -383,16 +385,16 @@
               class="btn-file-upload"
               chooseIcon="pi pi-upload"
               name="demo[]"
-              url="https://www.primefaces.org/cdn/api/upload.php"
+              [auto]="false"
               accept=".xlsx,.csv,.xls"
-              (onUpload)="onUpload($event,'Edit Older')"
+              (onSelect)="onSelect($event)"
             />
 
             <div class="d-flex justify-end">
               <p-button
                 label="Upload"
                 class="btn-upload"
-                (onClick)="fu.upload()"
+                (onClick)="onUpload('Edit Older')"
                 severity="secondary"
                 class="pb-3"
               />
@@ -586,9 +588,9 @@
                 chooseLabel="Choose"
                 chooseIcon="pi pi-upload"
                 name="demo[]"
-                url="https://www.primefaces.org/cdn/api/upload.php"
+               [auto]="false"
                 accept=".xlsx,.csv,.xls"
-                (onUpload)="onUpload($event,'Edit Current')"
+                (onSelect)="onSelect($event)"
                 class="btn-file-upload"
               />
     
@@ -596,7 +598,7 @@
                 <p-button
                   label="Upload"
                   class="btn-upload"
-                  (onClick)="fu.upload()"
+                  (onClick)="onUpload('Edit Current From Table')"
                   severity="secondary"
                   class="pb-3"
                 />
@@ -679,16 +681,16 @@
                   class="btn-file-upload"
                   chooseIcon="pi pi-upload"
                   name="demo[]"
-                  url="https://www.primefaces.org/cdn/api/upload.php"
+                  [auto]="false"
                   accept=".xlsx,.csv,.xls"
-                  (onUpload)="onUpload($event,'Edit Older')"
+                  (onSelect)="onSelect($event)"
                 />
     
                 <div class="d-flex justify-end">
                   <p-button
                     label="Upload"
                     class="btn-upload"
-                    (onClick)="fu.upload()"
+                    (onClick)="onUpload('Edit Older From Table')"
                     severity="secondary"
                     class="pb-3"
                   />
@@ -755,7 +757,7 @@
         label="Ok"
         [text]="true"
         severity="secondary"
-        *ngIf="!editOlderDaysStock || !editCurrentDaysStock"
+        *ngIf=" !editOlderDaysStock && !editCurrentDaysStock "
         (click)="visibleViewEditPopUp = false"
       />
         <p-button
@@ -802,9 +804,9 @@
                 chooseLabel="Choose"
                 chooseIcon="pi pi-upload"
                 name="demo[]"
-                url="https://www.primefaces.org/cdn/api/upload.php"
+               [auto]="false"
                 accept=".xlsx,.csv,.xls"
-                (onUpload)="onUpload($event,'Current')"
+                (onSelect)="onSelect($event)"
                 class="btn-file-upload"
               />
     
@@ -812,7 +814,7 @@
                 <p-button
                   label="Upload"
                   class="btn-upload"
-                  (onClick)="fu.upload()"
+                  (onClick)="onUpload('Add Current From Table')"
                   severity="secondary"
                   class="pb-3"
                 />
@@ -893,16 +895,16 @@
                   class="btn-file-upload"
                   chooseIcon="pi pi-upload"
                   name="demo[]"
-                  url="https://www.primefaces.org/cdn/api/upload.php"
+                  [auto]="false"
                   accept=".xlsx,.csv,.xls"
-                  (onUpload)="onUpload($event,'Older')"
+                  (onSelect)="onSelect($event)"
                 />
     
                 <div class="d-flex justify-end">
                   <p-button
                     label="Upload"
                     class="btn-upload"
-                    (onClick)="fu.upload()"
+                    (onClick)="onUpload('Add Older From Table')"
                     severity="secondary"
                     class="pb-3"
                   />
@@ -970,7 +972,7 @@
           label="Cancel"
           [text]="true"
           severity="secondary"
-          (click)="visible = false"
+          (click)="visibleAddPopUp = false"
         />
         <p-button
           label="Save"
