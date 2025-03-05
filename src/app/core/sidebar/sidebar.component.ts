@@ -29,7 +29,7 @@ export class SidebarComponent {
   sidebarItems = [
     {id: 1, value: "Mapping", children: [
         {id: 2, value: "Stock Upload Mapping", route: 'mapping/stock-upload',isActive: false},
-        {id: 3, value: "Dealer Location Mapping", route: '',isActive: false}
+        {id: 3, value: "Dealer Location Mapping", route: 'mapping/dealer-location',isActive: false}
       ], isExpanded: false},
     {id: 4, value: "Stock Upload", children: [
       {id: 2, value: "Single Location Upload", route: '',isActive: false},

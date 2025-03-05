@@ -18,22 +18,30 @@ export class DealerLocationMappingComponent {
  
  selectedFile:any;
  isLoading:boolean=false;
- fileName:string='';
  brands:any=[];
+ file:any;
+ fileName:any;
  dlForm:FormGroup;
  constructor(private utilitiesService:UtilitiesService,
   private fb:FormBuilder
  ){
 
   this.dlForm=this.fb.group({
-    brand:['',Validators.required]
+    brand:['',Validators.required],
+    file:['',Validators.required]
   })
  }
 
  ngOnInit(){
   this.getBrands();
  }
-  onUpload(event: any) {
+
+ onSelect(event:any){
+   this.file=event.files[0];
+   this.fileName=this.file.name;
+ }
+
+  onUpload() {
 
    if(this.dlForm.invalid){
 
@@ -42,10 +50,10 @@ export class DealerLocationMappingComponent {
      })
    }
    else{
-    let file=event.files[0];
+   
     let brandId=this.dlForm.value.brand;
       const formData = new FormData();
-      formData.append('excelFile', file, file.name);
+      formData.append('excelFile', this.file, this.fileName);
       formData.append('brand_id', brandId.toString());
    }
   }
@@ -56,5 +64,9 @@ export class DealerLocationMappingComponent {
       this.brands=res.data;
       // console.log(this.brands)
     })
+  }
+
+  exportToExcel(){
+
   }
 }

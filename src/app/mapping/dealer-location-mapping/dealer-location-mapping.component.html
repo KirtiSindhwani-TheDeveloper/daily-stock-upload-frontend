@@ -1,39 +1,44 @@
 <p-toast></p-toast>
-<div class=" !w-[100vw]">
 
-    <p-blockUI [blocked]="isLoading">
-        <i class='bx bx-loader-circle fa-spin custom-icon fa-spinner'></i>
-    
-      </p-blockUI>
-</div>
 <div class="body mt-4 ">
-    <span class="text-black text-3xl scale-110">Dealer Location Mapping</span>
+    <span class="text-black text-3xl ">Dealer Location Mapping</span>   
+                <div class="d-flex">
+                    <form [formGroup]="dlForm">
+                        <div class="d-flex justify-end">
+                            <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i>
+                        </div>
+                    <div class=" add-mapping-card w-[70vw] h-[20vh]  !flex !flex-row !gap-6 p-3 !items-center">
+                       
+                            <div>
 
-</div>
-                
-                <div class="d-flex !justify-center">
-                    <div class="  w-[80vh] add-mapping-card  !flex !flex-col !gap-6 !justify-center !items-center">
-                        <form [formGroup]="dlForm">
+                                <p-select
+                                  [options]="brands"
+                                  formControlName="brand"
+                                  optionLabel="brand"
+                                  optionValue="brand_id"
+                                  placeholder="Select Brand"
+                                  class="dropdown  w-56 md:w-56"
+                                  
+                                />
+                                <div class=" d-flex mt-1" *ngIf="dlForm.get('brand')?.touched && dlForm?.get('brand')?.invalid " >
+                                    <small *ngIf="dlForm?.get('brand')?.hasError('required')" style="color: red; font-size: 12px;">Part Number is required.</small> 
+                                </div>
+                            </div>
                             
-                            <p-select
-                              [options]="brands"
-                              formControlName="brand"
-                              optionLabel="brand"
-                              optionValue="brand_id"
-                              placeholder="Select Brands"
-                              class="dropdown !mt-3 w-56 md:w-56"
-                              
-                            />
-                            <div class=" d-flex justify-center mt-1" *ngIf="dlForm.get('brand')?.touched && dlForm?.get('brand')?.invalid " >
-                                <small *ngIf="dlForm?.get('brand')?.hasError('required')" style="color: red; font-size: 12px;">Part Number is required.</small> 
-                               </div>
-                            
-                        </form>
-                      
-                        <p-fileupload #fu class="mt-2 !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept=".xlsx,.csv,.xls" (onUpload)="onUpload($event)" />
-           
-                        <p-button label="Upload" class="" (onClick)="fu.upload()" severity="secondary" class="pb-3" />
+                      <div>
+                          <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                          [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+
+                          <div class=" d-flex mt-1" *ngIf="dlForm.get('file')?.touched && dlForm?.get('file')?.invalid " >
+                            <small *ngIf="dlForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
+                        </div>
+                      </div>
+                    
+                       
+                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
                     </div>
+                </form>
                 </div>
+            </div>
            
 

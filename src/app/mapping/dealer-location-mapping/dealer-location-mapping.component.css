@@ -42,3 +42,9 @@
     background-color: var(--primary-color);
     border-radius: 6px;
 }
+
+:host ::ng-deep .p-select-list-container{
+    max-height: 260px !important;
+    width: 225px !important;
+    overflow-x:hidden;
+}

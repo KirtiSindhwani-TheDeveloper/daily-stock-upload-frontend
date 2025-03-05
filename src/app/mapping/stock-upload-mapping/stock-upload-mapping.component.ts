@@ -765,6 +765,7 @@ export class StockUploadMappingComponent {
   }
 
   onSelect(event:any){
+   
     this.selectedFile = event.files[0];
     this.selectedFileName=this.selectedFile.name;
   }
@@ -778,23 +779,26 @@ export class StockUploadMappingComponent {
     }
     else{
       brandId = this.stMappingForm.value.brands;
-      if (this.stMappingForm.value.brands == '') {
+      if (this.stMappingForm.value.brands == '' || brandId=='' || brandId==null || this.selectedFile==null) {
         this.messageService.add({
           severity: 'error',
-          summary: 'Select the brand',
+          summary: 'Select the brand and File',
         });
         return;
       }
     }
-     
-    this.formData.append('excelFile', this.selectedFile, this.selectedFileName);
-    this.formData.append('brand_id', brandId.toString());
+     console.log(brandId)
+    
+      this.formData.append('excelFile', this.selectedFile, this.selectedFileName);
+      this.formData.append('brand_id', brandId.toString());
+
+  
    
     if (stockType == 'Current' || stockType=='Add Current From Table') {
       this.globalBlockUIService.startLoading();
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
-          this.currentStockColumns = res.data;
+          this.currentStockColumns = res.data.headers;
         },
         (error: any) => {
           this.messageService.add({
@@ -805,8 +809,9 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
-          
-          // this.clearSelectedFiles()
+          this.formData=new FormData();
+           this.clearSelectedFiles();
+           this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Older' || stockType=='Add Older From Table') {
@@ -814,7 +819,7 @@ export class StockUploadMappingComponent {
 
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
-          this.olderStockColumns = res.data;
+          this.olderStockColumns = res.data.headers;
         },
         (error: any) => {
           this.messageService.add({
@@ -825,14 +830,16 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
-          // this.clearSelectedFiles()
+           this.clearSelectedFiles()
+          this.formData=new FormData();
+          this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Edit Current') {
       this.editCurrentStockColumns = [];
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
-          this.editCurrentStockColumns = res.data;
+          this.editCurrentStockColumns = res.data.headers;
           // console.log('edit current ', this.editCurrentStockColumns);
         },
         (error: any) => {
@@ -844,14 +851,16 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
-          // this.clearSelectedFiles()
+          this.clearSelectedFiles()
+          this.formData=new FormData();
+          this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Edit Older') {
       this.editOlderStockColumns = [];
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
-          this.editOlderStockColumns = res.data;
+          this.editOlderStockColumns = res.data.headers;
         },
         (error: any) => {
           this.messageService.add({
@@ -862,7 +871,9 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
-          // this.clearSelectedFiles()
+          this.clearSelectedFiles();
+          this.formData=new FormData();
+          this.stMappingForm.reset();
         }
       );
     }
@@ -870,8 +881,8 @@ export class StockUploadMappingComponent {
       this.showCurrentStockColumnsInTable = [];
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
-          this.showCurrentStockColumnsInTable = res.data;
-           console.log('edit current ', this.showCurrentStockColumnsInTable);
+          this.showCurrentStockColumnsInTable = res.data.headers;
+          // console.log('edit current ', this.showCurrentStockColumnsInTable);
         },
         (error: any) => {
           this.messageService.add({
@@ -882,14 +893,17 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
-       
+          this.formData=new FormData();
+        
+          this.clearSelectedFiles();
+          this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Edit Older From Table') {
       this.showOlderStockColumnsInTable = [];
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
-          this.showOlderStockColumnsInTable = res.data;
+          this.showOlderStockColumnsInTable = res.data.headers;
         },
         (error: any) => {
           this.messageService.add({
@@ -900,7 +914,9 @@ export class StockUploadMappingComponent {
         },
         () => {
           this.globalBlockUIService.stopLoading();
-         
+         this.clearSelectedFiles();
+         this.formData=new FormData();
+         this.stMappingForm.reset();
         }
       );
     }
