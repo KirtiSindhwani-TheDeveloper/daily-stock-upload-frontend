@@ -18,4 +18,13 @@ export class UtilitiesService {
   singleUploadFile(data:any):Observable<any>{
     return this.http.post(`${this.url}utilities/upload`,data)
   }
+
+  getLocations(data:any):Observable<any>{
+    return this.http.post(`${this.url}utilities/locations`,data)
+  }
+
+  getDealers(data:any):Observable<any>{
+    return this.http.post(`${this.url}utilities/dealers`,data)
+  }
+  
 }

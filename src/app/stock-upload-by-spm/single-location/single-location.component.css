@@ -48,10 +48,3 @@
     width: 225px !important;
     overflow-x:hidden;
 }
-
-:host ::ng-deep .disabled {
-    pointer-events: none; /* Prevents clicking on the element */
-    color:gray; /* Optional: Change color to indicate it's disabled */
-    /* background-color: gray; */
-    cursor: not-allowed; /* Changes the cursor to indicate it's disabled */
-  }

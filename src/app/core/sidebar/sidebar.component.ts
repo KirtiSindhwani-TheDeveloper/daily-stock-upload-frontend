@@ -28,11 +28,11 @@ export class SidebarComponent {
   isVisible: boolean = true;
   sidebarItems = [
     {id: 1, value: "Mapping", children: [
-        {id: 2, value: "Stock Upload Mapping", route: 'mapping/stock-upload',isActive: false},
+        {id: 2, value: "Stock Upload Mapping", route: 'mapping/stock-upload',isActive: true},
         {id: 3, value: "Dealer Location Mapping", route: 'mapping/dealer-location',isActive: false}
       ], isExpanded: false},
     {id: 4, value: "Stock Upload", children: [
-      {id: 2, value: "Single Location Upload", route: '',isActive: false},
+      {id: 2, value: "Single Location Upload", route: 'upload/sl',isActive: false},
       {id: 3, value: "Multi Location Upload", route: '',isActive: false},
       {id: 3, value: "Single Upload", route: '',isActive: false},
       {id: 3, value: "Bulk Upload", route: '',isActive: false}

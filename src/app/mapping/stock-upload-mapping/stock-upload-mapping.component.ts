@@ -787,7 +787,7 @@ export class StockUploadMappingComponent {
         return;
       }
     }
-     console.log(brandId)
+    //  console.log(brandId)
     
       this.formData.append('excelFile', this.selectedFile, this.selectedFileName);
       this.formData.append('brand_id', brandId.toString());

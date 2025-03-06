@@ -1,0 +1,43 @@
+<p-toast></p-toast>
+
+<div class="body mt-4 ">
+    <span class="text-black text-3xl ">Single Location Stock Upload</span>   
+                <div class="d-flex">
+                    <form [formGroup]="slForm">
+                        <div class="d-flex justify-end">
+                            <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i>
+                        </div>
+                    <div class=" add-mapping-card w-[70vw] h-[20vh]  !flex !flex-row !gap-6 p-3 !items-center">
+                       
+                            <div>
+
+                                <p-select
+                                  [options]="locations"
+                                  formControlName="location"
+                                  optionLabel="location"
+                                  optionValue="location_id"
+                                  placeholder="Select Location"
+                                  class="dropdown  w-56 md:w-56"
+                                  
+                                />
+                                <div class=" d-flex mt-1" *ngIf="slForm.get('location')?.touched && slForm?.get('location')?.invalid " >
+                                    <small *ngIf="slForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
+                                </div>
+                            </div>
+                            
+                      <div>
+                          <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                          [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+
+                          <div class=" d-flex mt-1" *ngIf="slForm.get('file')?.touched && slForm?.get('file')?.invalid " >
+                            <small *ngIf="slForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
+                        </div>
+                      </div>
+                    
+                       
+                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
+                    </div>
+                </form>
+                </div>
+            </div>
+           

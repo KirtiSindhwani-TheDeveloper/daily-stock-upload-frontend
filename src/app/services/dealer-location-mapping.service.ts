@@ -15,6 +15,9 @@ export class DealerLocationMappingService {
   uploadDealerLocationMapping(data:any):Observable<any>{
 
     return this.http.post(`${this.url}dl-mapping/create`,data)
+  }
 
+  exportToExcel(data:any):Observable<any>{
+    return this.http.post(`${this.url}dl-mapping/export`,data);
   }
 }
