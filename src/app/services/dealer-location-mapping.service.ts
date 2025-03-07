@@ -20,4 +20,8 @@ export class DealerLocationMappingService {
   exportToExcel(data:any):Observable<any>{
     return this.http.post(`${this.url}dl-mapping/export`,data);
   }
+
+  editDealerLocationMapping(data:any):Observable<any>{
+    return this.http.post(`${this.url}dl-mapping/edit`,data)
+  }
 }

@@ -5,7 +5,7 @@
                 <div class="d-flex mt-2">
                     <form [formGroup]="dlForm">
                         <div class="d-flex justify-end">
-                            <i *ngIf="isDataPresent"
+                            <!-- <i *ngIf="isDataPresent"
      class="bx bx-export cursor-pointer font-semibold mb-2"
      style="font-size: 20px;"
      (click)="exportToExcel()">
@@ -13,9 +13,9 @@
   <i *ngIf="!isDataPresent"
      class="bx bx-export cursor-pointer font-semibold mb-2 disabled"
      style="font-size: 20px;">
-  </i>
+  </i> -->
                         </div>
- <div class=" add-mapping-card w-[70vw] h-[20vh]  !flex !flex-row !gap-6 p-3 !items-center">
+ <div class=" add-mapping-card w-[70vw] h-[15vh]  !flex !flex-row !gap-6 p-3 !items-center">
                        
                             <div>
 
@@ -44,16 +44,34 @@
                     
                        
                         <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" [disabled]="isDataPresent" />
+                        <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="!isDataPresent" />
+                        <p-button label="Edit" class="" (onClick)="showEditPopup()" severity="secondary" [disabled]="!isDataPresent" />
                     </div>
                 </form>
                 </div>
             </div>
            
-            <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
+            <!-- <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
                 <ng-template #header>
                   <div class="inline-flex items-center justify-center gap-2">
                     <span class="font-bold whitespace-nowrap">Mapping Already Exist.</span>
                   </div>
                 </ng-template>
                
-              </p-dialog> 
+              </p-dialog>  -->
+
+              <p-dialog header="Edit Mapping" [(visible)]="showEditPopUp" [modal]="true" [style]="{ width: '25rem' }">
+                <!-- <ng-template #header>
+                  <div class="inline-flex items-center justify-center gap-2">
+                    <span class="font-bold whitespace-nowrap">Mapping Already Exist.</span>
+                  </div>
+                </ng-template> -->
+
+                <div class="inline-flex items-center justify-center gap-2 flex-row">
+
+                    <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                    [auto]="false" accept=".xlsx,.csv,.xls" [multiple]="false" (onSelect)="onSelect($event)"   />
+                    <p-button label="Upload" class="" (onClick)="onEdit()" severity="secondary"  />
+                   
+                </div>
+              </p-dialog>           

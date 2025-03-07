@@ -56,19 +56,17 @@ export class SingleLocationComponent {
  
    getLocations(){
        
-     // this.utilitiesService.getLocations().subscribe((res:any)=>{
-     //   this.Locations=res.data;
-     //   // console.log(this.brands)
-     // })
+     this.utilitiesService.getLocations({dealer_id:20295}).subscribe((res:any)=>{
+       this.locations=res.data;
+       // console.log(this.brands)
+     })
    }
  
    exportToExcel(){
  
    }
 
-  //  getDealers(){
-  //   this.utilitiesService.getDealers({dealer_id:})
-  //  }
+ 
 
 
 }

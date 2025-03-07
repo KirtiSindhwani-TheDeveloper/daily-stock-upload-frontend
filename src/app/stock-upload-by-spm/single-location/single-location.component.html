@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
-<div class="body mt-4 ">
-    <span class="text-black text-3xl ">Single Location Stock Upload</span>   
+<div class="body mt-2 ">
+    <span class="text-black text-2xl ">Single Location Stock Upload</span>   
                 <div class="d-flex">
                     <form [formGroup]="slForm">
                         <div class="d-flex justify-end">
@@ -14,7 +14,7 @@
                                 <p-select
                                   [options]="locations"
                                   formControlName="location"
-                                  optionLabel="location"
+                                  optionLabel="location_name"
                                   optionValue="location_id"
                                   placeholder="Select Location"
                                   class="dropdown  w-56 md:w-56"

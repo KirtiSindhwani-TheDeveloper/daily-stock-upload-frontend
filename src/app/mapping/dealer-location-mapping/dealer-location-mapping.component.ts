@@ -30,6 +30,7 @@ export class DealerLocationMappingComponent {
  uploadedData:any=[];
  isDataPresent:boolean=false;
  userId=1;
+ showEditPopUp:boolean=false;
  visible:boolean=false;
  constructor(private utilitiesService:UtilitiesService,
   private fb:FormBuilder,private dealerLocationService:DealerLocationMappingService,
@@ -48,6 +49,7 @@ export class DealerLocationMappingComponent {
  }
 
  onSelect(event:any){
+ 
    this.file=event.files[0];
    this.fileName=this.file.name;
  }
@@ -87,6 +89,7 @@ export class DealerLocationMappingComponent {
         }
       },(error:any)=>{
         this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
+        this.globalUiService.stopLoading();
       },()=>{
         this.globalUiService.stopLoading();
         this.dlForm.reset();
@@ -102,6 +105,7 @@ export class DealerLocationMappingComponent {
       this.fileUpload.clear();  // Clear the file input from the p-fileupload component
     }
   }
+
   getBrands(){
       
     this.utilitiesService.getBrands().subscribe((res:any)=>{
@@ -112,6 +116,7 @@ export class DealerLocationMappingComponent {
 
 onBrandSelect(event:any){
 
+  this.clearSelectedFiles();
   this.dealerLocationService.exportToExcel({brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
     this.uploadedData=res.data;
     if(this.uploadedData.length!=0){
@@ -149,5 +154,45 @@ onBrandSelect(event:any){
 
     // Write the workbook to a file and trigger download
     XLSX.writeFile(wb, 'Dealer_Location_Mapping.xlsx');
+  }
+
+  onEdit(){
+    let brandId=this.dlForm.value.brand;
+    let formData = new FormData();
+    if(this.selectedFile!='' || this.selectedFile!=null){
+      formData.append('excelFile', this.file, this.fileName);
+      formData.append('brand_id', brandId.toString());
+      formData.append('added_by',this.userId.toString())
+
+    }
+    this.globalUiService.startLoading()
+    this.dealerLocationService.editDealerLocationMapping(formData).subscribe((res:any)=>{
+      if(res?.isDealerAndLocationPresent==false){
+        this.messageService.add({severity:'error',summary:'Dealer and Location is not present in Uploaded File!!',life:300000})
+      }
+      if(res?.isDealerAndLocationNull){
+        this.messageService.add({severity:'error',summary:'Dealer and Location cannot be null!!',life:300000})
+      }
+
+      if(res?.dealerLocationNotInMasterPresent){
+        this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!!',life:300000})
+      }
+      if(res?.insertedSuccessfully){
+        this.messageService.add({severity:'success',summary:'Mapping is updated successfully!!',life:10000})
+      }
+    },(error:any)=>{
+      this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
+    },()=>{
+      this.globalUiService.stopLoading();
+      this.dlForm.reset();
+      this.clearSelectedFiles();
+      formData=new FormData();
+
+    })
+ 
+  }
+
+  showEditPopup(){
+    this.showEditPopUp=true;
   }
 }
