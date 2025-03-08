@@ -20,12 +20,13 @@ import { FileUpload } from 'primeng/fileupload';
 })
 export class DealerLocationMappingComponent {
 
- @ViewChild('fu') fileUpload: FileUpload|null =null;
+ @ViewChild('fu') fu: FileUpload|null =null;
  selectedFile:any;
  isLoading:boolean=false;
  brands:any=[];
  file:any;
  fileName:any;
+ addFileName:any;
  dlForm:FormGroup;
  uploadedData:any=[];
  isDataPresent:boolean=false;
@@ -51,7 +52,13 @@ export class DealerLocationMappingComponent {
  onSelect(event:any){
  
    this.file=event.files[0];
+   if(this.showEditPopUp){
+    this.fileName=this.file.name;
+   }
    this.fileName=this.file.name;
+   if(!this.showEditPopUp){
+    this.addFileName=this.file.anme;
+   }
  }
 
   onUpload() {
@@ -66,7 +73,7 @@ export class DealerLocationMappingComponent {
    
     let brandId=this.dlForm.value.brand;
       let formData = new FormData();
-      if(this.selectedFile!='' || this.selectedFile!=null){
+      if(this.file!='' || this.file!=null){
         formData.append('excelFile', this.file, this.fileName);
         formData.append('brand_id', brandId.toString());
         formData.append('added_by',this.userId.toString())
@@ -87,6 +94,11 @@ export class DealerLocationMappingComponent {
         if(res?.insertedSuccessfully){
           this.messageService.add({severity:'success',summary:'Mapping is created successfully!!',life:10000})
         }
+        this.clearSelectedFiles();
+        formData=new FormData();
+        this.selectedFile=null;
+        this.file=null;
+        this.addFileName='';
       },(error:any)=>{
         this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
         this.globalUiService.stopLoading();
@@ -95,14 +107,20 @@ export class DealerLocationMappingComponent {
         this.dlForm.reset();
         this.clearSelectedFiles();
         formData=new FormData();
+        this.file=null
+        this.selectedFile=null;
+        this.addFileName='';
 
       })
    }
   }
 
   clearSelectedFiles() {
-    if (this.fileUpload) {
-      this.fileUpload.clear();  // Clear the file input from the p-fileupload component
+    if (this.fu) {
+      this.fu.clear();
+      this.file=null;
+      this.selectedFile=null
+        // Clear the file input from the p-fileupload component
     }
   }
 
@@ -159,7 +177,7 @@ onBrandSelect(event:any){
   onEdit(){
     let brandId=this.dlForm.value.brand;
     let formData = new FormData();
-    if(this.selectedFile!='' || this.selectedFile!=null){
+    if(this.file!='' || this.file!=null){
       formData.append('excelFile', this.file, this.fileName);
       formData.append('brand_id', brandId.toString());
       formData.append('added_by',this.userId.toString())
@@ -169,30 +187,54 @@ onBrandSelect(event:any){
     this.dealerLocationService.editDealerLocationMapping(formData).subscribe((res:any)=>{
       if(res?.isDealerAndLocationPresent==false){
         this.messageService.add({severity:'error',summary:'Dealer and Location is not present in Uploaded File!!',life:300000})
+      
       }
       if(res?.isDealerAndLocationNull){
         this.messageService.add({severity:'error',summary:'Dealer and Location cannot be null!!',life:300000})
+       
       }
 
       if(res?.dealerLocationNotInMasterPresent){
         this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!!',life:300000})
+       
       }
       if(res?.insertedSuccessfully){
         this.messageService.add({severity:'success',summary:'Mapping is updated successfully!!',life:10000})
+       
       }
+      this.dlForm.reset();
+      this.clearSelectedFiles();
+      formData=new FormData();
+      this.file=null;
+       this.fileName=null;     
+       this.selectedFile=null; 
+       this.fu?.clear();
     },(error:any)=>{
-      this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
-    },()=>{
+      this.showEditPopUp=false;
       this.globalUiService.stopLoading();
       this.dlForm.reset();
       this.clearSelectedFiles();
       formData=new FormData();
+      
+      this.messageService.add({severity:'error',summary:'Error in updating Mapping!!',life:300000})
+    },()=>{
+      // this.showEditPopUp=false
+      this.globalUiService.stopLoading();
+      this.dlForm.reset();
+      this.clearSelectedFiles();
+      formData=new FormData();
+      this.file=null;
+      this.fileName=''     
+      this.selectedFile=null;
+      this.fu?.clear();
 
     })
  
   }
 
   showEditPopup(){
+    this.fu?.clear();
+    this.fileName='';
     this.showEditPopUp=true;
   }
 }

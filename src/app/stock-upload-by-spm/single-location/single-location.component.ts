@@ -4,6 +4,7 @@ import { UtilitiesService } from '../../services/utilities.service';
 import { PrimengModuleModule } from '../../shared/primeng-module/primeng-module.module';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonModule } from '@angular/common';
+import { StockUploadBySpmService } from '../../services/stock-upload-by-spm.service';
 
 @Component({
   selector: 'app-single-location',
@@ -19,12 +20,13 @@ export class SingleLocationComponent {
   fileName:any;
   slForm:FormGroup;
   constructor(private utilitiesService:UtilitiesService,
-   private fb:FormBuilder
+   private fb:FormBuilder,
+   private stockUploadService:StockUploadBySpmService
   ){
  
    this.slForm=this.fb.group({
      location:['',Validators.required],
-     file:['',Validators.required]
+    //  file:['',Validators.required]
    })
   }
  
@@ -45,12 +47,17 @@ export class SingleLocationComponent {
         this.slForm.get(controlName)?.markAsTouched();
       })
     }
+    
     else{
     
-     let brandId=this.slForm.value.brand;
+     let locationId=this.slForm.value.location;
        const formData = new FormData();
        formData.append('excelFile', this.file, this.fileName);
-       formData.append('brand_id', brandId.toString());
+       formData.append('location_id', locationId.toString());
+      this.stockUploadService.uploadSingleLocationUpload(formData).subscribe((res:any)=>{
+        
+      })
+       
     }
    }
  
@@ -65,6 +72,8 @@ export class SingleLocationComponent {
    exportToExcel(){
  
    }
+
+   
 
  
 

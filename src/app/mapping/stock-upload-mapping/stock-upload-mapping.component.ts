@@ -811,7 +811,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
           this.formData=new FormData();
            this.clearSelectedFiles();
-           this.stMappingForm.reset();
+          //  this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Older' || stockType=='Add Older From Table') {
@@ -832,7 +832,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
            this.clearSelectedFiles()
           this.formData=new FormData();
-          this.stMappingForm.reset();
+          // this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Edit Current') {
@@ -853,7 +853,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
           this.clearSelectedFiles()
           this.formData=new FormData();
-          this.stMappingForm.reset();
+          // this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Edit Older') {
@@ -873,7 +873,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
           this.clearSelectedFiles();
           this.formData=new FormData();
-          this.stMappingForm.reset();
+          // this.stMappingForm.reset();
         }
       );
     }
@@ -896,7 +896,7 @@ export class StockUploadMappingComponent {
           this.formData=new FormData();
         
           this.clearSelectedFiles();
-          this.stMappingForm.reset();
+          // this.stMappingForm.reset();
         }
       );
     } else if (stockType == 'Edit Older From Table') {
@@ -916,7 +916,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
          this.clearSelectedFiles();
          this.formData=new FormData();
-         this.stMappingForm.reset();
+        //  this.stMappingForm.get()();
         }
       );
     }
