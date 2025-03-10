@@ -32,10 +32,10 @@ export class SidebarComponent {
         {id: 3, value: "Dealer Location Mapping", route: 'mapping/dealer-location',isActive: false}
       ], isExpanded: false},
     {id: 4, value: "Stock Upload", children: [
-      {id: 2, value: "Single Location Upload", route: 'upload/sl',isActive: false},
-      {id: 3, value: "Multi Location Upload", route: '',isActive: false},
-      {id: 3, value: "Single Upload", route: '',isActive: false},
-      {id: 3, value: "Bulk Upload", route: '',isActive: false}
+      {id: 5, value: "Single Location Upload", route: 'upload/sl',isActive: false},
+      {id: 9, value: "Multi Location Upload", route: 'upload/ml',isActive: false},
+      {id: 10, value: "Single Upload", route: '',isActive: false},
+      {id: 12, value: "Bulk Upload", route: '',isActive: false}
     ], isExpanded: false}
   ];
   

@@ -14,4 +14,17 @@ export class StockUploadBySpmService {
   uploadSingleLocationUpload(data:any):Observable<any>{
    return  this.http.post(`${this.url}stock-upload/single-location`,data);
   }
+
+  getAllRecords(data:any):Observable<any>{
+    return this.http.post(`${this.url}stock-upload/all-records`,data);
+  }
+
+  getPartNotInMaster(data:any):Observable<any>{
+    return this.http.post(`${this.url}stock-upload/part-not-in-master`,data);
+  }
+
+  getUploadedData(data:any):Observable<any>{
+    
+    return this.http.post(`${this.url}stock-upload/all-uploadedData`,data);
+  }
 }
