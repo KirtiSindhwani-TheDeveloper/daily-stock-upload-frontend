@@ -27,4 +27,21 @@ export class StockUploadBySpmService {
     
     return this.http.post(`${this.url}stock-upload/all-uploadedData`,data);
   }
+
+  uploadMultiLocation(data:any):Observable<any>{
+    return this.http.post(`${this.url}stock-upload/multi-location`,data)
+  }
+
+  getMultiLocationUploadedData(data:any):Observable<any>{  
+    return this.http.post(`${this.url}stock-upload/multi-uploadedData`,data)
+  }
+
+  getPartNotInMasterMultiLocation(data:any):Observable<any>{
+    return this.http.post(`${this.url}stock-upload/part-not-in-master-ml`,data)
+  }
+
+  getRecordsMultiLocation(data:any):Observable<any>{
+    return this.http.post(`${this.url}stock-upload/all-records-ml`,data)
+  }
+
 }

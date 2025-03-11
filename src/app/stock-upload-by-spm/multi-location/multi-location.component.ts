@@ -8,7 +8,7 @@ import { StockUploadBySpmService } from '../../services/stock-upload-by-spm.serv
 import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-multi-location',
   imports: [PrimengModuleModule,SharedModule,CommonModule,ReactiveFormsModule,FormsModule],
@@ -18,12 +18,13 @@ import { CommonModule } from '@angular/common';
 export class MultiLocationComponent {
 
   showTable:boolean=false;
-  records:any=[];
+  records:any[]=[];
  mlForm:FormGroup;
  locations:any=[];
  formData=new FormData();
  locationName:any;
  addedBy:any;
+ addedOn:any;
  files: any[] = [];
         locationSelected: Set<number> = new Set(); // To track selected locations
    @ViewChild('fu') fu:FileUpload|null=null;
@@ -107,26 +108,79 @@ export class MultiLocationComponent {
   
     // Handle the submit (upload)
     onUpload() {
+      let userId=1;
+      let dealerId=20295;
       if (this.mlForm.valid) {
-        const formData = new FormData();
+        this.globalBlockUiService.startLoading();
+        // const formData = new FormData();
   
-        // Append all files and locations to FormData
         const locations = this.mlForm.get('locations')?.value;
-        locations.forEach((location: any) => {
-          formData.append('files[]', location.file, location.file.name);
-          formData.append('location_id', location.location);
-        });
+
+      // Iterate through locations and append each file and location to FormData
+      locations.forEach((location: any) => {
+        if (location.file) {
+          this.formData.append('files[]', location.file, location.file.name); // Append file
+        }
+        if (location.location) {
+          this.formData.append('location_id', location.location); // Append location ID
+        }
+        this.formData.append('user_id', userId.toString());
+        
+        this.formData.append('dealer_id', dealerId.toString());
+      });
+        this.stockUploadService.uploadMultiLocation(this.formData).subscribe((res:any)=>{
+
+          if(res?.mappingNotPresent){
+            this.messageService.add({severity:'error',detail:'Brand Mapping is not available!!',life:300000});
+          }
+          else{
+            this.showTable=true;
+           this.getRecords();
+           this.messageService.add({severity:'success',detail:'Stock Upload successfully!!',life:300000});
+          }
+          this.formData=new FormData();
+          this.fu?.clear();
+        },(error:any)=>{
+          this.globalBlockUiService.stopLoading();
+          this.messageService.add({severity:'error',detail:'Error in uploading the file!!',life:300000});
+          this.formData=new FormData();
+          this.fu?.clear();
+        })
 
       }
     }
   
   
+    getRecords(){
+     
+      const locations = this.mlForm.get('locations')?.value;
+      
+      this.globalBlockUiService.startLoading();
+      this.stockUploadService.getRecordsMultiLocation({locations:locations}).subscribe((res:any)=>{
+        this.records=res.data;
+        this.globalBlockUiService.stopLoading();
+       
+      this.addedOn=res.data.added_on;
+      this.addedBy='Kirti'
+    //  this.records= this.records.map((item:any)=>({
+    //     ...item,
+    //     added_on: this.formatDate(item.added_on)
+    //     let locObj=this.locations.find((obj:any)=> obj.location_id==item.location_id)
+    //     this.locationName=locObj?.location_name;
+    //   }))
+      },(error:any)=>{
+        this.globalBlockUiService.stopLoading();
+        // this.messageService.add({severity:'error',detail:'Error in uploading the file!!',life:300000});
+      })
+    }
+
     getLocations(){
       this.utilitiesService.getLocations({dealer_id:20295}).subscribe((res:any)=>{
         this.locations=res.data;
         // console.log(this.brands)
       })
     }
+
     onSelect(event:any){
       const files = event.files;
       const formArray = this.mlForm.get('files') as FormArray;
@@ -140,6 +194,25 @@ export class MultiLocationComponent {
 
     exportTableData(){
 
+       const modifiedData = this.records.map((item: any) => ({
+                ['Location']: this.locationName,
+                ['Previous Records']: item.prevStockUploadCount ,
+                ['Current Records']: item.stockUploadCount,
+                ['Previous Sum Quantity']: item.prevQuantitySum,
+                ['Current Sum Quantity']: item.quantitySum ,
+                ['Added On ']: this.formatDate(item.added_on),
+                ['Added By ']:'Kirti'
+               
+          
+              }));
+              const ws = XLSX.utils.json_to_sheet(modifiedData);
+          
+              // Create a workbook and append the worksheet
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, 'Table Data');
+          
+              // Write the workbook to a file and trigger download
+              XLSX.writeFile(wb, 'exported_data.xlsx');
     }
 
     exportToExcel(){
@@ -148,5 +221,25 @@ export class MultiLocationComponent {
 
     exportUploadedData(){
 
+    }
+
+    formatDate(dateString: string): string {
+      const date = new Date(dateString); // Parse the input string as a date
+    
+      // Check if the Date object is valid
+      if (isNaN(date.getTime())) {
+        return '-'; // Return a default value if the date is invalid
+      }
+    
+      // Extract year, month, day, hours, minutes, and seconds in IST
+      const year = date.getUTCFullYear();
+      const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Use UTC methods to avoid time zone conversion
+      const day = date.getUTCDate().toString().padStart(2, '0');
+      const hours = date.getUTCHours().toString().padStart(2, '0');
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      // const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    
+      // Combine and return the formatted string as 'DD-MM-YYYY HH:MM:SS'
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
     }
 }
