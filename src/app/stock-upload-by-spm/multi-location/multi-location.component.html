@@ -4,8 +4,10 @@
     <span class="text-black text-2xl ">Multi Location Stock Upload</span>   
                 <div class="d-flex">
                     <form [formGroup]="mlForm">
+                        <!-- [ngClass]="showTable ? 'cursor-pointer' : 'disabled'" -->
+
                         <div class="d-flex justify-end">
-                            <span class="btn-view mb-2" [ngClass]="showTable ? 'cursor-pointer' : 'disabled'" (click)="exportToExcel()">Part Not In Master Export</span>
+                            <span class="btn-view mb-2"  (click)="exportToExcel()">Part Not In Master Export</span>
                         </div>
                     
                         <div class="add-mapping-card w-[70vw] h-auto  !gap-6 p-3">
@@ -54,7 +56,8 @@
                             
                         </div>
                             <p-button label="Upload" (onClick)="onUpload()" severity="secondary" />
-                            <p-button label="Get Uploaded Data" class="" [disabled]="!showTable" (onClick)="exportUploadedData()" severity="secondary" class="ms-3" />
+                            <!-- [disabled]="!showTable" -->
+                            <p-button label="Get Uploaded Data" class="" (onClick)="exportUploadedData()" severity="secondary" class="ms-3" />
                         </div>
                     </form>
                     
@@ -106,7 +109,7 @@
               </ng-template>
               <ng-template #body let-rowData let-i="rowIndex">
                 <tr>
-                  <td style="font-size: 11px;">{{locationName}}</td>
+                  <td style="font-size: 11px;">{{rowData.locationName}}</td>
                  
                   <td style="font-size: 11px;">
                       {{rowData.prevStockUploadCount}}
@@ -126,7 +129,7 @@
                     {{rowData.added_on}}
                  </td>
                  <td style="font-size: 11px;">
-                    {{addedBy}}
+                    {{rowData.added_by}}
                  </td>
                  
                 </tr>

@@ -14,6 +14,7 @@ import { DrawerModule } from 'primeng/drawer';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DropdownModule } from 'primeng/dropdown';
 import { BlockUIModule } from 'primeng/blockui';
+import { DatePickerModule } from 'primeng/datepicker';
 const modules:any=[
   MultiSelectModule,
   ButtonModule,
@@ -23,7 +24,7 @@ const modules:any=[
   FileUploadModule,
     SidebarModule,
     InputTextModule,
-
+    DatePickerModule,
     AvatarModule,
     TieredMenuModule,
     ToastModule,

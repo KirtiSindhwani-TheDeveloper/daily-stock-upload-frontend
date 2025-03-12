@@ -26,6 +26,8 @@ export class MultiLocationComponent {
  addedBy:any;
  addedOn:any;
  files: any[] = [];
+ partNotInMasterData:any[]=[];
+ previousLocations:any[]=[];
         locationSelected: Set<number> = new Set(); // To track selected locations
    @ViewChild('fu') fu:FileUpload|null=null;
     constructor(private utilitiesService:UtilitiesService,
@@ -80,10 +82,21 @@ export class MultiLocationComponent {
     onLocationChange(index: number) {
       const locationControl = (this.mlForm.get('locations') as FormArray).at(index).get('location');
       const selectedLocation = locationControl?.value;
-  
+    
       // Clear previous errors
       locationControl?.setErrors(null);
-  
+    
+      // Check if there was a previous location selected
+      const previousLocation = this.previousLocations[index];
+    
+      // If there was a previous location and it's different, remove it from the locationSelected set
+      if (previousLocation && previousLocation !== selectedLocation) {
+        this.locationSelected.delete(previousLocation);
+      }
+    
+      // Update previous location with the new one
+      this.previousLocations[index] = selectedLocation;
+    
       // Check for duplicate locations
       if (this.locationSelected.has(selectedLocation)) {
         locationControl?.setErrors({ duplicateLocation: true });
@@ -91,6 +104,7 @@ export class MultiLocationComponent {
         this.locationSelected.add(selectedLocation); // Mark the location as selected
       }
     }
+    
   
     // Validate that no location is selected twice
     validateLocations() {
@@ -128,6 +142,7 @@ export class MultiLocationComponent {
         
         this.formData.append('dealer_id', dealerId.toString());
       });
+
         this.stockUploadService.uploadMultiLocation(this.formData).subscribe((res:any)=>{
 
           if(res?.mappingNotPresent){
@@ -148,6 +163,13 @@ export class MultiLocationComponent {
         })
 
       }
+      else{}
+      const locations = this.mlForm.get('locations') as FormArray;
+
+      // Mark each control as touched to show validation errors
+      locations.controls.forEach((locationControl: any) => {
+        locationControl.markAllAsTouched(); // Mark all controls within each location as touched
+      });
     }
   
   
@@ -162,12 +184,23 @@ export class MultiLocationComponent {
        
       this.addedOn=res.data.added_on;
       this.addedBy='Kirti'
-    //  this.records= this.records.map((item:any)=>({
-    //     ...item,
-    //     added_on: this.formatDate(item.added_on)
-    //     let locObj=this.locations.find((obj:any)=> obj.location_id==item.location_id)
-    //     this.locationName=locObj?.location_name;
-    //   }))
+      this.records=this.records[0]
+      this.records = this.records.map((item: any) => {
+        // Find the location object based on location_id
+
+        let locObj = this.locations.find((obj: any) => obj.location_id == item.location_id);
+        console.log(locObj)
+        // Return the updated item with formatted date and locationName
+        return {
+          ...item,
+          added_on: this.formatDate(item.added_on),
+          locationName: locObj?.location_name || '' , // Add location name, defaulting to an empty string if not found,
+          added_by:this.addedBy
+        };
+      });
+
+      
+      // console.log("records ",this.records)
       },(error:any)=>{
         this.globalBlockUiService.stopLoading();
         // this.messageService.add({severity:'error',detail:'Error in uploading the file!!',life:300000});
@@ -191,7 +224,32 @@ export class MultiLocationComponent {
     }
 
 
+    getPartNotInMasterRecords(){
 
+      if(this.mlForm.get('locations')?.value!=''){
+        this.globalBlockUiService.startLoading();
+        this.stockUploadService.getPartNotInMasterMultiLocation({locations:this.mlForm.get('locations')?.value}).subscribe((blob:any)=>{
+          const link = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+
+      // Set the file name and trigger the download
+      link.href = url;
+      link.download = 'part_not_in_master.zip'; // You can set a dynamic file name here
+      link.click();
+
+      // Cleanup the object URL after download
+      window.URL.revokeObjectURL(url);
+          this.globalBlockUiService.stopLoading();
+          this.messageService.add({severity:'success',detail:'File is generated succesfully for part not in master',life:30000})
+        },(error:any)=>{
+          this.globalBlockUiService.stopLoading();
+          this.messageService.add({severity:'error',detail:'Error in downloading the file',life:30000});
+        })
+      }
+      else{
+        this.messageService.add({severity:'error',detail:'Select the locations',life:30000});
+      }
+    }
     exportTableData(){
 
        const modifiedData = this.records.map((item: any) => ({
@@ -216,11 +274,11 @@ export class MultiLocationComponent {
     }
 
     exportToExcel(){
-
+    this.getPartNotInMasterRecords();
     }
 
     exportUploadedData(){
-
+      this.getUploadedData();
     }
 
     formatDate(dateString: string): string {
@@ -241,5 +299,33 @@ export class MultiLocationComponent {
     
       // Combine and return the formatted string as 'DD-MM-YYYY HH:MM:SS'
       return `${day}-${month}-${year} ${hours}:${minutes}`;
+    }
+
+    getUploadedData(){
+
+      if(this.mlForm.get('locations')?.value!=''){
+        this.globalBlockUiService.startLoading();
+        this.stockUploadService.getMultiLocationUploadedData({locations:this.mlForm.get('locations')?.value}).subscribe((blob:any)=>{
+          const link = document.createElement('a');
+          const url = window.URL.createObjectURL(blob);
+    
+          // Set the file name and trigger the download
+          link.href = url;
+          link.download = 'uploaded_data.zip'; // You can set a dynamic file name here
+          link.click();
+    
+          // Cleanup the object URL after download
+          window.URL.revokeObjectURL(url);
+              this.globalBlockUiService.stopLoading();
+              this.messageService.add({severity:'success',detail:'File is generated succesfully for uploaded stock',life:30000})
+        },(error:any)=>{
+          this.globalBlockUiService.stopLoading();
+          this.messageService.add({severity:'error',detail:'Error in Downloading the file',life:30000});
+        })
+      }
+      else{
+        this.messageService.add({severity:'error',detail:'Select the locations',life:30000});
+      }
+      
     }
 }

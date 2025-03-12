@@ -33,11 +33,13 @@ export class StockUploadBySpmService {
   }
 
   getMultiLocationUploadedData(data:any):Observable<any>{  
-    return this.http.post(`${this.url}stock-upload/multi-uploadedData`,data)
+    return this.http.post(`${this.url}stock-upload/multi-uploadedData`,data,{responseType:'blob'})
   }
 
   getPartNotInMasterMultiLocation(data:any):Observable<any>{
-    return this.http.post(`${this.url}stock-upload/part-not-in-master-ml`,data)
+    return this.http.post(`${this.url}stock-upload/part-not-in-master-ml`,data,{
+      responseType:'blob'
+    })
   }
 
   getRecordsMultiLocation(data:any):Observable<any>{

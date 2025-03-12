@@ -10,7 +10,14 @@ export const routes: Routes = [
     {
         path:'upload',
         loadChildren:()=> import('../app/stock-upload-by-spm/stock-upload-by-spm.module').then(m=>m.StockUploadBySpmModule)
+    },
+
+    {
+        path:'stock-upload',
+        loadChildren:()=> import('../app/stock-upload-by-scs-user/stock-upload-by-scs-user.module').then(m=>m.StockUploadByScsUserModule)
     }
+
+
 
 
 ];

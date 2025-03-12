@@ -1,44 +1,71 @@
-<p-toast></p-toast>
+<p>bulk-stock-upload works!</p>
+
+<!-- <p-toast></p-toast>
 
 <div class="body mt-2 ">
-    <span class="text-black text-2xl ">Single Location Stock Upload</span>   
+    <span class="text-black text-2xl ">Bulk Stock Upload</span>   
                 <div class="d-flex">
                     <form [formGroup]="slForm">
                         <div class="d-flex justify-end">
                             <span class="btn-view  mb-2" [ngClass]="showTable?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
-                            <!-- <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i> -->
-                        </div>
-                    <div class=" add-mapping-card w-[70vw] h-[20vh]  !flex !flex-row !gap-6 p-3 !items-center">
-                       
-                            <div>
-
-                                <p-select
-                                  [options]="locations"
-                                  formControlName="location"
-                                  optionLabel="location_name"
-                                  optionValue="location_id"
-                                  placeholder="Select Location"
-                                  class="dropdown  w-56 md:w-56"
-                                  (onChange)="onLocationChange($event)"
-                                  
-                                />
-                                <div class=" d-flex mt-1" *ngIf="slForm.get('location')?.touched && slForm?.get('location')?.invalid " >
-                                    <small *ngIf="slForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
-                                </div>
-                            </div>
                             
-                      <div>
-                          <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
-                          [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+                        </div>
+                    <div class=" add-mapping-card w-[70vw] h-[20vh] !p-3 ">
+                       <div class="!flex !flex-row !gap-6  !items-center">
 
-                          <!-- <div class=" d-flex mt-1" *ngIf="slForm.get('file')?.touched && slForm?.get('file')?.invalid " >
-                            <small *ngIf="slForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
-                        </div> -->
-                      </div>
-                    
-                       
-                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
-                        <p-button label="Get Uploaded Data" class="" [disabled]="!showTable" (onClick)="exportUploadedData()" severity="secondary" class="" />
+                      
+                        <div>
+
+                            <p-select
+                              [options]="brands"
+                              formControlName="brand"
+                              optionLabel="brand"
+                              optionValue="brand_id"
+                              placeholder="Select Brand"
+                              class="dropdown  w-56 md:w-56"
+                              (onChange)="onBrandChange($event)"
+                              
+                            />
+                            <div class=" d-flex mt-1" *ngIf="slForm.get('brand')?.touched && slForm?.get('brand')?.invalid " >
+                                <small *ngIf="slForm?.get('brand')?.hasError('required')" style="color: red; font-size: 12px;">Brand is required.</small> 
+                            </div>
+                        </div>
+                        <div>
+
+                            <p-select
+                              [options]="dealers"
+                              formControlName="dealer"
+                              optionLabel="dealer"
+                              optionValue="dealer_id"
+                              placeholder="Select Dealer"
+                              class="dropdown  w-56 md:w-56"
+                              (onChange)="onDealerChange($event)"
+                              
+                            />
+                            <div class=" d-flex mt-1" *ngIf="slForm.get('dealer')?.touched && slForm?.get('dealer')?.invalid " >
+                                <small *ngIf="slForm?.get('dealer')?.hasError('required')" style="color: red; font-size: 12px;">Dealer is required.</small> 
+                            </div>
+                        </div>
+                            
+                            <div>
+                                <p-datepicker formControlName="date"  placeholder="Select Date"  class="dropdown" /> 
+                            </div>
+                        </div>
+
+                            <div class="!flex  !flex-row gap-6 mt-4 !items-center ">
+                               
+                                <div>
+                                    <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                                    [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+          
+                                    
+                                </div>
+                              
+                                 
+                                  <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
+                                  <p-button label="Get Uploaded Data" class="" [disabled]="!showTable" (onClick)="exportUploadedData()" severity="secondary" class="" />
+                            </div>
+                     
                     </div>
                 </form>
                 </div>
@@ -108,7 +135,7 @@
                     {{rowData.added_on}}
                  </td>
                  <td style="font-size: 11px;">
-                    {{rowData.added_by}}
+                    {{addedBy}}
                  </td>
                  
                 </tr>
@@ -123,4 +150,4 @@
               </div>
             </ng-template>
            
-          </p-dialog> 
+          </p-dialog>  -->

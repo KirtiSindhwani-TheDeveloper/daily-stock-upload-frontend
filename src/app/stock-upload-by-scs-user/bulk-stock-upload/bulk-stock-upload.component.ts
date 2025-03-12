@@ -10,14 +10,13 @@ import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 @Component({
-  selector: 'app-single-location',
-  imports: [PrimengModuleModule,SharedModule,FormsModule,ReactiveFormsModule,CommonModule],
-  templateUrl: './single-location.component.html',
-  providers:[MessageService],
-  styleUrl: './single-location.component.css'
+  selector: 'app-bulk-stock-upload',
+  imports: [PrimengModuleModule,SharedModule,CommonModule,ReactiveFormsModule,FormsModule],
+  templateUrl: './bulk-stock-upload.component.html',
+  styleUrl: './bulk-stock-upload.component.css'
 })
-export class SingleLocationComponent {
-  selectedFile:any;
+export class BulkStockUploadComponent {
+ selectedFile:any;
   isLoading:boolean=false;
   locations:any=[];
   file:any;
@@ -35,6 +34,8 @@ export class SingleLocationComponent {
   uploadedData:any=[];
   visible:boolean=false;
   partNotInMasterRecords:any;
+  brands:any=[];
+  dealers:any=[]
   @ViewChild('fu') fu:FileUpload|null=null;
   constructor(private utilitiesService:UtilitiesService,
    private fb:FormBuilder,
@@ -45,6 +46,9 @@ export class SingleLocationComponent {
  
    this.slForm=this.fb.group({
      location:['',Validators.required],
+     brand:['',Validators.required],
+     dealer:['',Validators.required],
+     date:['',Validators.required]
     //  file:['',Validators.required]
    })
   }
@@ -56,6 +60,13 @@ export class SingleLocationComponent {
   onSelect(event:any){
     this.file=event.files[0];
     this.fileName=this.file.name;
+  }
+
+  onBrandChange(event:any){
+
+  }
+  onDealerChange(event:any){
+    
   }
  
    onUpload() {
@@ -207,8 +218,7 @@ export class SingleLocationComponent {
       this.addedBy='Kirti'
      this.records= this.records.map((item:any)=>({
         ...item,
-        added_on: this.formatDate(item.added_on),
-        added_by:this.addedBy
+        added_on: this.formatDate(item.added_on)
       }))
     })
    }
@@ -232,10 +242,4 @@ export class SingleLocationComponent {
     // Combine and return the formatted string as 'DD-MM-YYYY HH:MM:SS'
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
-
-   
-
- 
-
-
 }
