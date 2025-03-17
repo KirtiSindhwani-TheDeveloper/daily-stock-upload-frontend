@@ -31,6 +31,7 @@ export class DealerLocationMappingComponent {
  uploadedData:any=[];
  isDataPresent:boolean=false;
  userId=1;
+ formData=new FormData();
  showEditPopUp:boolean=false;
  visible:boolean=false;
  constructor(private utilitiesService:UtilitiesService,
@@ -41,7 +42,7 @@ export class DealerLocationMappingComponent {
 
   this.dlForm=this.fb.group({
     brand:['',Validators.required],
-    // file:['',Validators.required]
+    //  file:['',Validators.required]
   })
  }
 
@@ -52,66 +53,82 @@ export class DealerLocationMappingComponent {
  onSelect(event:any){
  
    this.file=event.files[0];
-   if(this.showEditPopUp){
     this.fileName=this.file.name;
-   }
-   this.fileName=this.file.name;
-   if(!this.showEditPopUp){
-    this.addFileName=this.file.anme;
-   }
+    // this.dlForm.get('file')?.setValue(this.file);
+
+    // // Mark the control as touched (to trigger validation)
+    // this.dlForm.get('file')?.markAsTouched();
+
+    // If you want to mark the form as valid after selecting a file, you can validate it
+    // if (this.dlForm.get('file')?.valid) {
+    //   this.dlForm.get('file')?.setErrors(null); // Clear any validation errors if valid
+    // }
+  //  if(this.showEditPopUp){
+  //   this.fileName=this.file.name;
+  //  }
+  //  this.fileName=this.file.name;
+  //  if(!this.showEditPopUp){
+  //   this.addFileName=this.file.name;
+  //  }
  }
 
   onUpload() {
 
-   if(this.dlForm.invalid){
+    console.log("form valid ",this.dlForm.valid,this.file)
+    
+   if(this.dlForm.valid){
+    let brandId=this.dlForm.value.brand;
+    // let formData = new FormData();
+    if(this.file!='' || this.file!=null){
+     
 
-     Object.keys(this.dlForm.controls).forEach((controlName:any)=>{
-       this.dlForm.get(controlName)?.markAsTouched();
-     })
+      this.formData.append('excelFile', this.file, this.fileName);
+        this.formData.append('brand_id', this.dlForm.value.brand.toString());
+      this.formData.append('added_by',this.userId.toString())
+    }
+    this.globalUiService.startLoading()
+    this.dealerLocationService.uploadDealerLocationMapping(this.formData).subscribe((res:any)=>{
+      if(res?.isDealerAndLocationPresent==false){
+        this.messageService.add({severity:'error',summary:'Dealer and Location is not present in Uploaded File!!',life:300000})
+      }
+      if(res?.isDealerAndLocationNull){
+        this.messageService.add({severity:'error',summary:'Dealer and Location cannot be null!!',life:300000})
+      }
+
+      if(res?.dealerLocationNotInMasterPresent){
+        this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!!',life:300000})
+      }
+      if(res?.insertedSuccessfully){
+        this.messageService.add({severity:'success',summary:'Mapping is created successfully!!',life:10000})
+      }
+      this.clearSelectedFiles();
+      this.formData=new FormData();
+      
+      this.selectedFile=null;
+
+      this.file=null;
+      this.addFileName='';
+    },(error:any)=>{
+      this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
+      this.globalUiService.stopLoading();
+    },()=>{
+      this.globalUiService.stopLoading();
+      this.dlForm.reset();
+      this.clearSelectedFiles();
+      this.formData=new FormData();
+      this.fu?.clear();
+      this.file=null
+      this.selectedFile=null;
+      this.addFileName='';
+
+    })
+     
    }
    else{
+    Object.keys(this.dlForm.controls).forEach((controlName:any)=>{
+      this.dlForm.get(controlName)?.markAsTouched();
+    })
    
-    let brandId=this.dlForm.value.brand;
-      let formData = new FormData();
-      if(this.file!='' || this.file!=null){
-        formData.append('excelFile', this.file, this.fileName);
-        formData.append('brand_id', brandId.toString());
-        formData.append('added_by',this.userId.toString())
-
-      }
-      this.globalUiService.startLoading()
-      this.dealerLocationService.uploadDealerLocationMapping(formData).subscribe((res:any)=>{
-        if(res?.isDealerAndLocationPresent==false){
-          this.messageService.add({severity:'error',summary:'Dealer and Location is not present in Uploaded File!!',life:300000})
-        }
-        if(res?.isDealerAndLocationNull){
-          this.messageService.add({severity:'error',summary:'Dealer and Location cannot be null!!',life:300000})
-        }
-
-        if(res?.dealerLocationNotInMasterPresent){
-          this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!!',life:300000})
-        }
-        if(res?.insertedSuccessfully){
-          this.messageService.add({severity:'success',summary:'Mapping is created successfully!!',life:10000})
-        }
-        this.clearSelectedFiles();
-        formData=new FormData();
-        this.selectedFile=null;
-        this.file=null;
-        this.addFileName='';
-      },(error:any)=>{
-        this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
-        this.globalUiService.stopLoading();
-      },()=>{
-        this.globalUiService.stopLoading();
-        this.dlForm.reset();
-        this.clearSelectedFiles();
-        formData=new FormData();
-        this.file=null
-        this.selectedFile=null;
-        this.addFileName='';
-
-      })
    }
   }
 

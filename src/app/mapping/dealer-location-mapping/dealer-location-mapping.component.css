@@ -55,6 +55,6 @@
     /* background-color: gray; */
     cursor: not-allowed; /* Changes the cursor to indicate it's disabled */
   }
- :host ::ng-deep span.filelabel.ng-star-inserted {
+ /* :host ::ng-deep span.filelabel.ng-star-inserted {
     display: none;
-  } 
+  }  */

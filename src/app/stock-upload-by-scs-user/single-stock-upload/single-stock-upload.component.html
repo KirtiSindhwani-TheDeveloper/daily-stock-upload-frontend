@@ -8,7 +8,7 @@
                             <span class="btn-view  mb-2" [ngClass]="showTable?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
                             <!-- <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i> -->
                         </div>
-                    <div class=" add-mapping-card w-[70vw] h-[20vh] !p-3 ">
+                    <div class=" add-mapping-card w-[73vw] h-[25vh] !p-3 ">
                        <div class="!flex !flex-row !gap-6  !items-center">
 
                       
@@ -33,7 +33,7 @@
                             <p-select
                               [options]="dealers"
                               formControlName="dealer"
-                              optionLabel="dealer"
+                              optionLabel="dealer_name"
                               optionValue="dealer_id"
                               placeholder="Select Dealer"
                               class="dropdown  w-56 md:w-56"
@@ -62,7 +62,10 @@
                             </div>
                             <div>
                                 <p-datepicker formControlName="date"  placeholder="Select Date"  class="dropdown" /> 
-                            </div>
+                                <div class=" d-flex mt-1" *ngIf="slForm.get('date')?.touched && slForm?.get('date')?.invalid " >
+                                  <small *ngIf="slForm?.get('date')?.hasError('required')" style="color: red; font-size: 12px;">Date is required.</small> 
+                              </div>
+                              </div>
                         </div>
 
                             <div class="!flex  !flex-row gap-6 mt-4 !items-center ">
@@ -86,7 +89,7 @@
                 </div>
             </div>
             <div
-            class="card   h-auto  p-3 bg-gray-50 rounded-lg shadow-lg mb-5 w-[70vw] mt-4 "
+            class="card   h-auto  p-3 bg-gray-50 rounded-lg shadow-lg mb-5 w-[73vw] mt-4 "
             *ngIf="showTable"
             >
             <div class="d-flex justify-end">
@@ -107,7 +110,8 @@
             >
               <ng-template #header let-item>
                 <tr>
-                 
+                  <th style="font-size: 13px;">Brand</th>
+                  <th style="font-size: 13px;">Dealer</th>
                   <th style="font-size: 13px;" >Location</th>
                   <th style="font-size: 13px;" >
                     Previous Records
@@ -130,6 +134,10 @@
               </ng-template>
               <ng-template #body let-rowData let-i="rowIndex">
                 <tr>
+                    <td  style="font-size: 11px;">
+                        {{rowData.brandName}}
+                    </td>
+                    <td  style="font-size: 11px;"> {{rowData.dealerName}}</td>
                   <td style="font-size: 11px;">{{locationName}}</td>
                  
                   <td style="font-size: 11px;">

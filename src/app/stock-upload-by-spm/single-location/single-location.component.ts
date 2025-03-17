@@ -34,6 +34,7 @@ export class SingleLocationComponent {
   addedBy:any;
   uploadedData:any=[];
   visible:boolean=false;
+  userId:any;
   partNotInMasterRecords:any;
   @ViewChild('fu') fu:FileUpload|null=null;
   constructor(private utilitiesService:UtilitiesService,
@@ -73,16 +74,19 @@ export class SingleLocationComponent {
        return this.messageService.add({severity:'error',summary:'Select the File!!',life:300000});
        }
      let locationId=this.slForm.value.location;
-     let userId=1;
+    this.userId=1;
        const formData = new FormData();
        formData.append('excelFile', this.file, this.fileName);
        formData.append('location_id', locationId.toString());
-       formData.append('user_id', userId.toString());
+       formData.append('user_id', this.userId.toString());
        
        this.globalBlockUiService.startLoading();
       this.stockUploadService.uploadSingleLocationUpload(formData).subscribe((res:any)=>{
 
         this.globalBlockUiService.stopLoading();
+        if(res?.mappingNotPresent){
+          return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!!'});
+        }
         if(res?.currentSumQuantity){
           this.currentUploadQuantity=res.currentSumQuantity
         }
@@ -199,8 +203,9 @@ export class SingleLocationComponent {
 
    getAllRecords(){
 
+    this.userId=1;
     let locObj=this.locations.find((obj:any)=> obj.location_id==this.slForm.value.location)
-    this.stockUploadService.getAllRecords({location_id:this.slForm.value.location}).subscribe((res:any)=>{
+    this.stockUploadService.getAllRecords({location_id:this.slForm.value.location,added_by:this.userId}).subscribe((res:any)=>{
       this.records=res.data;
       this.locationName=locObj.location_name;
       this.addedOn=res.data.added_on;
