@@ -18,4 +18,8 @@ export class StockUploadByUserService {
   getAllRecords(data:any):Observable<any>{
     return this.http.post(`${this.url}upload/all-records`,data)
   }
+
+  bulkStockUpload(data:any):Observable<any>{
+    return this.http.post(`${this.url}upload/bulk-upload`,data)
+  }
 }

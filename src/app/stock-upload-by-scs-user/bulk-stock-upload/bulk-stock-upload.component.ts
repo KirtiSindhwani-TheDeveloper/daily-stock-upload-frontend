@@ -55,8 +55,14 @@ export class BulkStockUploadComponent {
  
   ngOnInit(){
    this.getLocations();
+   this.getBrands();
   }
  
+  getBrands(){
+    this.utilitiesService.getBrands().subscribe((res:any)=>{
+      this.brands=res.data;
+    })
+  }
   onSelect(event:any){
     this.file=event.files[0];
     this.fileName=this.file.name;
@@ -64,9 +70,15 @@ export class BulkStockUploadComponent {
 
   onBrandChange(event:any){
 
+    this.utilitiesService.getDealers({brand_id:this.slForm.value.brand}).subscribe((res:any)=>{
+      this.dealers=res.data;
+    })
   }
+
   onDealerChange(event:any){
-    
+  this.utilitiesService.getLocations({dealer_id:this.slForm.value.dealer}).subscribe((res:any)=>{
+    this.locations=res.data;
+  })
   }
  
    onUpload() {
