@@ -31,12 +31,12 @@ export class SidebarComponent {
         {id: 2, value: "Stock Upload Mapping", route: 'mapping/stock-upload',isActive: true},
         {id: 3, value: "Dealer Location Mapping", route: 'mapping/dealer-location',isActive: false}
       ], isExpanded: false},
-    {id: 4, value: "Stock Upload", children: [
-      {id: 5, value: "Single Location Upload", route: 'upload/sl',isActive: false},
-      {id: 9, value: "Multi Location Upload", route: 'upload/ml',isActive: false},
-      {id: 10, value: "Single Upload", route: 'stock-upload/sl',isActive: false},
-      {id: 12, value: "Bulk Upload", route: 'stock-upload/ml',isActive: false}
-    ], isExpanded: false}
+    // {id: 4, value: "Stock Upload", children: [
+    //   {id: 5, value: "Single Location Upload", route: 'upload/sl',isActive: false},
+    //   {id: 9, value: "Multi Location Upload", route: 'upload/ml',isActive: false},
+    //   {id: 10, value: "Single Upload", route: 'stock-upload/sl',isActive: false},
+    //   {id: 12, value: "Bulk Upload", route: 'stock-upload/ml',isActive: false}
+    // ], isExpanded: false}
   ];
   
     filteredItems: any[] = [...this.sidebarItems]; // Initially, all items are visible
