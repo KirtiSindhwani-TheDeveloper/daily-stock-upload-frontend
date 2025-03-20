@@ -186,7 +186,7 @@ export class SingleLocationComponent {
           ['Current Records']: item.stockUploadCount,
           ['Previous Sum Quantity']: item.prevQuantitySum,
           ['Current Sum Quantity']: item.quantitySum ,
-          ['Added On ']: this.formatDate(item.added_on),
+          ['Added On ']: (item.added_on),
           ['Added By ']:'Kirti'
          
     

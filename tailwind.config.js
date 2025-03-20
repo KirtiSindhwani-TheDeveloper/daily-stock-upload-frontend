@@ -4,7 +4,13 @@ module.exports = {
     "./src/**/*.{html,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        customBlue: '#25313D',
+        customgreen: '#5CA2A6',
+        customgreen2: '#225A58'
+      },
+    },
   },
   plugins: [require('tailwindcss-primeui')]
 }

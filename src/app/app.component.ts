@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { CoreModule } from './core/core.module';
 import { SidebarComponent } from "./core/sidebar/sidebar.component";
 import { HeaderComponent } from "./core/header/header.component";
@@ -20,8 +20,9 @@ export class AppComponent {
   visibleSidebar:boolean=true;
   isLoading:boolean=false;
   blocked:boolean=false;
+  isLoginPage = false;
   @ViewChild('blockUI') blockUI!: BlockUI;
-  constructor(private globalBlockUIService: GlobalBlockUiService,private router:Router) {}
+  constructor(private globalBlockUIService: GlobalBlockUiService,private router:Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
     // Set BlockUI reference in the global service
@@ -38,5 +39,10 @@ export class AppComponent {
     this.globalBlockUIService.loading$.subscribe((loading:any)=>{
       this.isLoading=loading;
     })
+
+    this.router.events.subscribe(() => {
+      // Update whether the current route is the login page
+      this.isLoginPage = this.router.url.includes('/login');
+    });
   }
 }

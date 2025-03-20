@@ -35,7 +35,9 @@ export class BulkStockUploadComponent {
   visible:boolean=false;
   partNotInMasterRecords:any;
   brands:any=[];
-  dealers:any=[]
+  dealers:any=[];
+  min:any;
+  max:any;
   @ViewChild('fu') fu:FileUpload|null=null;
   constructor(private utilitiesService:UtilitiesService,
    private fb:FormBuilder,
@@ -56,6 +58,12 @@ export class BulkStockUploadComponent {
   ngOnInit(){
    this.getLocations();
    this.getBrands();
+
+   this.max = new Date();
+
+   // Set min date to three months ago
+   this.min = new Date();
+   this.min.setMonth(this.max.getMonth() - 3);
   }
  
   getBrands(){

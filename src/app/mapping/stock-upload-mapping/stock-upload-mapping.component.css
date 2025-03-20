@@ -85,8 +85,10 @@ span{
 
 :host ::ng-deep .p-select-list-container{
     max-height: 260px !important;
-    width: 225px !important;
-    overflow-x:hidden;
+    /* width: 225px !important;
+    overflow-x:hidden; */
+    width: 15vw !important;
+    overflow-x: hidden !important;
 }
 :host ::ng-deep .disabled {
     pointer-events: none; /* Prevents clicking on the element */

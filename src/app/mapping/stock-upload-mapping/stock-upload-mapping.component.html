@@ -13,7 +13,7 @@
       >
       <div class="!flex !flex-row !gap-6 !justify-evenly !items-center">
 
-          <p-select
+          <p-select  
             [options]="brands"
             formControlName="brands"
             optionLabel="brand"
@@ -98,7 +98,7 @@
                           
                           
                           <div class="col-6">
-                            <p-select
+                            <p-select  appendTo="body"
                               [options]="currentStockColumns"
                              formControlName="partNumber"
                               placeholder="Select"
@@ -115,7 +115,7 @@
                             <span>Location:</span>
                           </div>
                           <div class="col-6">
-                            <p-select
+                            <p-select  appendTo="body"
                             [options]="currentStockColumns"
                               placeholder="Select"
                               formControlName="location"
@@ -131,7 +131,7 @@
                             <span>Stock Quantity:</span>
                           </div>
                           <div class="col-6">
-                            <p-select
+                            <p-select  appendTo="body"
                             [options]="currentStockColumns"
                              formControlName="stockQty"
                               placeholder="Select"
@@ -194,7 +194,7 @@
                         <span>Part Number:</span>
                       </div>
                       <div class="col-6">
-                        <p-select
+                        <p-select  appendTo="body"
                           [options]="olderStockColumns"
                           placeholder="Select"
                           formControlName="partNumber"
@@ -210,7 +210,7 @@
                         <span>Location:</span>
                       </div>
                       <div class="col-6">
-                        <p-select
+                        <p-select  appendTo="body"
                           [options]="olderStockColumns"
                           placeholder="Select"
                           formControlName="location"
@@ -226,7 +226,7 @@
                         <span>Stock Quantity:</span>
                       </div>
                       <div class="col-6">
-                        <p-select
+                        <p-select  appendTo="body"
                           [options]="olderStockColumns"
                           placeholder="Select"
                           formControlName="stockQty"
@@ -317,7 +317,7 @@
               <span>Part Number:</span>
             </div>
             <div class="col-6">
-              <p-select
+              <p-select  appendTo="body"
                 [options]="editCurrentStockColumns"
                 formControlName="partNumber"
             
@@ -334,7 +334,7 @@
               <span>Location:</span>
             </div>
             <div class="col-6">
-              <p-select
+              <p-select  appendTo="body"
                 [options]="editCurrentStockColumns"
                 formControlName="location"
                
@@ -351,7 +351,7 @@
               <span>Stock Quantity:</span>
             </div>
             <div class="col-6">
-              <p-select
+              <p-select  appendTo="body"
                 [options]="editCurrentStockColumns"
                 formControlName="stockQty"
                
@@ -409,7 +409,7 @@
               <span>Part Number:</span>
             </div>
             <div class="col-6">
-              <p-select
+              <p-select  appendTo="body"
                 [options]="editOlderStockColumns"
                
                 placeholder="Select"
@@ -427,7 +427,7 @@
               <span>Location:</span>
             </div>
             <div class="col-6">
-              <p-select
+              <p-select  appendTo="body"
                 [options]="editOlderStockColumns"
                
                 placeholder="Select"
@@ -444,7 +444,7 @@
               <span>Stock Quantity:</span>
             </div>
             <div class="col-6">
-              <p-select
+              <p-select  appendTo="body"
                 [options]="editOlderStockColumns"
                 
                 placeholder="Select"
@@ -505,8 +505,8 @@
         scrollHeight="400px"
         [value]="tableData"
         styleClass="mt-4"
-        [paginator]="true"
         [rows]="10"
+      
         [rowsPerPageOptions]="[10,20, 30, 40, 50, 100]"
         [showGridlines]="true"
         [scrollHeight]="'400px'"
@@ -542,22 +542,28 @@
                 {{rowData.current_added_on}}
             </td>
             <td style="font-size: 11px;">
-                <!-- {{rowData.current_added_by}} -->
-                Kirti
+                {{rowData.current_added_by}}
             </td>
             <td style="font-size: 11px;" class="text-center"><i [ngClass]="rowData.older_data_exists?'pi pi-check':'pi pi-times'" style="color: slateblue" class="cursor-pointer" (click)="showEditStock('older',rowData.older_data_exists,rowData)"></i></td>
             <td style="font-size: 11px;">
                 {{rowData.older_added_on}}
             </td>
-            <td style="font-size: 11px;">
-                <!-- {{rowData.older_added_by}} -->
-                 Kirti
+            <td style="font-size: 11px;" >
+                 {{rowData.older_added_by}}
+               
             </td>
            
            
           </tr>
         </ng-template>
+
+        <!-- <ng-template  > -->
+          <!-- <div class="card flex justify-center"> -->
+           
+        <!-- </div> -->
+        <!-- </ng-template> -->
       </p-table>
+      
     </div>
   <!-- </div> -->
 
@@ -615,10 +621,10 @@
                   <span>Part Number:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  
                     [options]="showCurrentStockColumnsInTable"
                     formControlName="partNumber"
-                
+                    appendTo="body"
                     placeholder="Select"
                     class="dropdown !mt-3 w-56 md:w-56"
                   />
@@ -632,7 +638,7 @@
                   <span>Location:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="showCurrentStockColumnsInTable"
                     formControlName="location"
                    
@@ -649,7 +655,7 @@
                   <span>Stock Quantity:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="showCurrentStockColumnsInTable"
                     formControlName="stockQty"
                    
@@ -707,7 +713,7 @@
                   <span>Part Number:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="showCurrentStockColumnsInTable"
                    
                     placeholder="Select"
@@ -725,7 +731,7 @@
                   <span>Location:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="showCurrentStockColumnsInTable"
                    
                     placeholder="Select"
@@ -742,7 +748,7 @@
                   <span>Stock Quantity:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="showCurrentStockColumnsInTable"
                     
                     placeholder="Select"
@@ -784,7 +790,7 @@
 </p-dialog>
 
 
-<p-dialog [modal]="true" [(visible)]="visibleAddPopUp" [style]="{ width: '45rem' }">
+<p-dialog [modal]="true" [(visible)]="visibleAddPopUp" [style]="{ width: '45rem' }" >
     <ng-template #header>
         <div class="inline-flex items-center justify-center gap-2">
           <!-- <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" /> -->
@@ -833,7 +839,7 @@
                   <span>Part Number:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="currentStockColumns"
                     formControlName="partNumber"
                 
@@ -850,7 +856,7 @@
                   <span>Location:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="currentStockColumns"
                     formControlName="location"
                    
@@ -867,7 +873,7 @@
                   <span>Stock Quantity:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="currentStockColumns"
                     formControlName="stockQty"
                    
@@ -923,7 +929,7 @@
                   <span>Part Number:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="olderStockColumns"
                    
                     placeholder="Select"
@@ -941,7 +947,7 @@
                   <span>Location:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="olderStockColumns"
                    
                     placeholder="Select"
@@ -958,7 +964,7 @@
                   <span>Stock Quantity:</span>
                 </div>
                 <div class="col-6">
-                  <p-select
+                  <p-select  appendTo="body"
                     [options]="olderStockColumns"
                     
                     placeholder="Select"

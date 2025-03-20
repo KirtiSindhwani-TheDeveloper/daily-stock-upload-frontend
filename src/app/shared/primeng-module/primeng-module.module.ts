@@ -16,6 +16,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { BlockUIModule } from 'primeng/blockui';
 import { DatePickerModule } from 'primeng/datepicker';
 import { PasswordModule } from 'primeng/password';
+import { PaginatorModule } from 'primeng/paginator';
+
 const modules:any=[
   MultiSelectModule,
   ButtonModule,
@@ -32,7 +34,8 @@ const modules:any=[
     DrawerModule,
     DropdownModule,
     BlockUIModule,
-    PasswordModule
+    PasswordModule,
+    PaginatorModule
 
    
 ]

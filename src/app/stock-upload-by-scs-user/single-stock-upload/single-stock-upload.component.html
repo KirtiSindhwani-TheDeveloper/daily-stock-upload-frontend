@@ -61,7 +61,7 @@
                                 </div>
                             </div>
                             <div>
-                                <p-datepicker formControlName="date"  placeholder="Select Date"  class="dropdown" /> 
+                                <p-datepicker formControlName="date" [minDate]="min" [maxDate]="max"  placeholder="Select Date"  class="dropdown" /> 
                                 <div class=" d-flex mt-1" *ngIf="slForm.get('date')?.touched && slForm?.get('date')?.invalid " >
                                   <small *ngIf="slForm?.get('date')?.hasError('required')" style="color: red; font-size: 12px;">Date is required.</small> 
                               </div>

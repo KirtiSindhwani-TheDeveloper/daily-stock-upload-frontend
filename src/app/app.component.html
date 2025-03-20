@@ -52,7 +52,7 @@
 </div>  -->
 
 <img src="Background_image.png" alt="Background Image" class="w-[100vw] h-[100vh] img-fluid fixed -z-50">
-<p-blockUI #blockUI [blocked]="blocked" [style]="{ 'z-index': '9999' }" [ngClass]="isLoading?'loader':''">
+<p-blockUI #blockUI [blocked]="blocked" [style]="{ 'z-index': '9999',  'width': '100vw', 'height': '100vh' }" class="w-[100vw] h-[100vh]" [ngClass]="isLoading?'loader':''">
   <div class="d-flex !justify-center !align-items-center">
     <i class="bx bx-loader-circle fa-spin custom-icon fa-spinner"></i>
   </div>
@@ -60,7 +60,7 @@
 </p-blockUI>
 <div class="row flex-row">
  
-  <div class="col-3">
+  <div class="col-3" *ngIf="!isLoginPage">
     <app-sidebar
       #sidebar
       [ngClass]="{ 'sidebar card bg-gray-50 rounded-lg shadow-sm': visibleSidebar, 'w-0': !visibleSidebar }"

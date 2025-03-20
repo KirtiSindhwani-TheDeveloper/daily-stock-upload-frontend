@@ -21,6 +21,7 @@ import { FileUpload } from 'primeng/fileupload';
 export class DealerLocationMappingComponent {
 
  @ViewChild('fu') fu: FileUpload|null =null;
+ @ViewChild('fu1') fu1: FileUpload|null =null;
  selectedFile:any;
  isLoading:boolean=false;
  brands:any=[];
@@ -63,13 +64,13 @@ export class DealerLocationMappingComponent {
     // if (this.dlForm.get('file')?.valid) {
     //   this.dlForm.get('file')?.setErrors(null); // Clear any validation errors if valid
     // }
-  //  if(this.showEditPopUp){
-  //   this.fileName=this.file.name;
-  //  }
-  //  this.fileName=this.file.name;
-  //  if(!this.showEditPopUp){
-  //   this.addFileName=this.file.name;
-  //  }
+   if(this.showEditPopUp){
+    this.fileName=this.file.name;
+   }
+   this.fileName=this.file.name;
+   if(!this.showEditPopUp){
+    this.addFileName=this.file.name;
+   }
  }
 
   onUpload() {
@@ -108,14 +109,24 @@ export class DealerLocationMappingComponent {
 
       this.file=null;
       this.addFileName='';
+      this.fu?.clear();
+      this.fu1?.clear();
     },(error:any)=>{
       this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
       this.globalUiService.stopLoading();
+      this.clearSelectedFiles();
+      this.formData=new FormData();
+      this.selectedFile=null;
+      this.fu?.clear();
+      this.file=null;
+      this.fu1?.clear();
+      this.addFileName='';
     },()=>{
       this.globalUiService.stopLoading();
       this.dlForm.reset();
       this.clearSelectedFiles();
       this.formData=new FormData();
+      this.fu1?.clear();
       this.fu?.clear();
       this.file=null
       this.selectedFile=null;
@@ -216,8 +227,17 @@ onBrandSelect(event:any){
        
       }
       if(res?.insertedSuccessfully){
+
         this.messageService.add({severity:'success',summary:'Mapping is updated successfully!!',life:10000})
-       
+        this.dealerLocationService.exportToExcel({brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
+         this.uploadedData=res.data;
+        if(this.uploadedData.length!=0){
+          this.isDataPresent=true;
+          this.visible=true;
+        }
+        else{
+          this.isDataPresent=true;
+        }})
       }
       this.dlForm.reset();
       this.clearSelectedFiles();
@@ -225,14 +245,16 @@ onBrandSelect(event:any){
       this.file=null;
        this.fileName=null;     
        this.selectedFile=null; 
-       this.fu?.clear();
+       this.fu1?.clear();
+       this.showEditPopUp=false;
     },(error:any)=>{
       this.showEditPopUp=false;
       this.globalUiService.stopLoading();
       this.dlForm.reset();
       this.clearSelectedFiles();
       formData=new FormData();
-      
+      this.showEditPopUp=false;
+      this.fu1?.clear();
       this.messageService.add({severity:'error',summary:'Error in updating Mapping!!',life:300000})
     },()=>{
       // this.showEditPopUp=false
@@ -243,7 +265,7 @@ onBrandSelect(event:any){
       this.file=null;
       this.fileName=''     
       this.selectedFile=null;
-      this.fu?.clear();
+      this.fu1?.clear();
 
     })
  
@@ -251,7 +273,11 @@ onBrandSelect(event:any){
 
   showEditPopup(){
     this.fu?.clear();
-    this.fileName='';
     this.showEditPopUp=true;
+    this.formData=new FormData;
+    this.file=null;
+    this.selectedFile=null;
+    this.addFileName=''
+    this.fu1?.clear();
   }
 }

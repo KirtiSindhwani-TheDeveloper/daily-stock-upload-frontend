@@ -38,6 +38,8 @@ export class SingleStockUploadComponent {
   brands:any=[];
   dealers:any=[];
   userId:any;
+  min:any;
+  max:any;
   @ViewChild('fu') fu:FileUpload|null=null;
   constructor(private utilitiesService:UtilitiesService,
    private fb:FormBuilder,
@@ -59,6 +61,14 @@ export class SingleStockUploadComponent {
   ngOnInit(){
    this.getLocations();
    this.getBrands();
+
+   this.max = new Date();
+
+   // Set min date to three months ago
+   this.min = new Date();
+   this.min.setMonth(this.max.getMonth() - 3);
+
+
   }
  
   onSelect(event:any){
@@ -139,12 +149,15 @@ export class SingleStockUploadComponent {
         this.getAllRecords();
         this.fu?.clear();
         formData=new FormData();
+        this.file=null;
+
        
       },(error)=>{
         // this.slForm.reset();
         this.fu?.clear();
         this.fileName='';
         formData=new FormData();
+        this.file=null;
         this.globalBlockUiService.stopLoading();
         this.messageService.add({severity:'error',summary:'Error in Uploading file!!..',life:300000});
       })
@@ -221,7 +234,7 @@ export class SingleStockUploadComponent {
  
    exportTableData(){
  
-    console.log("records",this.records)
+    // console.log("records",this.records)
     let brandObj=this.brands.find((obj:any)=> obj.brand_id==this.slForm.value.brand)
     let dealerObj=this.dealers.find((obj:any)=>obj.dealer_id==this.slForm.value.dealer)
       const modifiedData = this.records.map((item: any) => ({
