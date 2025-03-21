@@ -50,3 +50,7 @@ box-shadow:  20px 20px 60px #BEBEBE,
     z-index: inherit !important;
   }
   
+  body.loader {
+    overflow: hidden; /* Hides scrollbar */
+  }
+  

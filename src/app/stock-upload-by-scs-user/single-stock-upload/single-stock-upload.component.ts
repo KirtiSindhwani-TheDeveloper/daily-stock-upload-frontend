@@ -38,6 +38,8 @@ export class SingleStockUploadComponent {
   brands:any=[];
   dealers:any=[];
   userId:any;
+  isDataPresent:boolean=false;
+  isDataPresentForPartNotInMaster:boolean=false
   min:any;
   max:any;
   @ViewChild('fu') fu:FileUpload|null=null;
@@ -59,7 +61,7 @@ export class SingleStockUploadComponent {
   }
  
   ngOnInit(){
-   this.getLocations();
+    // this.getLocations();
    this.getBrands();
 
    this.max = new Date();
@@ -83,7 +85,7 @@ export class SingleStockUploadComponent {
   }
 
   onBrandChange(event:any){
-
+    this.getPartNotInMaster();
     this.utilitiesService.getDealers({brand_id:this.slForm.value.brand}).subscribe((res:any)=>{
       this.dealers=res.data;
     })
@@ -97,7 +99,7 @@ export class SingleStockUploadComponent {
  
    onUpload() {
  
-     console.log("form ",this.slForm.valid)
+    //  console.log("form ",this.slForm.valid)
     if(this.slForm.invalid){
  
       Object.keys(this.slForm.controls).forEach((controlName:any)=>{
@@ -165,8 +167,10 @@ export class SingleStockUploadComponent {
     }
    }
 
+ 
+  
    onLocationChange(event:any){
-    this.getPartNotInMaster();
+   
     this.getUploadedData();
    }
 
@@ -174,6 +178,12 @@ export class SingleStockUploadComponent {
 
     this.stockUploadService.getPartNotInMaster({location_id:this.slForm.value.location}).subscribe((res:any)=>{
       this.partNotInMasterRecords=res.data;
+      if(this.partNotInMasterRecords.length!=0){
+        this.isDataPresentForPartNotInMaster=true;
+      }
+      else{
+        this.isDataPresentForPartNotInMaster=false;
+      }
     },(error:any)=>{
 
     })
@@ -202,6 +212,13 @@ export class SingleStockUploadComponent {
    getUploadedData(){
     this.stockUploadService.getUploadedData({location_id:this.slForm.value.location}).subscribe((res:any)=>{
       this.uploadedData=res.data;
+
+      if(this.uploadedData.length!=0){
+        this.isDataPresent=true;
+      }
+      else{
+        this.isDataPresent=false;
+      }
       
     })  
    }

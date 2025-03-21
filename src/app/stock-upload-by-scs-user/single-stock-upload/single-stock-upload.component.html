@@ -5,7 +5,7 @@
                 <div class="d-flex">
                     <form [formGroup]="slForm">
                         <div class="d-flex justify-end">
-                            <span class="btn-view  mb-2" [ngClass]="showTable?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
+                            <span class="btn-view  mb-2" [ngClass]="isDataPresentForPartNotInMaster?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
                             <!-- <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i> -->
                         </div>
                     <div class=" add-mapping-card w-[73vw] h-[25vh] !p-3 ">
@@ -81,7 +81,7 @@
                               
                                  
                                   <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
-                                  <p-button label="Get Uploaded Data" class="" [disabled]="!showTable" (onClick)="exportUploadedData()" severity="secondary" class="" />
+                                  <p-button label="Get Uploaded Data" class="" [disabled]="!isDataPresent" (onClick)="exportUploadedData()" severity="secondary" class="" />
                             </div>
                      
                     </div>

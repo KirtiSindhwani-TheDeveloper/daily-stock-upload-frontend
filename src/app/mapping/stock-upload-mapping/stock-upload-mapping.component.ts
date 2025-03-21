@@ -202,7 +202,7 @@ export class StockUploadMappingComponent {
       return acc;
     }, {});
 
-     console.log("grouped data ",groupedData)
+    //  console.log("grouped data ",groupedData)
 
     const finalResult = Object.keys(groupedData).map((brand_id) => {
       const data = groupedData[brand_id];
@@ -308,7 +308,7 @@ export class StockUploadMappingComponent {
   }
 
   showEditStock(stockType: any, dataExist: any,rowData:any) {
-    // console.log("rowdata ",rowData)
+    //  console.log("rowdata ",rowData)
     this.clearSelectedFiles()
     this.rowData=rowData;
     this.editCurrentDaysStock=false;
@@ -379,10 +379,11 @@ export class StockUploadMappingComponent {
   }
 
   editFromTable(isCurrent:any,isOlder:any){
+    // console.log("edit fromtable ",isCurrent,isOlder)
     if (isCurrent) {
       if (this.editCurrentDayStockForm.valid) {
         if(this.showCurrentStockColumnsInTable.length==0){
-          this.showCurrentStockColumnsInTable=JSON.stringify(this.rowData.currentBrandColumns);
+          this.showCurrentStockColumnsInTable=JSON.parse(this.rowData.currentBrandColumns);
         }
         this.stockUploadMappingService
           .editColumnMapping({
@@ -426,10 +427,10 @@ export class StockUploadMappingComponent {
     }
     
     if(isOlder){
-      if (this.editCurrentDayStockForm.valid) {
-
+      if (this.editOlderDaysStockForm.valid) {
+          // console.log("is form valid ",this.editOlderDaysStockForm.value)
         if(this.showOlderStockColumnsInTable.length==0){
-          this.showOlderStockColumnsInTable=JSON.stringify(this.rowData.olderBrandColumns)
+          this.showOlderStockColumnsInTable=JSON.parse(this.rowData.olderBrandColumns);
         }
         this.stockUploadMappingService
           .editColumnMapping({
@@ -575,6 +576,7 @@ export class StockUploadMappingComponent {
               .subscribe(
                 (res: any) => {
                   this.viewAllExistingMapping();
+                  this.globalBlockUIService.stopLoading();
                   this.messageService.add({
                     severity: 'success',
                     summary: 'Mapping has been successfully updated !!',
@@ -582,6 +584,7 @@ export class StockUploadMappingComponent {
                   });
                 },
                 (error: any) => {
+                  this.globalBlockUIService.stopLoading();
                   this.messageService.add({
                     severity: 'error',
                     summary:
@@ -646,10 +649,12 @@ export class StockUploadMappingComponent {
               })
               .subscribe(
                 (res: any) => {
+                  this.globalBlockUIService.stopLoading();
                   this.viewAllExistingMapping();
                   // this.messageService.add({severity:'success',summary:'Mapping has been successfully updated !!',life:10000})
                 },
                 (error: any) => {
+                  this.globalBlockUIService.stopLoading();
                   this.messageService.add({
                     severity: 'error',
                     summary:
@@ -713,6 +718,8 @@ export class StockUploadMappingComponent {
           })
           .subscribe(
             (res: any) => {
+              this.viewAllExistingMapping();
+              this.globalBlockUIService.stopLoading();
               this.messageService.add({
                 severity: 'success',
                 summary: 'Mapping has been successfully updated !!',
@@ -720,6 +727,7 @@ export class StockUploadMappingComponent {
               });
             },
             (error: any) => {
+              this.globalBlockUIService.stopLoading();
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error in updating the mapping for current stocks !!',
@@ -826,6 +834,11 @@ export class StockUploadMappingComponent {
         (res: any) => {
           this.globalBlockUIService.stopLoading();
           this.currentStockColumns = res.data.headers;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'File Uploaded Successfully',
+            life: 3000,
+          });
         },
         (error: any) => {
           this.globalBlockUIService.stopLoading();
@@ -847,6 +860,11 @@ export class StockUploadMappingComponent {
 
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'File Uploaded Successfully',
+            life: 3000,
+          });
           this.globalBlockUIService.stopLoading();
           this.olderStockColumns = res.data.headers;
         },
@@ -869,6 +887,11 @@ export class StockUploadMappingComponent {
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.globalBlockUIService.stopLoading();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'File Uploaded Successfully',
+            life: 3000,
+          });
           this.editCurrentStockColumns = res.data.headers;
           // console.log('edit current ', this.editCurrentStockColumns);
         },
@@ -891,7 +914,13 @@ export class StockUploadMappingComponent {
       this.editOlderStockColumns = [];
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
+
           this.globalBlockUIService.stopLoading();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'File Uploaded Successfully',
+            life: 3000,
+          });
           this.editOlderStockColumns = res.data.headers;
         },
         (error: any) => {
@@ -915,6 +944,11 @@ export class StockUploadMappingComponent {
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.globalBlockUIService.stopLoading();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'File Uploaded Successfully',
+            life: 3000,
+          });
           this.showCurrentStockColumnsInTable = res.data.headers;
           // console.log('edit current ', this.showCurrentStockColumnsInTable);
         },
@@ -939,7 +973,13 @@ export class StockUploadMappingComponent {
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.showOlderStockColumnsInTable = res.data.headers;
+
           this.globalBlockUIService.stopLoading();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'File Uploaded Successfully',
+            life: 3000,
+          });
         },
         (error: any) => {
           this.globalBlockUIService.stopLoading();
@@ -1102,14 +1142,24 @@ export class StockUploadMappingComponent {
           })
           .subscribe(
             (res: any) => {
-              this.stMappingForm.reset();
-              this.currentStockForm.reset();
-              this.currentStockColumns = [];
-              this.messageService.add({
-                severity: 'success',
-                life: 10000,
-                summary: 'Mapping is created Successfully.',
-              });
+              this.stockUploadMappingService
+              .addColumnMapping({
+                brandId: this.stMappingForm.value.brands,
+                values: this.currentStockForm.value,
+                brandColumns: this.currentStockColumns,
+                userId: 1,
+                stockType: 'older',
+              }).subscribe((res1:any)=>{
+
+                this.stMappingForm.reset();
+                this.currentStockForm.reset();
+                this.currentStockColumns = [];
+                this.messageService.add({
+                  severity: 'success',
+                  life: 10000,
+                  summary: 'Mapping is created Successfully.',
+                });
+              })
             },
             (error: any) => {
               this.stMappingForm.reset();

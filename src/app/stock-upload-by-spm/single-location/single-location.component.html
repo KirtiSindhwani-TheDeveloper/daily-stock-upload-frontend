@@ -5,27 +5,53 @@
                 <div class="d-flex">
                     <form [formGroup]="slForm">
                         <div class="d-flex justify-end">
-                            <span class="btn-view  mb-2" [ngClass]="showTable?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
+                            <span class="btn-view  mb-2" [ngClass]="isDataPresentPartNotInMaster?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
                             <!-- <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i> -->
                         </div>
-                    <div class=" add-mapping-card w-[70vw] h-[20vh]  !flex !flex-row !gap-6 p-3 !items-center">
-                       
-                            <div>
-
-                                <p-select
-                                  [options]="locations"
-                                  formControlName="location"
-                                  optionLabel="location_name"
-                                  optionValue="location_id"
-                                  placeholder="Select Location"
-                                  class="dropdown  w-56 md:w-56"
-                                  (onChange)="onLocationChange($event)"
-                                  
-                                />
-                                <div class=" d-flex mt-1" *ngIf="slForm.get('location')?.touched && slForm?.get('location')?.invalid " >
-                                    <small *ngIf="slForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
-                                </div>
-                            </div>
+                    <div class=" add-mapping-card w-[70vw] h-[30vh]  ">
+                       <div class="!flex !flex-row !gap-6 p-3 !items-center">
+                        <div>
+                          <p-select
+                          [options]="brands"
+                          formControlName="brand"
+                          optionLabel="brand"
+                          optionValue="brand_id"
+                          placeholder="Select Brand"
+                          class="dropdown  w-56 md:w-56"
+                          (onChange)="onBrandChange($event)"
+                          
+                        />
+                        </div>
+                        <div>
+                          <p-select
+                          [options]="dealers"
+                          formControlName="dealer"
+                          optionLabel="dealer_name"
+                          optionValue="dealer_id"
+                          placeholder="Select Dealer"
+                          class="dropdown  w-56 md:w-56"
+                          (onChange)="onDealerChange($event)"
+                          
+                        />
+                        </div>
+                              <div>
+  
+                                  <p-select
+                                    [options]="locations"
+                                    formControlName="location"
+                                    optionLabel="location_name"
+                                    optionValue="location_id"
+                                    placeholder="Select Location"
+                                    class="dropdown  w-56 md:w-56"
+                                    (onChange)="onLocationChange($event)"
+                                    
+                                  />
+                                  <div class=" d-flex mt-1" *ngIf="slForm.get('location')?.touched && slForm?.get('location')?.invalid " >
+                                      <small *ngIf="slForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
+                                  </div>
+                              </div>
+                    
+                     
                             
                       <div>
                           <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
@@ -36,9 +62,14 @@
                         </div> -->
                       </div>
                     
+                      
                        
-                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
-                        <p-button label="Get Uploaded Data" class="" [disabled]="!showTable" (onClick)="exportUploadedData()" severity="secondary" class="" />
+                    </div>
+                    
+                    <div class="!flex !flex-row !gap-6 p-3 ">
+                      <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
+                      <p-button label="Get Uploaded Data" class="" [disabled]="!isDataPresent" (onClick)="exportUploadedData()" severity="secondary" class="" />
+                     </div>
                     </div>
                 </form>
                 </div>

@@ -49,9 +49,9 @@
                       </div>
                     
                        
-                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" [disabled]="isDataPresent" />
-                        <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="!isDataPresent" />
-                        <p-button label="Edit" class="" (onClick)="showEditPopup()" severity="secondary" [disabled]="!isDataPresent" />
+                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" [disabled]="!isDataPresent" />
+                        <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="isDataPresent" />
+                        <p-button label="Edit" class="" (onClick)="showEditPopup()" severity="secondary" [disabled]="isDataPresent" />
                     </div>
                 </form>
                 </div>

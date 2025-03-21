@@ -29,6 +29,8 @@ export class MultiLocationComponent {
  partNotInMasterData:any[]=[];
  previousLocations:any[]=[];
  userId:any;
+ brands:any=[];
+ dealers:any=[];
         locationSelected: Set<number> = new Set(); // To track selected locations
         @ViewChildren('fu') fu: QueryList<FileUpload> | undefined;
     constructor(private utilitiesService:UtilitiesService,
@@ -40,7 +42,9 @@ export class MultiLocationComponent {
 
      
         this.mlForm = this.fb.group({
-          locations: this.fb.array([])
+          locations: this.fb.array([]),
+          brand:[''],
+          dealer:['']
         });
         this.addLocation(); // Initially add one location entry
       
@@ -48,7 +52,8 @@ export class MultiLocationComponent {
     }
 
     ngOnInit(){
-      this.getLocations();
+      // this.getLocations();
+      this.getBrands();
     }
     get locationControls() {
       return (this.mlForm.get('locations') as FormArray);
@@ -274,6 +279,7 @@ export class MultiLocationComponent {
         this.messageService.add({severity:'error',detail:'Select the locations',life:30000});
       }
     }
+
     exportTableData(){
 
        const modifiedData = this.records.map((item: any) => ({
@@ -326,8 +332,9 @@ export class MultiLocationComponent {
     }
 
     getUploadedData(){
-
-      if(this.mlForm.get('locations')?.value!=''){
+      const hasEmptyLocation = this.mlForm.get('locations')?.value.some((item:any) => item.location === "");
+     
+      if(!hasEmptyLocation){
         this.globalBlockUiService.startLoading();
         this.stockUploadService.getMultiLocationUploadedData({locations:this.mlForm.get('locations')?.value}).subscribe((blob:any)=>{
           const link = document.createElement('a');
@@ -351,5 +358,24 @@ export class MultiLocationComponent {
         this.messageService.add({severity:'error',detail:'Select the locations',life:30000});
       }
       
+    }
+
+    getBrands(){
+      this.utilitiesService.getBrands().subscribe((res:any)=>{
+        this.brands=res.data;
+      })
+    }
+  
+    onBrandChange(event:any){
+      // this.getPartNotInMasterRecords()
+      this.utilitiesService.getDealers({brand_id:this.mlForm.value.brand}).subscribe((res:any)=>{
+        this.dealers=res.data;
+      })
+    }
+  
+    onDealerChange(event:any){
+    this.utilitiesService.getLocations({dealer_id:this.mlForm.value.dealer}).subscribe((res:any)=>{
+      this.locations=res.data;
+    })
     }
 }

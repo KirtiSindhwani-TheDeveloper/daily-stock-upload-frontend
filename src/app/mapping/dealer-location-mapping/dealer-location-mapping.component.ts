@@ -166,11 +166,11 @@ onBrandSelect(event:any){
   this.dealerLocationService.exportToExcel({brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
     this.uploadedData=res.data;
     if(this.uploadedData.length!=0){
-      this.isDataPresent=true;
+      this.isDataPresent=false;
       this.visible=true;
     }
     else{
-      this.isDataPresent=false;
+      this.isDataPresent=true;
     }
     //  console.log(this.uploadedData);
    
@@ -236,7 +236,7 @@ onBrandSelect(event:any){
           this.visible=true;
         }
         else{
-          this.isDataPresent=true;
+          this.isDataPresent=false;
         }})
       }
       this.dlForm.reset();

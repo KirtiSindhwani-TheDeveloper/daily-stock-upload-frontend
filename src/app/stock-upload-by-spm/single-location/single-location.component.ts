@@ -35,7 +35,11 @@ export class SingleLocationComponent {
   uploadedData:any=[];
   visible:boolean=false;
   userId:any;
+  isDataPresent:boolean=false;
   partNotInMasterRecords:any;
+  dealers:any;
+  brands:any;
+  isDataPresentPartNotInMaster:boolean=false;
   @ViewChild('fu') fu:FileUpload|null=null;
   constructor(private utilitiesService:UtilitiesService,
    private fb:FormBuilder,
@@ -47,11 +51,14 @@ export class SingleLocationComponent {
    this.slForm=this.fb.group({
      location:['',Validators.required],
     //  file:['',Validators.required]
+    brand:[''],
+    dealer:['']
    })
   }
  
   ngOnInit(){
-   this.getLocations();
+  //  this.getLocations();
+   this.getBrands();  
   }
  
   onSelect(event:any){
@@ -82,7 +89,8 @@ export class SingleLocationComponent {
        
        this.globalBlockUiService.startLoading();
       this.stockUploadService.uploadSingleLocationUpload(formData).subscribe((res:any)=>{
-
+        this.getPartNotInMaster();
+        this.getUploadedData();
         this.globalBlockUiService.stopLoading();
         if(res?.mappingNotPresent){
           return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!!'});
@@ -117,10 +125,33 @@ export class SingleLocationComponent {
     this.getUploadedData();
    }
 
+   onBrandChange(event:any){
+    this.utilitiesService.getDealers({brand_id:this.slForm.value.brand}).subscribe((res:any)=>{
+      this.dealers=res.data;
+    })
+   }
+
+   getBrands(){
+    this.utilitiesService.getBrands().subscribe((res:any)=>{
+      this.brands=res.data;
+    })
+  }
+   onDealerChange(event:any){
+    console.log(this.slForm.value)
+    this.utilitiesService.getLocations({dealer_id:this.slForm.value.dealer}).subscribe((res:any)=>{
+      this.locations=res.data;
+      // console.log(this.brands)
+    })
+   }
    getPartNotInMaster(){
 
     this.stockUploadService.getPartNotInMaster({location_id:this.slForm.value.location}).subscribe((res:any)=>{
       this.partNotInMasterRecords=res.data;
+      if(this.partNotInMasterRecords.length!=0){
+         this.isDataPresentPartNotInMaster=true;
+      }else{
+        this.isDataPresentPartNotInMaster=false;
+      }
     },(error:any)=>{
 
     })
@@ -149,6 +180,13 @@ export class SingleLocationComponent {
    getUploadedData(){
     this.stockUploadService.getUploadedData({location_id:this.slForm.value.location}).subscribe((res:any)=>{
       this.uploadedData=res.data;
+      if(this.uploadedData.length!=0){
+        this.isDataPresent=true;
+      }
+      else{
+        this.isDataPresent=false;
+      }
+
       
     })  
    }
