@@ -1,0 +1,191 @@
+/* Sidebar styles */
+:host ::ng-deep .p-sidebar {
+    width: 250px;
+    height: 100%;
+    padding-top: 20px;
+    
+  }
+  :host ::ng-deep .sidebar {
+    width: 250px;
+    padding-top: 20px;
+    width: min-content;
+    background: red;
+    height: 90vh;
+    
+  }
+
+  /* Logo Section */
+  .logo-section {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 3px;
+  }
+  
+  .sidebar-logo {
+    width: 60% !important;
+    height: auto;
+  }
+  
+  /* Search Section */
+  .search-section {
+    padding: 4px 12px;
+    border: 2px solid black;
+    border-radius: 25px;
+    display: flex
+;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    /* width: 80%; */
+  }
+  
+  .sidebar-search {
+    width: 100%;
+  }
+  
+  /* Menu Items */
+  .menu-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: auto !important;
+  }
+  
+  .menu-item {
+    /* padding: 10px 20px; */
+    padding: 3px 12px;
+    padding-top: 3px;
+    cursor: pointer;
+    /* margin-left: 13px; */
+  }
+  
+  /* .menu-item:hover {
+    background-color: #f1f1f1;
+    width: max-content;
+  } */
+  
+  /* User Profile at the bottom */
+  .user-profile {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+   /* flex-direction: column; */
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+  }
+  
+  .user-profile .user-name {
+    margin-top: 10px;
+  }
+  
+  /* Toggle button */
+  button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 20000;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-1.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-2.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-3.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-4.p-drawer-header.ng-star-inserted{
+    padding: 0px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+  }
+
+  :host ::ng-deep .p-sidebar-header .p-sidebar-close {
+    display: none !important;
+  }
+
+  :host ::ng-deep .ng-tns-c3529911234-2.p-drawer-header.ng-star-inserted{
+    padding: 0px !important
+  }
+
+button{
+    position: unset !important;
+}
+
+li{
+    font-size: 12px !important;
+    width: 240px !important;
+    display: grid !important;
+}
+
+:host ::ng-deep li.menu-item.child .ng-star-inserted{
+    margin-left: 13px;
+}
+
+
+.menu-item li a.active-item{
+    background-color: rgb(0 132 255 / 21%);
+    padding-inline: 5px;
+    padding-block: 7px;
+    text-decoration: none !important;
+}
+
+.menu-item li a:hover{
+  
+    text-decoration: none !important;
+}
+
+/* :host ::ng-deep .p-sidebar-mask{
+    display: none !important;
+} */
+
+/* This will make sure the sidebar floats over the content without blocking it */
+.ui-sidebar.ui-sidebar-visible {
+    z-index: 10000;  /* Sidebar should float above other content */
+    position: fixed; 
+    left: 0; /* Sidebar should stay on the left */
+    top: 0;
+    height: 100%; /* Full height */
+  }
+  
+  /* Ensuring that the content behind the sidebar remains accessible */
+  body {
+    overflow-x: hidden; /* To prevent horizontal scrolling if the sidebar is overlaying */
+  }
+  
+  .content-container {
+    transition: margin-left 0.3s ease;
+  }
+  
+  /* This rule ensures the sidebar is over the content when opened */
+  .ui-sidebar.ui-sidebar-visible ~ .content-container .main-content {
+    z-index: 1;
+    position: relative;
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  /* Optional styling for sidebar content */
+  .sidebar-logo {
+    width: 100%;
+    margin: 20px 0;
+  }
+  

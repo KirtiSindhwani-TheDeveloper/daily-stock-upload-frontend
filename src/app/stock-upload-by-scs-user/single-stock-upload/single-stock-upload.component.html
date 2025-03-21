@@ -1,0 +1,176 @@
+<p-toast></p-toast>
+
+<div class="body mt-2 ">
+    <span class="text-black text-2xl ">Single Stock Upload</span>   
+                <div class="d-flex">
+                    <form [formGroup]="slForm">
+                        <div class="d-flex justify-end">
+                            <span class="btn-view  mb-2" [ngClass]="showTable?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
+                            <!-- <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i> -->
+                        </div>
+                    <div class=" add-mapping-card w-[73vw] h-[25vh] !p-3 ">
+                       <div class="!flex !flex-row !gap-6  !items-center">
+
+                      
+                        <div>
+
+                            <p-select
+                              [options]="brands"
+                              formControlName="brand"
+                              optionLabel="brand"
+                              optionValue="brand_id"
+                              placeholder="Select Brand"
+                              class="dropdown  w-56 md:w-56"
+                              (onChange)="onBrandChange($event)"
+                              
+                            />
+                            <div class=" d-flex mt-1" *ngIf="slForm.get('brand')?.touched && slForm?.get('brand')?.invalid " >
+                                <small *ngIf="slForm?.get('brand')?.hasError('required')" style="color: red; font-size: 12px;">Brand is required.</small> 
+                            </div>
+                        </div>
+                        <div>
+
+                            <p-select
+                              [options]="dealers"
+                              formControlName="dealer"
+                              optionLabel="dealer_name"
+                              optionValue="dealer_id"
+                              placeholder="Select Dealer"
+                              class="dropdown  w-56 md:w-56"
+                              (onChange)="onDealerChange($event)"
+                              
+                            />
+                            <div class=" d-flex mt-1" *ngIf="slForm.get('dealer')?.touched && slForm?.get('dealer')?.invalid " >
+                                <small *ngIf="slForm?.get('dealer')?.hasError('required')" style="color: red; font-size: 12px;">Dealer is required.</small> 
+                            </div>
+                        </div>
+                            <div>
+
+                                <p-select
+                                  [options]="locations"
+                                  formControlName="location"
+                                  optionLabel="location_name"
+                                  optionValue="location_id"
+                                  placeholder="Select Location"
+                                  class="dropdown  w-56 md:w-56"
+                                  (onChange)="onLocationChange($event)"
+                                  
+                                />
+                                <div class=" d-flex mt-1" *ngIf="slForm.get('location')?.touched && slForm?.get('location')?.invalid " >
+                                    <small *ngIf="slForm?.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small> 
+                                </div>
+                            </div>
+                            <div>
+                                <p-datepicker formControlName="date" [minDate]="min" [maxDate]="max"  placeholder="Select Date"  class="dropdown" /> 
+                                <div class=" d-flex mt-1" *ngIf="slForm.get('date')?.touched && slForm?.get('date')?.invalid " >
+                                  <small *ngIf="slForm?.get('date')?.hasError('required')" style="color: red; font-size: 12px;">Date is required.</small> 
+                              </div>
+                              </div>
+                        </div>
+
+                            <div class="!flex  !flex-row gap-6 mt-4 !items-center ">
+                               
+                                <div>
+                                    <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                                    [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+          
+                                    <!-- <div class=" d-flex mt-1" *ngIf="slForm.get('file')?.touched && slForm?.get('file')?.invalid " >
+                                      <small *ngIf="slForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
+                                  </div> -->
+                                </div>
+                              
+                                 
+                                  <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
+                                  <p-button label="Get Uploaded Data" class="" [disabled]="!showTable" (onClick)="exportUploadedData()" severity="secondary" class="" />
+                            </div>
+                     
+                    </div>
+                </form>
+                </div>
+            </div>
+            <div
+            class="card   h-auto  p-3 bg-gray-50 rounded-lg shadow-lg mb-5 w-[73vw] mt-4 "
+            *ngIf="showTable"
+            >
+            <div class="d-flex justify-end">
+              <i class="bx bx-export font-bold mb-3 cursor-pointer" style="font-size: 18px;" (click)="exportTableData()"></i>
+            </div>
+            <p-table
+              [scrollable]="true"
+              scrollHeight="400px"
+              [value]="records"
+              styleClass="mt-4"
+              [paginator]="true"
+              [rows]="10"
+              [rowsPerPageOptions]="[10,20, 30, 40, 50, 100]"
+              [showGridlines]="true"
+              [scrollHeight]="'400px'"
+              [scrollable]="true"
+              class="bg-white  !rounded-lg border border-gray-200 shadow-md"
+            >
+              <ng-template #header let-item>
+                <tr>
+                  <th style="font-size: 13px;">Brand</th>
+                  <th style="font-size: 13px;">Dealer</th>
+                  <th style="font-size: 13px;" >Location</th>
+                  <th style="font-size: 13px;" >
+                    Previous Records
+                  </th>
+                 
+                  <th style="font-size: 13px;" >
+                    Current Records
+                   
+                  </th>
+                  <th style="font-size: 13px;">
+                   Previous Quantity Sum
+                  </th>
+                  <th style="font-size: 13px;" >Current Quantity Sum </th>
+                  <th style="font-size: 13px;">
+                     Added On
+                   </th>
+                   <th style="font-size: 13px;" >Added By</th>
+                  
+                </tr>
+              </ng-template>
+              <ng-template #body let-rowData let-i="rowIndex">
+                <tr>
+                    <td  style="font-size: 11px;">
+                        {{rowData.brandName}}
+                    </td>
+                    <td  style="font-size: 11px;"> {{rowData.dealerName}}</td>
+                  <td style="font-size: 11px;">{{locationName}}</td>
+                 
+                  <td style="font-size: 11px;">
+                      {{rowData.prevStockUploadCount}}
+                  </td>
+                  <td style="font-size: 11px;">
+                      {{rowData.stockUploadCount}}
+                     
+                  </td>
+             
+                  <td style="font-size: 11px;">
+                     {{rowData.prevQuantitySum}}
+                  </td>
+                 <td style="font-size: 11px;">
+                    {{rowData.quantitySum}}
+                 </td>
+                 <td style="font-size: 11px;">
+                    {{rowData.added_on}}
+                 </td>
+                 <td style="font-size: 11px;">
+                    {{addedBy}}
+                 </td>
+                 
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
+            <ng-template #header>
+              <div class="inline-flex items-center justify-center gap-2">
+                <span class="font-bold whitespace-nowrap"></span>
+              </div>
+            </ng-template>
+           
+          </p-dialog> 

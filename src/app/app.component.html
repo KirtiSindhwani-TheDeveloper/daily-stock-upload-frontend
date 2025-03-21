@@ -1,0 +1,80 @@
+
+<!-- 
+<app-header></app-header>
+<div class="container flex flex-row space-x-4">
+  <app-sidebar class="w-1/4"></app-sidebar> 
+  
+  <div class="flex-1">
+    <router-outlet></router-outlet> 
+  </div>
+</div> -->
+<app-header></app-header> <!-- Header at the top -->
+
+<!-- 
+<div class="flex flex-col">
+
+  <div class="flex flex-row flex-1">
+    <app-sidebar class="w-1/4"></app-sidebar> 
+    
+   
+    <div class="flex-1">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div class="flex flex-row w-full "> -->
+  <!-- w-1/4 added in ngclass of app-sidebar-->
+    <!-- <div class="row flex-row">
+     <div class="col-2">
+      <app-sidebar 
+      #sidebar
+      
+      [ngClass]="{ ' sidebar card bg-gray-50 rounded-lg shadow-sm ': visibleSidebar, 'w-0': !visibleSidebar }"
+      class="transition-all duration-300 h-[100vh] fixed"
+    ></app-sidebar> 
+     </div>
+     <div class="col ">
+     
+        <img src="Background_image.png" alt="Background Image"  class="w-[100vw]  h-[100vh] img-fluid fixed -z-50">
+        <div class="d-flex justify-content-center align-items-center">
+         
+          <router-outlet></router-outlet>
+        </div>
+        
+   
+     </div>
+  
+ 
+
+ 
+ 
+</div>  -->
+
+<img src="Background_image.png" alt="Background Image" class="w-[100vw] h-[100vh] img-fluid fixed -z-50">
+<p-blockUI #blockUI [blocked]="blocked" [style]="{ 'z-index': '9999',  'width': '100vw', 'height': '100vh' }" class="w-[100vw] h-[100vh]" [ngClass]="isLoading?'loader':''">
+  <div class="d-flex !justify-center !align-items-center">
+    <i class="bx bx-loader-circle fa-spin custom-icon fa-spinner"></i>
+  </div>
+ 
+</p-blockUI>
+<div class="row flex-row">
+ 
+  <div class="col-3" *ngIf="!isLoginPage">
+    <app-sidebar
+      #sidebar
+      [ngClass]="{ 'sidebar card bg-gray-50 rounded-lg shadow-sm': visibleSidebar, 'w-0': !visibleSidebar }"
+      class="transition-all duration-300 h-[100vh] fixed"
+    ></app-sidebar>
+  </div>
+  <div class="col">
+    
+    <div class="d-flex  align-items-center">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+
+

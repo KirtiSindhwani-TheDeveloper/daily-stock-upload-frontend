@@ -1,0 +1,138 @@
+<p-toast></p-toast>
+
+<div class="body mt-2 ">
+    <span class="text-black text-2xl ">Multi Location Stock Upload</span>   
+                <div class="d-flex">
+                    <form [formGroup]="mlForm">
+                        <!-- [ngClass]="showTable ? 'cursor-pointer' : 'disabled'" -->
+
+                        <div class="d-flex justify-end">
+                            <span class="btn-view mb-2"  (click)="exportToExcel()">Part Not In Master Export</span>
+                        </div>
+                    
+                        <div class="add-mapping-card w-[70vw] h-auto  !gap-6 p-3">
+                            <div formArrayName="locations" *ngFor="let locationControl of locationControls.controls; let i = index">
+                               
+
+                               
+                                <div [formGroupName]="i" class="location-container">
+                                    <div class="!flex !flex-row gap-6 my-4">
+                                    <div class="">
+                                        <p-select 
+                                            [options]="locations"
+                                            formControlName="location"
+                                            optionLabel="location_name"
+                                            optionValue="location_id"
+                                            placeholder="Select Location"
+                                            class="dropdown w-56 md:w-56"
+                                            (onChange)="onLocationChange(i)"
+                                        />
+                                        <div *ngIf="locationControl.get('location')?.touched && locationControl.get('location')?.invalid" class="error-message">
+                                            <small *ngIf="locationControl.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small>
+                                            <small *ngIf="locationControl.get('location')?.hasError('duplicateLocation')" style="color: red; font-size: 12px;">Cannot select the same location twice.</small>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="!flex !justify-center !items-center">
+                                        <p-fileupload #fu
+                                            mode="basic"
+                                            chooseLabel="Choose"
+                                            chooseIcon="pi pi-upload"
+                                            name="file"
+                                            [auto]="false"
+                                            accept=".xlsx,.csv,.xls"
+                                            (onSelect)="onFileSelect($event, i)"
+                                        ></p-fileupload>
+                                         <!-- Show the minus button only if it's not the first location (index > 0) -->
+                                    
+                                </div>
+                                <button *ngIf="i > 0" type="button" (click)="removeLocation(i)" class="remove-btn mt-1">-</button>
+                                <button type="button" (click)="addLocation()" class="add-btn mt-1">+</button>    
+                                   
+                                </div>
+                            </div>
+                           
+                    
+                            
+                        </div>
+                            <p-button label="Upload" (onClick)="onUpload()" severity="secondary" />
+                            <!-- [disabled]="!showTable" -->
+                            <p-button label="Get Uploaded Data" class="" (onClick)="exportUploadedData()" severity="secondary" class="ms-3" />
+                        </div>
+                    </form>
+                    
+                    
+                </div>
+            </div>
+            <div
+            class="card   h-auto  p-3 bg-gray-50 rounded-lg shadow-lg mb-5 w-[70vw] mt-4 "
+            *ngIf="showTable"
+            >
+            <div class="d-flex justify-end">
+              <i class="bx bx-export font-bold mb-3 cursor-pointer" style="font-size: 18px;" (click)="exportTableData()"></i>
+            </div>
+            <p-table
+              [scrollable]="true"
+              scrollHeight="400px"
+              [value]="records"
+              styleClass="mt-4"
+              [paginator]="true"
+              [rows]="10"
+              [rowsPerPageOptions]="[10,20, 30, 40, 50, 100]"
+              [showGridlines]="true"
+              [scrollHeight]="'400px'"
+              [scrollable]="true"
+              class="bg-white  !rounded-lg border border-gray-200 shadow-md"
+            >
+              <ng-template #header let-item>
+                <tr>
+                 
+                  <th style="font-size: 13px;" >Location</th>
+                  <th style="font-size: 13px;" >
+                    Previous Records
+                  </th>
+                 
+                  <th style="font-size: 13px;" >
+                    Current Records
+                   
+                  </th>
+                  <th style="font-size: 13px;">
+                   Previous Quantity Sum
+                  </th>
+                  <th style="font-size: 13px;" >Current Quantity Sum </th>
+                  <th style="font-size: 13px;">
+                     Added On
+                   </th>
+                   <th style="font-size: 13px;" >Added By</th>
+                  
+                </tr>
+              </ng-template>
+              <ng-template #body let-rowData let-i="rowIndex">
+                <tr>
+                  <td style="font-size: 11px;">{{rowData.locationName}}</td>
+                 
+                  <td style="font-size: 11px;">
+                      {{rowData.prevStockUploadCount}}
+                  </td>
+                  <td style="font-size: 11px;">
+                      {{rowData.stockUploadCount}}
+                     
+                  </td>
+             
+                  <td style="font-size: 11px;">
+                     {{rowData.prevQuantitySum}}
+                  </td>
+                 <td style="font-size: 11px;">
+                    {{rowData.quantitySum}}
+                 </td>
+                 <td style="font-size: 11px;">
+                    {{rowData.added_on}}
+                 </td>
+                 <td style="font-size: 11px;">
+                    {{rowData.added_by}}
+                 </td>
+                 
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>

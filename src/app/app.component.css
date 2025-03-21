@@ -1,0 +1,52 @@
+.container {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 300px;
+    /* background-color: #333;
+    color: white; */
+    padding: 12px;
+    padding-top: 0px;
+    /* border-radius: 50px; */
+/* background: #E0E0E0; */
+box-shadow:  20px 20px 60px #BEBEBE,
+             -20px -20px 60px #FFFFFF;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar nav ul li {
+    margin: 10px 0;
+  }
+  
+  .sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .sidebar nav ul li a.active {
+    font-weight: bold;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+  }
+
+  .card{
+    border: none;
+  }
+
+  :host ::ng-deep .loader .p-overlay-mask{
+    /* background: red; */
+    position: absolute;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: inherit !important;
+  }
+  

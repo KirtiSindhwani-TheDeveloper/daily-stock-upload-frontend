@@ -1,0 +1,163 @@
+/* :host ::ng-deep input.p-inputtext.p-component.p-element.ng-tns-c3237098745-2.p-password-input.p-filled{
+    padding: 10px !important;
+    width: 20vw !important;
+    padding-left: 20px !important;
+} */
+::ng-deep body{
+  
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  
+  }
+  ::ng-deep input{
+    background-color: #E8F0FE !important;
+    padding: 10px !important;
+    padding-left: 20px !important;
+    width: 20vw !important;
+  }
+  
+  
+  input:focus-visible{
+    border:none;
+    outline: none;
+  }
+
+  .btn-edit{
+      width: 80px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+  }
+  
+  :host ::ng-deep .ng-tns-c1946505645-1.p-dialog-content.ng-star-inserted{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  :host ::ng-deep span.p-button-label.ng-star-inserted:focus-visible{
+    border: none !important;
+    outline: none !important;
+  }
+  :host ::ng-deep button.p-ripple.p-element.p-button.p-component.p-button-secondary:focus{
+      box-shadow: none !important;
+  }
+  
+  :host ::ng-deep button.p-ripple.p-element.p-button.p-component:focus{
+    border:none !important;
+    box-shadow: none !important;
+  }
+  
+  :host ::ng-deep input.p-inputtext.p-component.p-element.p-inputotp-input.ng-star-inserted{
+      width: 40px !important;
+      height: 40px !important;
+      background: #E8F0FE !important;
+  }
+  
+  :host ::ng-deep input.p-inputtext.p-component.p-element.p-inputotp-input.ng-star-inserted:focus{
+     outline:none;
+     box-shadow:none;
+  }
+  
+  :host ::ng-deep input.p-inputtext.p-component.p-element.w-\[20vw\].h-8.rounded.p-4.p-filled{
+      outline:none;
+     box-shadow:none;
+  }
+  
+  :host ::ng-deep .btn-verifyOtp{
+      width: 100px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+  }
+  
+  :host ::ng-deep input.p-inputtext.p-component.p-element{
+      background-color: #E8F0FE !important;
+      padding: 10px !important;
+      width: 20vw !important;
+      padding-left: 20px !important;
+  }
+  
+  .marquee {
+      width: 100%; /* Full-width container */
+      overflow: hidden; /* Hide the overflow */
+      white-space: nowrap; /* Prevent text wrapping */
+      background: #FFFFFF;
+      padding: 10px 0;
+      position: relative;
+    }
+    .marquee-content {
+      display: inline-block;
+      animation: scroll-left 10s linear infinite; /* Continuous scrolling */
+    }
+    .marquee-content img {
+      display: inline-block;
+      margin: 0 20px; /* Add spacing between images */
+    }
+    :host ::ng-deep  input.p-inputtext.p-component.p-element.email-input{
+      width:25vw !important
+    }
+  
+  
+    @keyframes scroll-left {
+      from {
+        transform: translateX(0%); /* Start from outside the container */
+      }
+      to {
+        transform: translateX(-100%); /* End outside the container on the left */
+      }
+    }
+  :host ::ng-deep .ng-tns-c1946505645-2.p-dialog-mask.p-component-overlay.p-component-overlay-enter.p-dialog-mask-scrollblocker.ng-star-inserted{
+      z-index:0 !important;
+  }
+  :host ::ng-deep  input.p-inputtext.p-component.p-element.email-input:focus{
+   /* width: 28vw !important; */
+    outline: none;
+    box-shadow:none
+  }
+  /* :host ::ng-deep input.p-inputtext.p-component.p-element.ng-tns-c3237098745-1.p-password-input {
+      width: 555px !important;
+  } */
+  
+  .verify-btn{
+    background-color: var(--theme2-color);
+    color: white;
+    font-weight: 500;
+  }
+  
+  .verify-btn:active{
+    background-color: var(--theme2-color);
+    color: white;
+    font-weight: 500;
+    border: none;
+  }
+  
+  :host::ng-deep .p-dialog-header.ng-tns-c1946505645-4.ng-star-inserted{
+    padding-block: 8px !important;
+  }
+  
+  :host ::ng-deep input.p-inputtext.p-component.p-element.p-inputotp-input
+  {
+    width: 4vw !important;
+  }
+  @media (min-width: 768px) and (max-width: 992px) {
+      :host ::ng-deep input.p-inputtext.p-component.p-element {
+          background-color: #E8F0FE !important;
+          padding: 10px !important;
+          width: 70vw !important;
+          padding-left: 20px !important;
+      }
+      :host ::ng-deep  input.p-inputtext.p-component.p-element.email-input{
+        width:45vw !important
+      }
+  }
+  
+  @media (min-width:350px) and (max-width:767px){
+      :host ::ng-deep input.p-inputtext.p-component.p-element {
+          background-color: #E8F0FE !important;
+          padding: 10px !important;
+          width: 70vw !important;
+          padding-left: 20px !important;
+      }
+  }
+  

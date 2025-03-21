@@ -1,0 +1,14 @@
+:root{
+    --primary-color: #49505757;
+}
+
+.custom-icon {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: #ccc;
+    /* color: red; */
+    animation: spin 1s infinite linear;
+}

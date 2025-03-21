@@ -1,0 +1,217 @@
+<p-toast></p-toast>
+<div class="flex flex-col lg:flex-row w-auto h-auto  overflow-hidden">
+   <!-- First Div -->
+   <div class="w-full lg:w-[70vw] h-auto">
+     <div class="flex items-center justify-center w-auto h-6 bg-customgreen pt-4 pb-2">
+       <h2 class="text-white text-sm sm:text-lg"><u>Smart Inventory Management</u></h2>
+     </div>
+     <div class="flex w-auto h-auto items-center justify-around bg-customgreen pt-4 pb-3">
+       <div class="flex flex-col">
+         <h2 class="text-white text-sm sm:text-base flex justify-center">3144</h2>
+         <h2 class="text-white text-[12px] sm:text-base">Active Location</h2>
+       </div>
+       <div class="flex flex-col">
+         <h2 class="text-white text-sm sm:text-base flex justify-center">₹ 1026 Cr</h2>
+         <h2 class="text-white text-[12px] sm:text-base">Inventory Under Management</h2>
+       </div>
+       <div class="flex flex-col">
+         <h2 class="text-white text-sm sm:text-base flex justify-center">₹ 154 Cr</h2>
+         <h2 class="text-white text-[12px] sm:text-base">Inventory Optimized</h2>
+       </div>
+     </div>
+     <div class="flex w-auto h-auto bg-customgreen2 items-center justify-center pt-16 pb-16 lg:pt-8 lg:pb-8">
+       <img src="SparecareLogopng.png" alt="Sparecare Logo" width="350px" height="185px">
+     </div>
+     <div class="flex items-center justify-center w-auto h-10 bg-customgreen pt-5 pb-4">
+       <h2 class="text-white text-lg"><u>Non-Moving Parts Liquidation</u></h2>
+     </div>
+     <div class="flex w-auto h-auto items-center justify-around bg-customgreen pt-3 pb-3">
+       <div class="flex flex-col">
+         <h2 class="text-white  sm:text-base flex justify-center">1996</h2>
+         <h2 class="text-white text-sm sm:text-base">Active Location</h2>
+       </div>
+       <div class="flex flex-col">
+         <h2 class="text-white  sm:text-base flex justify-center">₹ 132 Cr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+         <h2 class="text-white text-sm sm:text-base">Inventory Pool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+       </div>
+       <div class="flex flex-col">
+         <h2 class="text-white  sm:text-base flex justify-center">₹ 39 Cr</h2>
+         <h2 class="text-white text-sm sm:text-base">&nbsp;&nbsp;GMV</h2>
+       </div>
+     </div>
+   </div>
+ 
+
+   <!-- Login Div -->
+   <div class="w-full lg:w-[30vw] h-auto order-2 lg:order-none">
+     <div class="relative w-full h-full">
+       <img
+         src="Background_image.png"
+         alt="Background"
+         class="absolute inset-0 w-full h-full object-cover -z-10"
+       />
+       <div class="flex flex-col w-auto h-auto">
+         <div class="flex items-center justify-center lg:pt-10 pt-3  ">
+           <h1 class="text-3xl text-black font-bold">Welcome!</h1>
+         </div>
+         <form class="lg:mt-16 mt-5"  [formGroup]="userLoginInputDetails" >
+           <div class="flex flex-col w-auto h-auto justify-center pl-16">
+             <label for="email">Email</label>
+             <input
+               formControlName="email"
+               type="text"
+               class="md:w-[70vw] lg:w-[20vw] w-[70vw] h-8 rounded p-4"
+             />
+             <div *ngIf="userLoginInputDetails.get('email')?.touched && userLoginInputDetails.get('email')?.invalid">
+               <small *ngIf="userLoginInputDetails.get('email')?.hasError('required')" style="color: red; font-size: 12px;">Email is required.</small>
+             </div>  
+           </div>
+          
+           <div class="flex flex-col w-auto h-auto justify-center lg:mt-5 mt-2 pl-16 relative">
+             <label for="password">Password</label>
+             <!-- <input
+               formControlName="userPassword" [toggleMask]="true"
+               type="password"
+               class="md:w-[70vw] lg:w-[20vw] w-[70vw] h-8 rounded p-4 shadow-xl"
+             /> -->
+             <p-password [toggleMask]="true" formControlName="userPassword"  class=""  />
+             <div *ngIf="userLoginInputDetails.get('userPassword')?.touched && userLoginInputDetails.get('userPassword')?.invalid">
+               <small *ngIf="userLoginInputDetails.get('userPassword')?.hasError('required')" style="color: red; font-size: 12px;">Password is required.</small>
+             </div>
+           </div>
+          
+           <div class="flex justify-end my-3 pr-16 lg:pr-14 sm:pr-40 ">
+               <span  class="btn-forgot font-bold cursor-pointer" (click)="showDialog()" >Forgot Password?</span>
+              </div>
+           <div class="flex justify-center mt-2 mb-4">
+             <button class="w-[15vw] text-white bg-customgreen2 h-8 rounded shadow-xl" (click)="onLogin()">Login</button>
+           </div>
+         </form>
+       </div>
+     </div>
+   </div>
+ </div>
+ 
+<div class="flex items-center justify-around w-auto h-auto pt-2 pb-[11px] bg-[#e5e5e6]">
+   <h1 class="text-sm">Smart Inventory Management</h1>
+   <h1 class="text-sm">Dead Stock Liquidation</h1>
+   <h1 class="text-sm">Operational Excellence</h1>
+   <h1 class="text-sm">Smart Inventory Audit</h1>
+</div>
+<div class="flex flex-row w-full h-20 items-center justify-between">
+
+ <div class="marquee flex items-center">
+   <div class="marquee-content">
+     <img src="logistics/DelhiveryExpress.png" alt="" width="40px" height="60px">
+     <img src="logistics/DelihverySurface.png" alt="" width="40px" height="60px">
+     <img src="logistics/wefast.png" alt="" width="40px" height="40px">
+     <img src="logistics/BlueDart.png" alt="" width="40px" height="40px">
+     <img src="logistics/DelhiveryExpress.png" alt="" width="40px" height="60px">
+     <img src="logistics/DelihverySurface.png" alt="" width="40px" height="60px">
+     <img src="logistics/wefast.png" alt="" width="40px" height="40px">
+     <img src="logistics/BlueDart.png" alt="" width="40px" height="40px">
+     <img src="logistics/DelhiveryExpress.png" alt="" width="40px" height="60px">
+     <img src="logistics/DelihverySurface.png" alt="" width="40px" height="60px">
+     <img src="logistics/wefast.png" alt="" width="40px" height="40px">
+     <img src="logistics/BlueDart.png" alt="" width="40px" height="40px">
+     <img src="logistics/DelhiveryExpress.png" alt="" width="40px" height="60px">
+     <img src="logistics/DelihverySurface.png" alt="" width="40px" height="60px">
+     <img src="logistics/wefast.png" alt="" width="40px" height="40px">
+     <img src="logistics/BlueDart.png" alt="" width="40px" height="40px">
+   </div>
+ </div>
+   <div class="">
+       <img src="logistics\ICICI bank.png" alt="" width="350px" height="80px">
+   </div>
+     <div class="marquee flex items-center">
+       <div class="marquee-content">
+         <img src="brands\ashokleyland.jpg" alt="" width="25px" height="60px">
+         <img src="brands\bajaj.jpg" alt="" width="25px" height="60px">
+         <img src="brands\baratbenz.jpg" alt="" width="25px" height="60px">
+         <img src="brands\eicher.png" alt="" width="25px" height="60px">
+         <img src="brands\bmw.jpg" alt="" width="25px" height="60px">
+         <img src="brands\fiat.jpg" alt="" width="25px" height="60px">
+         <img src="brands\jcb.png" alt="" width="50px" height="60px">
+         <img src="brands\mahindra.png" alt="" width="50px" height="60px">
+         <img src="brands\escort.JPG" alt="" width="25px" height="60px">
+         <img src="brands\hero.jpg" alt="" width="25px" height="60px">
+         <img src="brands\mg.jpg" alt="" width="50px" height="60px">
+         <img src="brands\nissan.jpg" alt="" width="50px" height="60px">
+         <img src="brands\honda.jpg" alt="" width="25px" height="60px">
+         <img src="brands\mahindratruckandbus.jpg" alt="" width="50px" height="60px">
+         <img src="brands\kia.jpg" alt="" width="50px" height="60px">
+         <img src="brands\renault.jpg" alt="" width="50px" height="60px">
+         <img src="brands\royalenfield.jpg" alt="" width="50px" height="60px">
+         <img src="brands\honda2w.jpg" alt="" width="50px" height="60px">
+         <img src="brands\triumph.png" alt="" width="50px" height="60px">
+         <img src="brands\volkwegan.jpg" alt="" width="50px" height="60px">
+         <img src="brands\sukuzi.jpg" alt="" width="50px" height="60px">
+         <img src="brands\skoda.jpg" alt="" width="50px" height="60px">
+         <img src="brands\tvs.jpg" alt="" width="50px" height="60px">
+         <img src="brands\mercedese.jpg" alt="" width="50px" height="60px">
+         <img src="brands\hyundai.jpg" alt="" width="50px" height="60px">
+         
+       </div>
+     </div>
+</div>
+<!-- <div class="card flex justify-content-center">
+ 
+   <p-dialog header="Forgot Password" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+       
+       <form  class="" [formGroup]="updateInfoForm">
+           <div class="flex flex-col w-auto h-auto justify-center ">
+               <label  class="email">Email</label>
+               <input type="text" pInputText  class="email-input " formControlName="email" />
+               <div *ngIf="updateInfoForm.get('email')?.touched && updateInfoForm.get('email')?.invalid">
+                   <small *ngIf="updateInfoForm.get('email')?.hasError('required')" style="color: red; font-size: 12px;">Email is required.</small>
+                 </div> 
+                 <div *ngIf="updateInfoForm.get('email')?.touched && updateInfoForm.get('email')?.invalid">
+                   <small *ngIf="updateInfoForm.get('email')?.hasError('email')" style="color: red; font-size: 12px;">Please Enter a valid email.</small>
+                 </div> 
+           </div>
+         
+           <div class="flex flex-col w-auto h-auto justify-center mt-3" *ngIf="!getOtp">
+               <label  class="">OTP</label>
+               <p-inputOtp  [length]="6" [integerOnly]="true" formControlName="otp" />
+           </div>
+           <div class="flex flex-col w-auto h-auto justify-center mt-3 relative" *ngIf="isPasswordFilledVisible">
+               <label class="">Password</label>
+               <p-password  [toggleMask]="true" formControlName="password"  />
+           </div>
+
+           <div class="flex justify-content-end gap-2 mt-3">
+               <p-button label="Cancel" severity="secondary" class="btn-edit text-white bg-customgreen2 rounded shadow-xl" (onClick)="cancel()" />
+               <p-button [label]="getOtp?'Send': isPasswordFilledVisible? 'Confirm':'Verify OTP'"  [ngClass]="!isPasswordFilledVisible?'btn-verifyOtp':''" (onClick)="submit()" class="btn-edit text-white bg-customgreen2  rounded shadow-xl"  />
+           </div>
+       </form>
+   </p-dialog>
+</div>  -->
+
+<!-- <p-dialog 
+   header="Two Factor Authentication" 
+   [(visible)]="visibleTwoFactor" 
+   [modal]="true" 
+   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+   [style]="{ width: '50vw' }" 
+   [draggable]="false" 
+   [resizable]="false">
+   <div class="d-flex justify-center align-items-center flex-column">
+     <label  class="" *ngIf="!isResetClicked">OTP for Authentication</label>
+     <p-inputOtp  [length]="6" [integerOnly]="true" *ngIf="!isResetClicked" [(ngModel)]="OTP" />
+
+     <a (click)="resetAuthentication()" class="cursor-pointer mt-2">Reset Authentication</a>
+   </div>
+   <div *ngIf="qrCodeUrl" class="d-flex justify-center align-items-center flex-column">
+     <h3>Scan this QR code with Google Authenticator</h3>
+     <img [src]="qrCodeUrl" alt="QR Code">
+     <div>
+       <input type="text" [(ngModel)]="OTP" name="token" placeholder="Enter OTP" class="p-2 me-4">
+       <button (click)="verifyOTP()" class="w-30 h-50 btn verify-btn">Verify OTP</button>
+     </div>
+    
+   </div>
+   <div class="d-flex justify-center mt-2">
+     <button (click)="verifyOTP()" class="w-30 h-50 btn verify-btn" *ngIf="!isResetClicked">Submit</button>
+   </div>
+</p-dialog> -->
+ 

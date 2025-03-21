@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './global.css';
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.p-drawer-header {
+    padding: 0px !important;
+  }
+  
+  .p-drawer-close {
+    display: none !important;
+  }
+   .p-drawer.p-component{
+    /* position: fixed !important;
+    top: 10vh !important; /* Below the header */
+    /* left: 0;
+    height: 90vh; */ 
+  }
+   .p-overlay-mask{
+    /* background: none;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important; */
+    /* z-index: inherit !important; */
+   
+  }
+  /*
+  .p-sidebar-mask{
+    display: none !important;
+  }   */
+
+  .f-15{
+    font-size: 15px;
+  }
+
+  :host ::ng-deep .p-blockui-mask-document.p-blockui.p-blockui-mask.p-overlay-mask{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
