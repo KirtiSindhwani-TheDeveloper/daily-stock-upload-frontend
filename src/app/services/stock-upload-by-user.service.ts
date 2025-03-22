@@ -22,4 +22,8 @@ export class StockUploadByUserService {
   bulkStockUpload(data:any):Observable<any>{
     return this.http.post(`${this.url}upload/bulk-upload`,data)
   }
+
+  getPartNotInMaster(data:any):Observable<any>{
+    return this.http.post(`${this.url}upload/part-not-in-master`,data)
+  }
 }

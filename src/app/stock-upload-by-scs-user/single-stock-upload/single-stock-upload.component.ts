@@ -129,9 +129,14 @@ export class SingleStockUploadComponent {
        this.globalBlockUiService.startLoading();
       this.stockUploadServiceByUser.uploadSingleStockUpload(formData).subscribe((res:any)=>{
         this.getUploadedData();
+        this.getPartNotInMaster();
         // this.slForm.reset();
         this.globalBlockUiService.stopLoading();
+        // console.log("res ",res)
         if(res?.data?.mappingNotPresent){
+          this.fu?.clear();
+          this.file=null;
+          formData=new FormData();
           return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!!'});
         }
         if(res?.data?.currentSumQuantity){
@@ -176,7 +181,7 @@ export class SingleStockUploadComponent {
 
    getPartNotInMaster(){
 
-    this.stockUploadService.getPartNotInMaster({location_id:this.slForm.value.location}).subscribe((res:any)=>{
+    this.stockUploadServiceByUser.getPartNotInMaster({brand_id:this.slForm.value.brand}).subscribe((res:any)=>{
       this.partNotInMasterRecords=res.data;
       if(this.partNotInMasterRecords.length!=0){
         this.isDataPresentForPartNotInMaster=true;

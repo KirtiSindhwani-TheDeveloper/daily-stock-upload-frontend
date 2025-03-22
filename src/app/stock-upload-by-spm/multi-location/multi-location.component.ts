@@ -31,6 +31,7 @@ export class MultiLocationComponent {
  userId:any;
  brands:any=[];
  dealers:any=[];
+ isDataPresentPartNotInMaster:boolean=false;
         locationSelected: Set<number> = new Set(); // To track selected locations
         @ViewChildren('fu') fu: QueryList<FileUpload> | undefined;
     constructor(private utilitiesService:UtilitiesService,
@@ -86,6 +87,7 @@ export class MultiLocationComponent {
   
     // Handle location change (to validate duplicate location selection)
     onLocationChange(index: number) {
+
       const locationControl = (this.mlForm.get('locations') as FormArray).at(index).get('location');
       const selectedLocation = locationControl?.value;
     
@@ -108,6 +110,7 @@ export class MultiLocationComponent {
         locationControl?.setErrors({ duplicateLocation: true });
       } else {
         this.locationSelected.add(selectedLocation); // Mark the location as selected
+        
       }
     }
     
@@ -129,7 +132,7 @@ export class MultiLocationComponent {
     // Handle the submit (upload)
     onUpload() {
       let userId=1;
-      let dealerId=20295;
+      // let dealerId=20295;
       if (this.mlForm.valid) {
         this.globalBlockUiService.startLoading();
         // const formData = new FormData();
@@ -146,11 +149,11 @@ export class MultiLocationComponent {
         }
         this.formData.append('user_id', userId.toString());
         
-        this.formData.append('dealer_id', dealerId.toString());
+        this.formData.append('dealer_id', this.mlForm.value.dealer.toString());
       });
 
         this.stockUploadService.uploadMultiLocation(this.formData).subscribe((res:any)=>{
-
+          this.globalBlockUiService.stopLoading();
           if(res?.mappingNotPresent){
             this.mlForm.reset();
            

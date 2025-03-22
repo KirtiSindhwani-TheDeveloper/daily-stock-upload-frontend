@@ -12,3 +12,7 @@
     /* color: red; */
     animation: spin 1s infinite linear;
 }
+
+body.loader {
+    overflow: hidden; /* Hides scrollbar */
+  }

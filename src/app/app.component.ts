@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { CoreModule } from './core/core.module';
 import { SidebarComponent } from "./core/sidebar/sidebar.component";
@@ -22,7 +22,9 @@ export class AppComponent {
   blocked:boolean=false;
   isLoginPage = false;
   @ViewChild('blockUI') blockUI!: BlockUI;
-  constructor(private globalBlockUIService: GlobalBlockUiService,private router:Router, private route: ActivatedRoute) {}
+  constructor(private globalBlockUIService: GlobalBlockUiService,
+    private router:Router, private route: ActivatedRoute,
+    private renderer: Renderer2) {}
 
   ngOnInit() {
     // Set BlockUI reference in the global service
@@ -44,5 +46,26 @@ export class AppComponent {
       // Update whether the current route is the login page
       this.isLoginPage = this.router.url.includes('/login');
     });
+  }
+
+  updateLoaderHeight() {
+    if (this.blockUI) {
+      const contentHeight = document.documentElement.scrollHeight; // Full page height
+      const viewportHeight = window.innerHeight; // Viewport height
+      const viewportWidth = window.innerWidth; // Full screen width
+
+      const newHeight = contentHeight > viewportHeight ? `${contentHeight}px` : '100vh';
+
+      this.blockUI.el.nativeElement.style.height = newHeight;
+      this.blockUI.el.nativeElement.style.width = `${viewportWidth}px`;
+    }
+  }
+
+  ngAfterViewInit() {
+    this.updateLoaderHeight();
+    window.addEventListener('resize', () => this.updateLoaderHeight());
+  }
+  ngAfterContentChecked() {
+    this.updateLoaderHeight(); // Adjust height when content updates
   }
 }

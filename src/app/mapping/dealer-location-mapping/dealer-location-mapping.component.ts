@@ -90,10 +90,10 @@ export class DealerLocationMappingComponent {
     this.globalUiService.startLoading()
     this.dealerLocationService.uploadDealerLocationMapping(this.formData).subscribe((res:any)=>{
       if(res?.isDealerAndLocationPresent==false){
-        this.messageService.add({severity:'error',summary:'Dealer and Location is not present in Uploaded File!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location is not present in Uploaded File!!',life:300000})
       }
       if(res?.isDealerAndLocationNull){
-        this.messageService.add({severity:'error',summary:'Dealer and Location cannot be null!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location cannot be null!!',life:300000})
       }
 
       if(res?.dealerLocationNotInMasterPresent){
@@ -214,11 +214,11 @@ onBrandSelect(event:any){
     this.globalUiService.startLoading()
     this.dealerLocationService.editDealerLocationMapping(formData).subscribe((res:any)=>{
       if(res?.isDealerAndLocationPresent==false){
-        this.messageService.add({severity:'error',summary:'Dealer and Location is not present in Uploaded File!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location is not present in Uploaded File!!',life:300000})
       
       }
       if(res?.isDealerAndLocationNull){
-        this.messageService.add({severity:'error',summary:'Dealer and Location cannot be null!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location cannot be null!!',life:300000})
        
       }
 
