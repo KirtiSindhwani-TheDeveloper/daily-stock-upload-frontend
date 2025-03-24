@@ -26,4 +26,10 @@ export class StockUploadByUserService {
   getPartNotInMaster(data:any):Observable<any>{
     return this.http.post(`${this.url}upload/part-not-in-master`,data)
   }
+
+  getUploadedData(data:any):Observable<any>{
+    return this.http.post(`${this.url}upload/all-uploaded-data`,data);
+  }
+
+  
 }

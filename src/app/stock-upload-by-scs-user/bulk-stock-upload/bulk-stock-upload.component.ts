@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
+import { StockUploadByUserService } from '../../services/stock-upload-by-user.service';
 @Component({
   selector: 'app-bulk-stock-upload',
   imports: [PrimengModuleModule,SharedModule,CommonModule,ReactiveFormsModule,FormsModule],
@@ -21,7 +22,7 @@ export class BulkStockUploadComponent {
   locations:any=[];
   file:any;
   fileName:any;
-  slForm:FormGroup;
+  mlForm:FormGroup;
   records:any=[];
   currentUploadQuantity:any;
   prevCountRecords:any;
@@ -43,10 +44,11 @@ export class BulkStockUploadComponent {
    private fb:FormBuilder,
    private stockUploadService:StockUploadBySpmService,
    private globalBlockUiService:GlobalBlockUiService,
-   private messageService:MessageService
+   private messageService:MessageService,
+   private stockUploadServiceBySCSUser:StockUploadByUserService
   ){
  
-   this.slForm=this.fb.group({
+   this.mlForm=this.fb.group({
      location:['',Validators.required],
      brand:['',Validators.required],
      dealer:['',Validators.required],
@@ -69,8 +71,11 @@ export class BulkStockUploadComponent {
   getBrands(){
     this.utilitiesService.getBrands().subscribe((res:any)=>{
       this.brands=res.data;
+    },(error:any)=>{
+      this.messageService.add({severity:'error',summary:'Error in fetching the Brands!! ',life:30000})
     })
   }
+
   onSelect(event:any){
     this.file=event.files[0];
     this.fileName=this.file.name;
@@ -78,23 +83,45 @@ export class BulkStockUploadComponent {
 
   onBrandChange(event:any){
 
-    this.utilitiesService.getDealers({brand_id:this.slForm.value.brand}).subscribe((res:any)=>{
+    this.globalBlockUiService.startLoading();
+    this.utilitiesService.getDealers({brand_id:this.mlForm.value.brand}).subscribe((res:any)=>{
+      this.globalBlockUiService.stopLoading();
       this.dealers=res.data;
-    })
+    },(error:any)=>{
+      this.globalBlockUiService.stopLoading();
+      this.messageService.add({severity:'error',summary:'Error in Fetching the Dealers !!'})
+    });
+  
+    
   }
 
   onDealerChange(event:any){
-  this.utilitiesService.getLocations({dealer_id:this.slForm.value.dealer}).subscribe((res:any)=>{
+    this.globalBlockUiService.startLoading();
+  this.utilitiesService.getLocations({dealer_id:this.mlForm.value.dealer}).subscribe((res:any)=>{
     this.locations=res.data;
+    this.globalBlockUiService.stopLoading();
+  },(error:any)=>{
+    this.globalBlockUiService.stopLoading();
+    this.messageService.add({severity:'error',summary:'Error in Fetching the Locations !!'})
   })
+
+  this.stockUploadService.getPartNotInMaster({brand_id:this.mlForm.value.brand}).subscribe((res:any)=>{
+    this.globalBlockUiService.stopLoading();
+    this.partNotInMasterRecords=res.data;
+  },(error:any)=>{
+    this.globalBlockUiService.stopLoading();
+    this.messageService.add({severity:'error',summary:'Error in getting the part not in master !!'})
+  });
+
+  this.getUploadedData();
   }
- 
+  
    onUpload() {
  
-    if(this.slForm.invalid){
+    if(this.mlForm.invalid){
  
-      Object.keys(this.slForm.controls).forEach((controlName:any)=>{
-        this.slForm.get(controlName)?.markAsTouched();
+      Object.keys(this.mlForm.controls).forEach((controlName:any)=>{
+        this.mlForm.get(controlName)?.markAsTouched();
       })
     }
     
@@ -103,7 +130,7 @@ export class BulkStockUploadComponent {
       if(this.fileName==''||this.fileName==null){
        return this.messageService.add({severity:'error',summary:'Select the File!!',life:300000});
        }
-     let locationId=this.slForm.value.location;
+     let locationId=this.mlForm.value.location;
      let userId=1;
        const formData = new FormData();
        formData.append('excelFile', this.file, this.fileName);
@@ -111,7 +138,7 @@ export class BulkStockUploadComponent {
        formData.append('user_id', userId.toString());
        
        this.globalBlockUiService.startLoading();
-      this.stockUploadService.uploadSingleLocationUpload(formData).subscribe((res:any)=>{
+      this.stockUploadServiceBySCSUser.bulkStockUpload(formData).subscribe((res:any)=>{
 
         this.globalBlockUiService.stopLoading();
         if(res?.currentSumQuantity){
@@ -140,18 +167,10 @@ export class BulkStockUploadComponent {
    }
 
    onLocationChange(event:any){
-    this.getPartNotInMaster();
+
     this.getUploadedData();
    }
 
-   getPartNotInMaster(){
-
-    this.stockUploadService.getPartNotInMaster({location_id:this.slForm.value.location}).subscribe((res:any)=>{
-      this.partNotInMasterRecords=res.data;
-    },(error:any)=>{
-
-    })
-   }
  
    exportToExcel(){
 
@@ -174,7 +193,7 @@ export class BulkStockUploadComponent {
 
 
    getUploadedData(){
-    this.stockUploadService.getUploadedData({location_id:this.slForm.value.location}).subscribe((res:any)=>{
+    this.stockUploadServiceBySCSUser.getUploadedData({dealer_id:this.mlForm.value.dealer}).subscribe((res:any)=>{
       this.uploadedData=res.data;
       
     })  
@@ -230,8 +249,8 @@ export class BulkStockUploadComponent {
 
    getAllRecords(){
 
-    let locObj=this.locations.find((obj:any)=> obj.location_id==this.slForm.value.location)
-    this.stockUploadService.getAllRecords({location_id:this.slForm.value.location}).subscribe((res:any)=>{
+    let locObj=this.locations.find((obj:any)=> obj.location_id==this.mlForm.value.location)
+    this.stockUploadService.getAllRecords({location_id:this.mlForm.value.location}).subscribe((res:any)=>{
       this.records=res.data;
       this.locationName=locObj.location_name;
       this.addedOn=res.data.added_on;

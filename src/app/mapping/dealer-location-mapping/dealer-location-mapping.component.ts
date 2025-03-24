@@ -163,7 +163,9 @@ export class DealerLocationMappingComponent {
 onBrandSelect(event:any){
 
   this.clearSelectedFiles();
+  this.globalUiService.startLoading();
   this.dealerLocationService.exportToExcel({brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
+    this.globalUiService.stopLoading();
     this.uploadedData=res.data;
     if(this.uploadedData.length!=0){
       this.isDataPresent=false;
@@ -174,6 +176,9 @@ onBrandSelect(event:any){
     }
     //  console.log(this.uploadedData);
    
+  },(error:any)=>{
+    this.globalUiService.stopLoading();
+    this.messageService.add({severity:'error',summary:'Error in exporting the file!!',life:30000})
   })
 }
 

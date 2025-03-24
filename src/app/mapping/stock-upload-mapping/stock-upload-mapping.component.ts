@@ -385,6 +385,7 @@ export class StockUploadMappingComponent {
         if(this.showCurrentStockColumnsInTable.length==0){
           this.showCurrentStockColumnsInTable=JSON.parse(this.rowData.currentBrandColumns);
         }
+        this.globalBlockUIService.startLoading();
         this.stockUploadMappingService
           .editColumnMapping({
             brandId: this.rowData?.brand_id,
@@ -396,6 +397,7 @@ export class StockUploadMappingComponent {
           })
           .subscribe(
             (res: any) => {
+              this.globalBlockUIService.stopLoading();
               this.viewAllExistingMapping();
               this.messageService.add({
                 severity: 'success',
@@ -404,6 +406,7 @@ export class StockUploadMappingComponent {
               });
             },
             (error: any) => {
+              this.globalBlockUIService.stopLoading();
               this.messageService.add({
                 severity: 'error',
                 summary:
@@ -432,6 +435,7 @@ export class StockUploadMappingComponent {
         if(this.showOlderStockColumnsInTable.length==0){
           this.showOlderStockColumnsInTable=JSON.parse(this.rowData.olderBrandColumns);
         }
+        this.globalBlockUIService.startLoading();
         this.stockUploadMappingService
           .editColumnMapping({
             brandId: this.rowData?.brand_id,
@@ -443,6 +447,7 @@ export class StockUploadMappingComponent {
           })
           .subscribe(
             (res: any) => {
+              this.globalBlockUIService.stopLoading();
               this.viewAllExistingMapping();
               this.messageService.add({
                 severity: 'success',
@@ -485,6 +490,7 @@ export class StockUploadMappingComponent {
     this.selectedFile=''
     this.selectedFileName=''
    // console.log("row data ",this.rowData)
+   this.globalBlockUIService.startLoading();
     if(isCurrent){
       if(this.currentStockForm.valid){
         this.stockUploadMappingService.addColumnMapping({
@@ -494,6 +500,7 @@ export class StockUploadMappingComponent {
             userId: 1,
             stockType: 'current',
         }).subscribe((res:any)=>{
+          this.globalBlockUIService.stopLoading();
           this.viewAllExistingMapping();
           this.messageService.add({
             severity: 'success',
@@ -522,6 +529,7 @@ export class StockUploadMappingComponent {
     }
     if(isOlder){
       if(this.olderStockForm.valid){
+        this.globalBlockUIService.startLoading();
         this.stockUploadMappingService.addColumnMapping({
           brandId: this.rowData?.brand_id,
             values: this.olderStockForm.value,
@@ -529,6 +537,7 @@ export class StockUploadMappingComponent {
             userId: 1,
             stockType: 'older',
         }).subscribe((res:any)=>{
+          this.globalBlockUIService.stopLoading();
           this.viewAllExistingMapping();
           this.messageService.add({
             severity: 'success',
@@ -1067,9 +1076,7 @@ export class StockUploadMappingComponent {
           .subscribe(
             (res: any) => {
              
-              this.stMappingForm.reset();
-              this.currentStockForm.reset();
-              this.currentStockColumns = [];
+             
               this.stockUploadMappingService
                 .addColumnMapping({
                   brandId: this.stMappingForm.value.brands,
@@ -1082,6 +1089,8 @@ export class StockUploadMappingComponent {
                   (res: any) => {
                     
                     this.stMappingForm.reset();
+                    this.currentStockForm.reset();
+                    this.currentStockColumns=[];
                     this.olderStockForm.reset();
                     this.olderStockColumns = [];
                     this.messageService.add({
@@ -1124,6 +1133,7 @@ export class StockUploadMappingComponent {
           );
       }
     } else {
+      let brandId=this.stMappingForm.value.brands;
       if (this.currentStockForm.invalid) {
         Object.keys(this.currentStockForm.controls).forEach(
           (controlName: any) => {
@@ -1134,7 +1144,7 @@ export class StockUploadMappingComponent {
         this.globalBlockUIService.startLoading();
         this.stockUploadMappingService
           .addColumnMapping({
-            brandId: this.stMappingForm.value.brands,
+            brandId: brandId,
             values: this.currentStockForm.value,
             brandColumns: this.currentStockColumns,
             userId: 1,
@@ -1144,14 +1154,14 @@ export class StockUploadMappingComponent {
             (res: any) => {
               this.stockUploadMappingService
               .addColumnMapping({
-                brandId: this.stMappingForm.value.brands,
+                brandId: brandId,
                 values: this.currentStockForm.value,
                 brandColumns: this.currentStockColumns,
                 userId: 1,
                 stockType: 'older',
               }).subscribe((res1:any)=>{
 
-                this.stMappingForm.reset();
+                 this.stMappingForm.reset();
                 this.currentStockForm.reset();
                 this.currentStockColumns = [];
                 this.messageService.add({
