@@ -165,8 +165,13 @@ export class BulkStockUploadComponent {
 
         this.getAllRecords();
         this.fu?.clear();
+        this.file=null;
+        this.selectedFile=null;
        
       },(error)=>{
+        this.fu?.clear();
+        this.file=null;
+        this.selectedFile=null;
         this.globalBlockUiService.stopLoading();
         this.messageService.add({severity:'error',summary:'Error in Uploading file!!..',life:300000});
       })
