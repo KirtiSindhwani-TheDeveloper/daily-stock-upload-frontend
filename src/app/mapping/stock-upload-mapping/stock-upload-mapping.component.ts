@@ -901,8 +901,9 @@ export class StockUploadMappingComponent {
             summary: 'File Uploaded Successfully',
             life: 3000,
           });
+
           this.editCurrentStockColumns = res.data.headers;
-          // console.log('edit current ', this.editCurrentStockColumns);
+          console.log('edit current ', this.editCurrentStockColumns);
         },
         (error: any) => {
           this.globalBlockUIService.stopLoading();

@@ -108,12 +108,16 @@ export class SingleLocationComponent {
           this.prevCountRecords=res.prevCountRecords;
         }
         this.showTable=true;
-
+        this.messageService.add({severity:'success',life:3000,summary:'Stock uploaded successfully!'});
         this.getAllRecords();
         this.fu?.clear();
+        this.file=null;
+        this.selectedFile=null;
        
       },(error)=>{
         this.globalBlockUiService.stopLoading();
+        this.file=null;
+        this.selectedFile=null;
         this.messageService.add({severity:'error',summary:'Error in Uploading file!!..',life:300000});
       })
        

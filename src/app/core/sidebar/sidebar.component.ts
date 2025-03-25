@@ -35,7 +35,7 @@ export class SidebarComponent {
       {id: 5, value: "Single Location Upload", route: 'upload/sl',isActive: false},
       {id: 9, value: "Multi Location Upload", route: 'upload/ml',isActive: false},
       {id: 10, value: "Single Upload", route: 'stock-upload/sl',isActive: false},
-      {id: 12, value: "Bulk Upload", route: 'stock-upload/ml',isActive: false}
+       {id: 12, value: "Bulk Upload", route: 'stock-upload/ml',isActive: false}
     ], isExpanded: false}
   ];
   

@@ -39,6 +39,11 @@ export class BulkStockUploadComponent {
   dealers:any=[];
   min:any;
   max:any;
+  userId:any;
+  users:any=[{
+    id:1,
+    name:'Kirti'
+  }]
   @ViewChild('fu') fu:FileUpload|null=null;
   constructor(private utilitiesService:UtilitiesService,
    private fb:FormBuilder,
@@ -49,7 +54,6 @@ export class BulkStockUploadComponent {
   ){
  
    this.mlForm=this.fb.group({
-     location:['',Validators.required],
      brand:['',Validators.required],
      dealer:['',Validators.required],
      date:['',Validators.required]
@@ -66,6 +70,7 @@ export class BulkStockUploadComponent {
    // Set min date to three months ago
    this.min = new Date();
    this.min.setMonth(this.max.getMonth() - 3);
+   this.userId=this.users[0].name;
   }
  
   getBrands(){
@@ -118,6 +123,7 @@ export class BulkStockUploadComponent {
   
    onUpload() {
  
+    // console.log("ml form ",this.mlForm.value)
     if(this.mlForm.invalid){
  
       Object.keys(this.mlForm.controls).forEach((controlName:any)=>{
@@ -130,13 +136,15 @@ export class BulkStockUploadComponent {
       if(this.fileName==''||this.fileName==null){
        return this.messageService.add({severity:'error',summary:'Select the File!!',life:300000});
        }
-     let locationId=this.mlForm.value.location;
-     let userId=1;
+     let dealerId=this.mlForm.value.dealer;
+    
        const formData = new FormData();
        formData.append('excelFile', this.file, this.fileName);
-       formData.append('location_id', locationId.toString());
-       formData.append('user_id', userId.toString());
-       
+       formData.append('dealer_id', dealerId.toString());
+       formData.append('brand_id', this.mlForm.value.brand.toString());
+       formData.append('user_id',  this.userId.toString());
+       formData.append('date',this.mlForm.value.date.toString())
+       console.log("formData ",formData)
        this.globalBlockUiService.startLoading();
       this.stockUploadServiceBySCSUser.bulkStockUpload(formData).subscribe((res:any)=>{
 
@@ -193,7 +201,7 @@ export class BulkStockUploadComponent {
 
 
    getUploadedData(){
-    this.stockUploadServiceBySCSUser.getUploadedData({dealer_id:this.mlForm.value.dealer}).subscribe((res:any)=>{
+    this.stockUploadServiceBySCSUser.getUploadedData({dealer_id:this.mlForm.value.dealer,user_id:this.userId}).subscribe((res:any)=>{
       this.uploadedData=res.data;
       
     })  

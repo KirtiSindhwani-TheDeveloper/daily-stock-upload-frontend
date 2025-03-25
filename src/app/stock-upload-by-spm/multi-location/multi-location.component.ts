@@ -199,6 +199,7 @@ export class MultiLocationComponent {
           const fileUpload = this.fu?.toArray()[index];
           if (fileUpload) {
             fileUpload.clear();  // Clear the file upload component
+            this.files=[];
           }
         });
       }
