@@ -401,7 +401,7 @@ export class StockUploadMappingComponent {
               this.viewAllExistingMapping();
               this.messageService.add({
                 severity: 'success',
-                summary: 'Mapping has been successfully updated !!',
+                summary: 'Mapping has been successfully updated !',
                 life: 10000,
               });
             },
@@ -410,7 +410,7 @@ export class StockUploadMappingComponent {
               this.messageService.add({
                 severity: 'error',
                 summary:
-                  'Error in updating the mapping for current stocks !!',
+                  'Error in updating the mapping for current stocks !',
                 life: 300000,
               });
             },
@@ -451,7 +451,7 @@ export class StockUploadMappingComponent {
               this.viewAllExistingMapping();
               this.messageService.add({
                 severity: 'success',
-                summary: 'Mapping has been successfully updated !!',
+                summary: 'Mapping has been successfully updated !',
                 life: 10000,
               });
             },
@@ -459,7 +459,7 @@ export class StockUploadMappingComponent {
               this.messageService.add({
                 severity: 'error',
                 summary:
-                  'Error in updating the mapping for current stocks !!',
+                  'Error in updating the mapping for current stocks !',
                 life: 300000,
               });
             },
@@ -504,14 +504,14 @@ export class StockUploadMappingComponent {
           this.viewAllExistingMapping();
           this.messageService.add({
             severity: 'success',
-            summary: 'Mapping has been successfully updated !!',
+            summary: 'Mapping has been successfully updated !',
             life: 10000,
           });
         },(error:any)=>{
           this.messageService.add({
             severity: 'error',
             summary:
-              'Error in updating the mapping for current stocks !!',
+              'Error in updating the mapping for current stocks !',
             life: 300000,
           });
         },()=>{
@@ -541,14 +541,14 @@ export class StockUploadMappingComponent {
           this.viewAllExistingMapping();
           this.messageService.add({
             severity: 'success',
-            summary: 'Mapping has been successfully updated !!',
+            summary: 'Mapping has been successfully updated !',
             life: 10000,
           });
         },(error:any)=>{
           this.messageService.add({
             severity: 'error',
             summary:
-              'Error in updating the mapping for current stocks !!',
+              'Error in updating the mapping for current stocks !',
             life: 300000,
           });
         },()=>{
@@ -588,7 +588,7 @@ export class StockUploadMappingComponent {
                   this.globalBlockUIService.stopLoading();
                   this.messageService.add({
                     severity: 'success',
-                    summary: 'Mapping has been successfully updated !!',
+                    summary: 'Mapping has been successfully updated !',
                     life: 10000,
                   });
                 },
@@ -597,7 +597,7 @@ export class StockUploadMappingComponent {
                   this.messageService.add({
                     severity: 'error',
                     summary:
-                      'Error in updating the mapping for current stocks !!',
+                      'Error in updating the mapping for current stocks !',
                     life: 300000,
                   });
                 },
@@ -618,14 +618,14 @@ export class StockUploadMappingComponent {
             }).subscribe((res:any)=>{
               this.messageService.add({
                 severity: 'success',
-                summary: 'Mapping has been successfully updated !!',
+                summary: 'Mapping has been successfully updated !',
                 life: 10000,
               });
             },(error:any)=>{
               this.messageService.add({
                 severity: 'error',
                 summary:
-                  'Error in updating the mapping for current stocks !!',
+                  'Error in updating the mapping for current stocks !',
                 life: 300000,
               });
             },()=>{
@@ -660,14 +660,14 @@ export class StockUploadMappingComponent {
                 (res: any) => {
                   this.globalBlockUIService.stopLoading();
                   this.viewAllExistingMapping();
-                  // this.messageService.add({severity:'success',summary:'Mapping has been successfully updated !!',life:10000})
+                  // this.messageService.add({severity:'success',summary:'Mapping has been successfully updated !',life:10000})
                 },
                 (error: any) => {
                   this.globalBlockUIService.stopLoading();
                   this.messageService.add({
                     severity: 'error',
                     summary:
-                      'Error in updating the mapping for older stocks !!',
+                      'Error in updating the mapping for older stocks !',
                     life: 300000,
                   });
                 },
@@ -688,14 +688,14 @@ export class StockUploadMappingComponent {
             }).subscribe((res:any)=>{
               this.messageService.add({
                 severity: 'success',
-                summary: 'Mapping has been successfully updated !!',
+                summary: 'Mapping has been successfully updated !',
                 life: 10000,
               });
             },(error:any)=>{
               this.messageService.add({
                 severity: 'error',
                 summary:
-                  'Error in updating the mapping for older stocks !!',
+                  'Error in updating the mapping for older stocks !',
                 life: 300000,
               });
             },()=>{
@@ -731,7 +731,7 @@ export class StockUploadMappingComponent {
               this.globalBlockUIService.stopLoading();
               this.messageService.add({
                 severity: 'success',
-                summary: 'Mapping has been successfully updated !!',
+                summary: 'Mapping has been successfully updated !',
                 life: 10000,
               });
             },
@@ -739,7 +739,7 @@ export class StockUploadMappingComponent {
               this.globalBlockUIService.stopLoading();
               this.messageService.add({
                 severity: 'error',
-                summary: 'Error in updating the mapping for current stocks !!',
+                summary: 'Error in updating the mapping for current stocks !',
                 life: 10000,
               });
             },
@@ -853,7 +853,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'error',
-            summary: 'Error in uploading the file !!',
+            summary: 'Error in uploading the file !',
             life: 300000,
           });
         },
@@ -880,7 +880,7 @@ export class StockUploadMappingComponent {
         (error: any) => {
           this.messageService.add({
             severity: 'error',
-            summary: 'Error in uploading the file !!',
+            summary: 'Error in uploading the file !',
             life: 300000,
           });
         },
@@ -903,13 +903,13 @@ export class StockUploadMappingComponent {
           });
 
           this.editCurrentStockColumns = res.data.headers;
-          console.log('edit current ', this.editCurrentStockColumns);
+        //  console.log('edit current ', this.editCurrentStockColumns);
         },
         (error: any) => {
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'error',
-            summary: 'Error in uploading the file !!',
+            summary: 'Error in uploading the file !',
             life: 300000,
           });
         },
@@ -937,7 +937,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'error',
-            summary: 'Error in uploading the file !!',
+            summary: 'Error in uploading the file !',
             life: 300000,
           });
         },
@@ -966,7 +966,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'error',
-            summary: 'Error in uploading the file !!',
+            summary: 'Error in uploading the file !',
             life: 300000,
           });
         },
@@ -995,7 +995,7 @@ export class StockUploadMappingComponent {
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'error',
-            summary: 'Error in uploading the file !!',
+            summary: 'Error in uploading the file !',
             life: 300000,
           });
         },
@@ -1107,7 +1107,7 @@ export class StockUploadMappingComponent {
                     this.messageService.add({
                       severity: 'error',
                       summary:
-                        'Error in creating mapping in older days stock !!',
+                        'Error in creating mapping in older days stock !',
                       life: 300000,
                     });
                   },
@@ -1123,7 +1123,7 @@ export class StockUploadMappingComponent {
               this.currentStockColumns = [];
               this.messageService.add({
                 severity: 'error',
-                summary: 'Error in creating mapping in current days stock !!',
+                summary: 'Error in creating mapping in current days stock !',
                 life: 300000,
               });
             },
@@ -1178,7 +1178,7 @@ export class StockUploadMappingComponent {
               this.currentStockColumns = [];
               this.messageService.add({
                 severity: 'error',
-                summary: 'Error in creating mapping!!',
+                summary: 'Error in creating mapping!',
                 life: 300000,
               });
             },

@@ -55,7 +55,7 @@
                             
                       <div>
                           <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
-                          [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+                          [auto]="false" accept=".xlsx,.csv,.xls" [multiple]="false" (onSelect)="onSelect($event)"  />
 
                           <!-- <div class=" d-flex mt-1" *ngIf="slForm.get('file')?.touched && slForm?.get('file')?.invalid " >
                             <small *ngIf="slForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 

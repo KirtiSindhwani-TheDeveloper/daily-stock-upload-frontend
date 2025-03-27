@@ -34,13 +34,13 @@
                             </div>
                             
                       <div>
-                          <!-- <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                          <!-- <p-fileupload [multiple]="false" #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
                           [auto]="false" accept=".xlsx,.csv,.xls" formControlName="file" [multiple]="false" (onSelect)="onSelect($event)" class="fileUpload"   />
                           <span>{{addFileName}}</span>
                           <div class=" d-flex mt-1" *ngIf="dlForm.get('file')?.touched && dlForm?.get('file')?.invalid " >
                             <small *ngIf="dlForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
                         </div> -->
-                        <p-fileupload #fu1 class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                        <p-fileupload [multiple]="false" #fu1 class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
                         [auto]="false" accept=".xlsx,.csv,.xls"  [multiple]="false" (onSelect)="onSelect($event)"  />
                         <!-- <span>{{addFileName}}</span> -->
                         <div class=" d-flex mt-1" *ngIf="dlForm.get('file')?.touched && dlForm?.get('file')?.invalid " >
@@ -66,7 +66,7 @@
                
               </p-dialog>  -->
 
-              <p-dialog header="Edit Mapping" [(visible)]="showEditPopUp" [modal]="true" [style]="{ width: '25rem' }">
+              <p-dialog header="Edit Mapping" [(visible)]="showEditPopUp" [modal]="true" [style]="{ width: '35rem' }">
                 <!-- <ng-template #header>
                   <div class="inline-flex items-center justify-center gap-2">
                     <span class="font-bold whitespace-nowrap">Mapping Already Exist.</span>
@@ -75,7 +75,7 @@
 
                 <div class="inline-flex items-center justify-center gap-2 flex-row">
 
-                    <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
+                    <p-fileupload [multiple]="false" #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
                     [auto]="false" accept=".xlsx,.csv,.xls" [multiple]="false" (onSelect)="onSelect($event)"   />
                     <!-- <span>{{fileName}}</span> -->
                     <p-button label="Upload" class="" (onClick)="onEdit()" severity="secondary"  />

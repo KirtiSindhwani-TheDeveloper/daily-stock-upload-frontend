@@ -28,8 +28,10 @@ export class StockUploadByUserService {
   }
 
   getUploadedData(data:any):Observable<any>{
-    return this.http.post(`${this.url}upload/all-uploaded-data`,data);
+    return this.http.post(`${this.url}upload/all-uploaded-data`,data,{responseType:'blob'});
   }
 
-  
+  getAllBulkRecords(data:any):Observable<any>{
+    return this.http.post(`${this.url}upload/all-records-bulk`,data)
+  }
 }

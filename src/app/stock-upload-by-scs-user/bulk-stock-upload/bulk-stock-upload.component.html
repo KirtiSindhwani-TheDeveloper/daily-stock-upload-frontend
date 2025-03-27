@@ -6,7 +6,7 @@
                 <div class="d-flex">
                     <form [formGroup]="mlForm">
                         <div class="d-flex justify-end">
-                            <span class="btn-view  mb-2" [ngClass]="showTable?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
+                            <span class="btn-view  mb-2" [ngClass]="isDataPresentForPartNotInMaster?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
                             
                         </div>
                     <div class=" add-mapping-card w-[70vw] h-[23vh] !p-3 ">
@@ -55,14 +55,14 @@
                                
                                 <div>
                                     <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
-                                    [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+                                    [auto]="false" [multiple]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
           
                                     
                                 </div>
                               
                                  
                                   <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" class="" />
-                                  <p-button label="Get Uploaded Data" class="" [disabled]="!showTable" (onClick)="exportUploadedData()" severity="secondary" class="" />
+                                  <p-button label="Get Uploaded Data" class=""  (onClick)="getUploadedData()" severity="secondary" class="" />
                             </div>
                      
                     </div>
@@ -114,7 +114,7 @@
               </ng-template>
               <ng-template #body let-rowData let-i="rowIndex">
                 <tr>
-                  <td style="font-size: 11px;">{{locationName}}</td>
+                  <td style="font-size: 11px;">{{rowData.locationName}}</td>
                  
                   <td style="font-size: 11px;">
                       {{rowData.prevStockUploadCount}}

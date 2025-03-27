@@ -92,8 +92,19 @@ export class SingleLocationComponent {
         this.getPartNotInMaster();
         this.getUploadedData();
         this.globalBlockUiService.stopLoading();
+        if(res?.headerNotPresent){
+          this.fu?.clear();
+          this.file=null;
+          this.selectedFile=null;
+          return this.messageService.add({severity:'error',life:300000,summary:'Headers are not matched with the brand mapping!'})
+        }
+        if(res?.error){
+          this.slForm.reset();
+          this.showTable=false;
+          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
+        }
         if(res?.mappingNotPresent){
-          return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!!'});
+          return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!'});
         }
         if(res?.currentSumQuantity){
           this.currentUploadQuantity=res.currentSumQuantity

@@ -75,7 +75,7 @@ export class DealerLocationMappingComponent {
 
   onUpload() {
 
-    console.log("form valid ",this.dlForm.valid,this.file)
+    //console.log("form valid ",this.dlForm.valid,this.file)
     
    if(this.dlForm.valid){
     let brandId=this.dlForm.value.brand;
@@ -90,17 +90,17 @@ export class DealerLocationMappingComponent {
     this.globalUiService.startLoading()
     this.dealerLocationService.uploadDealerLocationMapping(this.formData).subscribe((res:any)=>{
       if(res?.isDealerAndLocationPresent==false){
-        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location is not present in Uploaded File!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location is not present in Uploaded File!',life:300000})
       }
       if(res?.isDealerAndLocationNull){
-        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location cannot be null!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location cannot be null!',life:300000})
       }
 
       if(res?.dealerLocationNotInMasterPresent){
-        this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!',life:300000})
       }
       if(res?.insertedSuccessfully){
-        this.messageService.add({severity:'success',summary:'Mapping is created successfully!!',life:10000})
+        this.messageService.add({severity:'success',summary:'Mapping is created successfully!',life:10000})
       }
       this.clearSelectedFiles();
       this.formData=new FormData();
@@ -112,7 +112,7 @@ export class DealerLocationMappingComponent {
       this.fu?.clear();
       this.fu1?.clear();
     },(error:any)=>{
-      this.messageService.add({severity:'error',summary:'Error in creating Mapping!!',life:300000})
+      this.messageService.add({severity:'error',summary:'Error in creating Mapping!',life:300000})
       this.globalUiService.stopLoading();
       this.clearSelectedFiles();
       this.formData=new FormData();
@@ -178,7 +178,7 @@ onBrandSelect(event:any){
    
   },(error:any)=>{
     this.globalUiService.stopLoading();
-    this.messageService.add({severity:'error',summary:'Error in exporting the file!!',life:30000})
+    this.messageService.add({severity:'error',summary:'Error in exporting the file!',life:30000})
   })
 }
 
@@ -208,6 +208,9 @@ onBrandSelect(event:any){
   }
 
   onEdit(){
+    if(this.dlForm.value.brand==''){
+      return this.messageService.add({severity:'error',detail:'Select Brand',life:300000});
+    }
     let brandId=this.dlForm.value.brand;
     let formData = new FormData();
     if(this.file!='' || this.file!=null){
@@ -219,21 +222,21 @@ onBrandSelect(event:any){
     this.globalUiService.startLoading()
     this.dealerLocationService.editDealerLocationMapping(formData).subscribe((res:any)=>{
       if(res?.isDealerAndLocationPresent==false){
-        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location is not present in Uploaded File!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location is not present in Uploaded File!',life:300000})
       
       }
       if(res?.isDealerAndLocationNull){
-        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location cannot be null!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealer, Location and Inventory Location cannot be null!',life:300000})
        
       }
 
       if(res?.dealerLocationNotInMasterPresent){
-        this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!!',life:300000})
+        this.messageService.add({severity:'error',summary:'Dealers and Locations are not present in our database!',life:300000})
        
       }
       if(res?.insertedSuccessfully){
 
-        this.messageService.add({severity:'success',summary:'Mapping is updated successfully!!',life:10000})
+        this.messageService.add({severity:'success',summary:'Mapping is updated successfully!',life:10000})
         this.dealerLocationService.exportToExcel({brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
          this.uploadedData=res.data;
         if(this.uploadedData.length!=0){
@@ -260,7 +263,7 @@ onBrandSelect(event:any){
       formData=new FormData();
       this.showEditPopUp=false;
       this.fu1?.clear();
-      this.messageService.add({severity:'error',summary:'Error in updating Mapping!!',life:300000})
+      this.messageService.add({severity:'error',summary:'Error in updating Mapping!',life:300000})
     },()=>{
       // this.showEditPopUp=false
       this.globalUiService.stopLoading();

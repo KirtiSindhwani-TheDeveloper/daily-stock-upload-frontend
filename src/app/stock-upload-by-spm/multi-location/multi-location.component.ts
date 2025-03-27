@@ -154,6 +154,16 @@ export class MultiLocationComponent {
 
         this.stockUploadService.uploadMultiLocation(this.formData).subscribe((res:any)=>{
           this.globalBlockUiService.stopLoading();
+          if(res?.headerNotPresent){
+            this.formData=new FormData();
+            this.clearFileUploads();
+            return this.messageService.add({severity:'error',life:300000,summary:'Headers are not matched with the brand mapping!'})
+          }
+          if(res?.error){
+            this.mlForm.reset();
+            this.showTable=false;
+            this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
+          }
           if(res?.mappingNotPresent){
             this.mlForm.reset();
            
@@ -165,7 +175,6 @@ export class MultiLocationComponent {
            this.messageService.add({severity:'success',detail:'Stock Upload successfully!!',life:3000});
           }
           this.formData=new FormData();
-          
           this.clearFileUploads();
         },(error:any)=>{
           this.globalBlockUiService.stopLoading();

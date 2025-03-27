@@ -8,7 +8,7 @@
                             <span class="btn-view  mb-2" [ngClass]="isDataPresentForPartNotInMaster?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
                             <!-- <i  class="bx bx-export cursor-pointer font-semibold mb-2" style="font-size: 20px;" (click)="exportToExcel()"  ></i> -->
                         </div>
-                    <div class=" add-mapping-card w-[73vw] h-[25vh] !p-3 ">
+                    <div class=" add-mapping-card w-[74vw] h-[25vh] !p-3 ">
                        <div class="!flex !flex-row !gap-6  !items-center">
 
                       
@@ -72,7 +72,7 @@
                                
                                 <div>
                                     <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
-                                    [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  />
+                                    [auto]="false" accept=".xlsx,.csv,.xls" (onSelect)="onSelect($event)"  [multiple]="false" />
           
                                     <!-- <div class=" d-flex mt-1" *ngIf="slForm.get('file')?.touched && slForm?.get('file')?.invalid " >
                                       <small *ngIf="slForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div
-            class="card   h-auto  p-3 bg-gray-50 rounded-lg shadow-lg mb-5 w-[73vw] mt-4 "
+            class="card   h-auto  p-3 bg-gray-50 rounded-lg shadow-lg mb-5 w-[74vw] mt-4 "
             *ngIf="showTable"
             >
             <div class="d-flex justify-end">

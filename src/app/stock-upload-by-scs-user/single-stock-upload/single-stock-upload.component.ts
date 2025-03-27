@@ -79,8 +79,10 @@ export class SingleStockUploadComponent {
   }
 
   getBrands(){
+    // this.globalBlockUiService.startLoading();
     this.utilitiesService.getBrands().subscribe((res:any)=>{
       this.brands=res.data;
+      // this.globalBlockUiService.stopLoading();
     })
   }
 
@@ -133,11 +135,23 @@ export class SingleStockUploadComponent {
         // this.slForm.reset();
         this.globalBlockUiService.stopLoading();
         // console.log("res ",res)
+        if(res?.data?.headerNotPresent){
+          this.fu?.clear();
+          this.file=null;
+          this.selectedFile=null;
+          return this.messageService.add({severity:'error',life:300000,summary:'Headers are not matched with the brand mapping!'})
+        }
         if(res?.data?.mappingNotPresent){
           this.fu?.clear();
           this.file=null;
           formData=new FormData();
           return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!!'});
+        }
+
+        if(res?.data?.error){
+          this.slForm.reset();
+          this.showTable=false;
+          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
         }
         if(res?.data?.currentSumQuantity){
           this.currentUploadQuantity=res.currentSumQuantity
@@ -292,7 +306,7 @@ export class SingleStockUploadComponent {
       let dealerObj=this.dealers.find((obj:any)=>obj.dealer_id==this.slForm.value.dealer)
       this.locationName=locObj.location_name;
       this.addedOn=res.data.added_on;
-      console.log("brands ",brandObj,this.brands)
+      //console.log("brands ",brandObj,this.brands)
       this.addedBy='Kirti'
      this.records= this.records.map((item:any)=>({
         ...item,
