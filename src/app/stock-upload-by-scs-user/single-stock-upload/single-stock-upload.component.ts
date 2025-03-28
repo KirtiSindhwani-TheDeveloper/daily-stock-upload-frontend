@@ -79,10 +79,18 @@ export class SingleStockUploadComponent {
   }
 
   getBrands(){
-    // this.globalBlockUiService.startLoading();
+     this.globalBlockUiService.startLoading();
     this.utilitiesService.getBrands().subscribe((res:any)=>{
+      if(res?.data?.error){
+        // console.log("res ",res.data.error)
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Brands!'})
+      }
       this.brands=res.data;
-      // this.globalBlockUiService.stopLoading();
+       this.globalBlockUiService.stopLoading();
+    },(error:any)=>{
+      this.globalBlockUiService.stopLoading();
+      this.messageService.add({severity:'error',life:30000,detail:'Error in fetching Brands'})
     })
   }
 
@@ -151,21 +159,30 @@ export class SingleStockUploadComponent {
         if(res?.data?.error){
           this.slForm.reset();
           this.showTable=false;
+          this.file=null;
+          this.fu?.clear();
+          this.selectedFile=null;
           this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
         }
         if(res?.data?.currentSumQuantity){
+          this.showTable=true;
           this.currentUploadQuantity=res.currentSumQuantity
         }
         if(res?.data?.prevSumQuantity){
+          this.showTable=true;
           this.prevUploadQuantity=res.prevUploadQuantity;
         }
         if(res?.data.currentRecords){
+          this.showTable=true;
           this.currentCountRecords=res.currentRecords;
         }
         if(res?.data.prevRecords){
+          this.showTable=true;
           this.prevCountRecords=res.prevCountRecords;
         }
-        this.showTable=true;
+        if(this.showTable){
+          this.messageService.add({severity:'success',summary:'Stock uploaded succesfully!',life:3000})
+        }
 
         this.getAllRecords();
         this.fu?.clear();
@@ -262,9 +279,17 @@ export class SingleStockUploadComponent {
 
    getLocations(){
        
+    // this.globalBlockUiService.startLoading();
      this.utilitiesService.getLocations({dealer_id:20295}).subscribe((res:any)=>{
+      if(res?.data?.error){
+        // console.log("res ",res.data.error)
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Locations!'})
+      }
        this.locations=res.data;
        // console.log(this.brands)
+     },(error:any)=>{
+      this.globalBlockUiService.stopLoading();
      })
    }
  

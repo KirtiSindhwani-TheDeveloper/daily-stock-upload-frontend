@@ -100,6 +100,9 @@ export class SingleLocationComponent {
         }
         if(res?.error){
           this.slForm.reset();
+          this.file=null;
+          this.fu?.clear();
+          this.selectedFile=null;
           this.showTable=false;
           this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
         }
@@ -107,19 +110,26 @@ export class SingleLocationComponent {
           return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!'});
         }
         if(res?.currentSumQuantity){
+          this.showTable=true;
           this.currentUploadQuantity=res.currentSumQuantity
         }
         if(res?.prevSumQuantity){
+          this.showTable=true;
           this.prevUploadQuantity=res.prevUploadQuantity;
         }
         if(res?.currentRecords){
+          this.showTable=true;
           this.currentCountRecords=res.currentRecords;
         }
         if(res?.prevRecords){
+          this.showTable=true;
           this.prevCountRecords=res.prevCountRecords;
         }
-        this.showTable=true;
-        this.messageService.add({severity:'success',life:3000,summary:'Stock uploaded successfully!'});
+        
+        if(this.showTable){
+          this.messageService.add({severity:'success',life:3000,summary:'Stock uploaded successfully!'});
+        }
+       
         this.getAllRecords();
         this.fu?.clear();
         this.file=null;
@@ -142,20 +152,46 @@ export class SingleLocationComponent {
 
    onBrandChange(event:any){
     this.utilitiesService.getDealers({brand_id:this.slForm.value.brand}).subscribe((res:any)=>{
-      this.dealers=res.data;
+     
+      if(res?.data?.error){
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Dealers!'})
+      }
+      else{
+        this.dealers=res.data;
+      }
+    },(error:any)=>{
+      this.globalBlockUiService.stopLoading();
     })
    }
 
    getBrands(){
+    this.globalBlockUiService.startLoading();
     this.utilitiesService.getBrands().subscribe((res:any)=>{
+     
+      this.globalBlockUiService.stopLoading();
+      if(res?.data?.error){
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Brands!'})
+      }
       this.brands=res.data;
+    },(error:any)=>{
+      this.globalBlockUiService.stopLoading();
     })
   }
    onDealerChange(event:any){
-    console.log(this.slForm.value)
+    // console.log(this.slForm.value)
+    // this.globalBlockUiService.startLoading();
     this.utilitiesService.getLocations({dealer_id:this.slForm.value.dealer}).subscribe((res:any)=>{
       this.locations=res.data;
+      this.globalBlockUiService.stopLoading();
       // console.log(this.brands)
+      if(res?.data?.error){
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Locations!'})
+      }
+    },(error:any)=>{
+      this.globalBlockUiService.stopLoading();
     })
    }
    getPartNotInMaster(){

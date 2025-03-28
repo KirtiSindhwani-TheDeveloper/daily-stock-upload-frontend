@@ -166,7 +166,6 @@ export class MultiLocationComponent {
           }
           if(res?.mappingNotPresent){
             this.mlForm.reset();
-           
             this.messageService.add({severity:'error',detail:'Brand Mapping is not available!!',life:300000});
           }
           else{
@@ -250,9 +249,13 @@ export class MultiLocationComponent {
     }
 
     getLocations(){
+      this.globalBlockUiService.startLoading();
       this.utilitiesService.getLocations({dealer_id:20295}).subscribe((res:any)=>{
+        this.globalBlockUiService.stopLoading();
         this.locations=res.data;
         // console.log(this.brands)
+      },(error:any)=>{
+        this.globalBlockUiService.stopLoading();
       })
     }
 
@@ -374,21 +377,51 @@ export class MultiLocationComponent {
     }
 
     getBrands(){
+
+      this.globalBlockUiService.startLoading();
       this.utilitiesService.getBrands().subscribe((res:any)=>{
-        this.brands=res.data;
+       
+        this.globalBlockUiService.stopLoading();
+        if(res?.data?.error){
+          // console.log("res ",res.data.error)
+          this.globalBlockUiService.stopLoading();
+          return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Brands!'})
+        }
+        
+          this.brands=res.data;
+      
+      },(error:any)=>{
+        this.globalBlockUiService.stopLoading();
       })
     }
   
     onBrandChange(event:any){
       // this.getPartNotInMasterRecords()
+
+      // this.globalBlockUiService.startLoading();
       this.utilitiesService.getDealers({brand_id:this.mlForm.value.brand}).subscribe((res:any)=>{
         this.dealers=res.data;
+        this.globalBlockUiService.stopLoading();
+        if(res?.data?.error){
+          this.globalBlockUiService.stopLoading();
+          return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Dealers!'})
+        }
+      },(error:any)=>{
+        this.globalBlockUiService.stopLoading();
       })
     }
   
     onDealerChange(event:any){
+      // this.globalBlockUiService.startLoading();
     this.utilitiesService.getLocations({dealer_id:this.mlForm.value.dealer}).subscribe((res:any)=>{
       this.locations=res.data;
+      this.globalBlockUiService.stopLoading();
+      if(res?.data?.error){
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Locations!'})
+      }
+    },(error:any)=>{
+      this.globalBlockUiService.stopLoading();
     })
     }
 }

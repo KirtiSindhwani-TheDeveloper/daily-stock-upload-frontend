@@ -340,7 +340,8 @@ export class StockUploadMappingComponent {
         this.showforEditOlderData = false;
         this.visibleAddPopUp = true;
         this.currentStockForm.reset();
-       this.editCurrentDaysStock=false;
+      //  this.editCurrentDaysStock=false;
+      this.editCurrentDaysStock=true;
         this.showAddCurrentData = true;
         this.showAddOlderData = false;
         this.selectedFile='';
@@ -1038,101 +1039,118 @@ export class StockUploadMappingComponent {
     this.editCurrentDayStockForm.get('location')?.enable();
   }
 
-  onSubmit() {
+  onSubmit(stockType?:any) {
     // console.log("clicked ",this.isMappingForBothOlder)
     if (this.isMappingForBothOlder) {
-      if (this.currentStockForm.valid && this.olderStockForm.valid) {
-        this.validMappingForBothStock = true;
+      if(stockType=='current'){
+        if (this.currentStockForm.invalid) {
+          this.validMappingForBothStock = false;
+          // console.log("current stock invalid")
+          Object.keys(this.currentStockForm.controls).forEach(
+            (controlName: any) => {
+              this.currentStockForm.get(controlName)?.markAsTouched();
+            }
+          );
+        }
+        else{
+          this.globalBlockUIService.startLoading();
+          this.stockUploadMappingService
+            .addColumnMapping({
+              brandId: this.stMappingForm.value.brands,
+              values: this.currentStockForm.value,
+              brandColumns: this.currentStockColumns,
+              userId: 1,
+              stockType: 'current',
+            })
+            .subscribe(
+              (res: any) => {
+                this.globalBlockUIService.stopLoading();
+                      this.currentStockForm.reset();
+                      this.currentStockColumns=[];
+                      this.clearSelectedFiles()
+                      this.messageService.add({
+                        severity: 'success',
+                        life: 10000,
+                        summary: 'Mapping is created Successfully for current days stock.',
+                      });
+                    },
+                    (error: any) => {
+                      this.globalBlockUIService.stopLoading();
+                      this.stMappingForm.reset();
+                      this.currentStockForm.reset();
+                      this.currentStockColumns=[];
+                      this.clearSelectedFiles()
+                      this.messageService.add({
+                        severity: 'error',
+                        summary:
+                          'Error in creating mapping for current stock days stock !',
+                        life: 300000,
+                      });
+                    },
+                    () => {
+                      this.globalBlockUIService.stopLoading();
+                    }
+                  );
+                // this.messageService.add({severity:'success',life:10000,summary:'Mapping is created Successfully for Current Stock'})           
+        }
       }
-      if (this.currentStockForm.invalid) {
-        this.validMappingForBothStock = false;
-        // console.log("current stock invalid")
-        Object.keys(this.currentStockForm.controls).forEach(
-          (controlName: any) => {
-            this.currentStockForm.get(controlName)?.markAsTouched();
-          }
-        );
-      }
-
-      if (this.olderStockForm.invalid) {
-        this.validMappingForBothStock = false;
+    
+      if (stockType=='older') {
         //  console.log("older stock invalid")
-        Object.keys(this.olderStockForm.controls).forEach(
-          (controlName: any) => {
-            this.olderStockForm.get(controlName)?.markAsTouched();
-          }
-        );
-      }
-
-      if (this.validMappingForBothStock) {
-        this.globalBlockUIService.startLoading();
-        this.stockUploadMappingService
+        if(this.olderStockForm.invalid){
+          Object.keys(this.olderStockForm.controls).forEach(
+            (controlName: any) => {
+              this.olderStockForm.get(controlName)?.markAsTouched();
+            }
+          );
+        }
+        else{
+          this.stockUploadMappingService
           .addColumnMapping({
             brandId: this.stMappingForm.value.brands,
-            values: this.currentStockForm.value,
-            brandColumns: this.currentStockColumns,
+            values: this.olderStockForm.value,
+            brandColumns: this.olderStockColumns,
             userId: 1,
-            stockType: 'current',
+            stockType: 'older',
           })
           .subscribe(
             (res: any) => {
-             
-             
-              this.stockUploadMappingService
-                .addColumnMapping({
-                  brandId: this.stMappingForm.value.brands,
-                  values: this.olderStockForm.value,
-                  brandColumns: this.olderStockColumns,
-                  userId: 1,
-                  stockType: 'older',
-                })
-                .subscribe(
-                  (res: any) => {
-                    
-                    this.stMappingForm.reset();
-                    this.currentStockForm.reset();
-                    this.currentStockColumns=[];
-                    this.olderStockForm.reset();
-                    this.olderStockColumns = [];
-                    this.messageService.add({
-                      severity: 'success',
-                      life: 10000,
-                      summary: 'Mapping is created Successfully.',
-                    });
-                  },
-                  (error: any) => {
-                    this.stMappingForm.reset();
-                    this.olderStockForm.reset();
-                    this.olderStockColumns = [];
-                    this.messageService.add({
-                      severity: 'error',
-                      summary:
-                        'Error in creating mapping in older days stock !',
-                      life: 300000,
-                    });
-                  },
-                  () => {
-                    this.globalBlockUIService.stopLoading();
-                  }
-                );
-              // this.messageService.add({severity:'success',life:10000,summary:'Mapping is created Successfully for Current Stock'})
+              
+              this.currentStockForm.reset();
+              this.currentStockColumns=[];
+              this.olderStockForm.reset();
+              this.olderStockColumns = [];
+              this.globalBlockUIService.stopLoading();
+              this.clearSelectedFiles()
+              this.messageService.add({
+                severity: 'success',
+                life: 10000,
+                summary: 'Mapping is created Successfully for older days stock',
+              });
             },
             (error: any) => {
               this.stMappingForm.reset();
-              this.currentStockForm.reset();
-              this.currentStockColumns = [];
+              this.olderStockForm.reset();
+              this.olderStockColumns = [];
+              this.globalBlockUIService.stopLoading();
+              this.clearSelectedFiles()
               this.messageService.add({
                 severity: 'error',
-                summary: 'Error in creating mapping in current days stock !',
+                summary:
+                  'Error in creating mapping in older days stock !',
                 life: 300000,
               });
             },
             () => {
-              this.globalBlockUIService.stopLoading();
+               this.globalBlockUIService.stopLoading();
               this.clearSelectedFiles()
             }
-          );
+          );        
+                // this.messageService.add({severity:'success',life:10000,summary:'Mapping is created Successfully for Current Stock'})
+        }
+       
       }
+     
     } else {
       let brandId=this.stMappingForm.value.brands;
       if (this.currentStockForm.invalid) {

@@ -144,7 +144,9 @@
                            </div>
                       </div>
                     </div>
-                    
+                    <div class="!flex !justify-center !align-center w-full">
+                      <span class="btn-view cursor-pointer" (click)="onSubmit('current')" [ngClass]="isMappingExist?'disabled':''">Submit</span>
+                    </div>
                 </form>
             </div>
     
@@ -244,8 +246,9 @@
             </div>
     
             <div class="!flex !justify-center !align-center w-full">
-              <span class="btn-view cursor-pointer" (click)="onSubmit()" [ngClass]="isMappingExist?'disabled':''">Submit</span>
+              <span class="btn-view cursor-pointer" (click)="onSubmit('older')" [ngClass]="isMappingExist?'disabled':''" *ngIf="isMappingForBothOlder">Submit</span>
             </div>
+
           </div>
     </div>
     

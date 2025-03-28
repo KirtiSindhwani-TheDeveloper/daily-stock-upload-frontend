@@ -76,9 +76,17 @@ export class BulkStockUploadComponent {
   }
  
   getBrands(){
+    this.globalBlockUiService.startLoading()
     this.utilitiesService.getBrands().subscribe((res:any)=>{
+      
+      this.globalBlockUiService.stopLoading();
+      if(res?.data?.error){
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Brands!'})
+      }
       this.brands=res.data;
     },(error:any)=>{
+      this.globalBlockUiService.stopLoading()
       this.messageService.add({severity:'error',summary:'Error in fetching the Brands! ',life:30000})
     })
   }
@@ -90,10 +98,14 @@ export class BulkStockUploadComponent {
 
   onBrandChange(event:any){
 
-    this.globalBlockUiService.startLoading();
+  //  this.globalBlockUiService.startLoading();
     this.utilitiesService.getDealers({brand_id:this.mlForm.value.brand}).subscribe((res:any)=>{
       this.globalBlockUiService.stopLoading();
       this.dealers=res.data;
+      if(res?.data?.error){
+        this.globalBlockUiService.stopLoading();
+        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Dealers!'})
+      }
     },(error:any)=>{
       this.globalBlockUiService.stopLoading();
       this.messageService.add({severity:'error',summary:'Error in Fetching the Dealers !'})
@@ -104,10 +116,14 @@ export class BulkStockUploadComponent {
   }
 
   onDealerChange(event:any){
-    this.globalBlockUiService.startLoading();
+    //this.globalBlockUiService.startLoading();
   this.utilitiesService.getLocations({dealer_id:this.mlForm.value.dealer}).subscribe((res:any)=>{
     this.locations=res.data;
     this.globalBlockUiService.stopLoading();
+    if(res?.data?.error){
+      this.globalBlockUiService.stopLoading();
+      return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching locations!'})
+    }
   },(error:any)=>{
     this.globalBlockUiService.stopLoading();
     this.messageService.add({severity:'error',summary:'Error in Fetching the Dealers!'})
@@ -164,6 +180,9 @@ export class BulkStockUploadComponent {
         if(res?.error){
           this.mlForm.reset();
           this.showTable=false;
+          this.file=null;
+          this.fu?.clear();
+          this.selectedFile=null;
           this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
         }
         if(res[0]?.currentSumQuantity){
