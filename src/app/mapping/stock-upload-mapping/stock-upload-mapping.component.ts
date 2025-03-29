@@ -32,7 +32,7 @@ import { PaginatorState } from 'primeng/paginator';
   styleUrl: './stock-upload-mapping.component.css',
 })
 export class StockUploadMappingComponent {
-  @ViewChild('fu') fileUpload: FileUpload|null =null;
+  @ViewChild('fu') fu: FileUpload|null =null;
   selectedBrand: any;
   brands: any = [];
   formData = new FormData()
@@ -503,12 +503,14 @@ export class StockUploadMappingComponent {
         }).subscribe((res:any)=>{
           this.globalBlockUIService.stopLoading();
           this.viewAllExistingMapping();
+          this.clearSelectedFiles()
           this.messageService.add({
             severity: 'success',
             summary: 'Mapping has been successfully updated !',
             life: 10000,
           });
         },(error:any)=>{
+          this.clearSelectedFiles()
           this.messageService.add({
             severity: 'error',
             summary:
@@ -540,12 +542,14 @@ export class StockUploadMappingComponent {
         }).subscribe((res:any)=>{
           this.globalBlockUIService.stopLoading();
           this.viewAllExistingMapping();
+          this.clearSelectedFiles();
           this.messageService.add({
             severity: 'success',
             summary: 'Mapping has been successfully updated !',
             life: 10000,
           });
         },(error:any)=>{
+          this.clearSelectedFiles()
           this.messageService.add({
             severity: 'error',
             summary:
@@ -843,6 +847,8 @@ export class StockUploadMappingComponent {
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.globalBlockUIService.stopLoading();
+          this.formData=new FormData();
+          this.clearSelectedFiles();
           this.currentStockColumns = res.data.headers;
           this.messageService.add({
             severity: 'success',
@@ -851,6 +857,8 @@ export class StockUploadMappingComponent {
           });
         },
         (error: any) => {
+          this.formData=new FormData();
+          this.clearSelectedFiles();
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'error',
@@ -870,15 +878,21 @@ export class StockUploadMappingComponent {
 
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
+          this.globalBlockUIService.stopLoading();
+          this.clearSelectedFiles();
+          this.formData=new FormData();
           this.messageService.add({
             severity: 'success',
             summary: 'File Uploaded Successfully',
             life: 3000,
           });
-          this.globalBlockUIService.stopLoading();
+       
           this.olderStockColumns = res.data.headers;
         },
         (error: any) => {
+          this.globalBlockUIService.stopLoading();
+          this.formData=new FormData();
+          this.clearSelectedFiles()
           this.messageService.add({
             severity: 'error',
             summary: 'Error in uploading the file !',
@@ -897,6 +911,8 @@ export class StockUploadMappingComponent {
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.globalBlockUIService.stopLoading();
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.messageService.add({
             severity: 'success',
             summary: 'File Uploaded Successfully',
@@ -907,6 +923,8 @@ export class StockUploadMappingComponent {
         //  console.log('edit current ', this.editCurrentStockColumns);
         },
         (error: any) => {
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'error',
@@ -927,6 +945,8 @@ export class StockUploadMappingComponent {
         (res: any) => {
 
           this.globalBlockUIService.stopLoading();
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.messageService.add({
             severity: 'success',
             summary: 'File Uploaded Successfully',
@@ -936,6 +956,8 @@ export class StockUploadMappingComponent {
         },
         (error: any) => {
           this.globalBlockUIService.stopLoading();
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.messageService.add({
             severity: 'error',
             summary: 'Error in uploading the file !',
@@ -960,11 +982,15 @@ export class StockUploadMappingComponent {
             summary: 'File Uploaded Successfully',
             life: 3000,
           });
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.showCurrentStockColumnsInTable = res.data.headers;
           // console.log('edit current ', this.showCurrentStockColumnsInTable);
         },
         (error: any) => {
           this.globalBlockUIService.stopLoading();
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.messageService.add({
             severity: 'error',
             summary: 'Error in uploading the file !',
@@ -984,7 +1010,8 @@ export class StockUploadMappingComponent {
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.showOlderStockColumnsInTable = res.data.headers;
-
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.globalBlockUIService.stopLoading();
           this.messageService.add({
             severity: 'success',
@@ -994,6 +1021,8 @@ export class StockUploadMappingComponent {
         },
         (error: any) => {
           this.globalBlockUIService.stopLoading();
+          this.clearSelectedFiles()
+          this.formData=new FormData();
           this.messageService.add({
             severity: 'error',
             summary: 'Error in uploading the file !',
@@ -1011,10 +1040,13 @@ export class StockUploadMappingComponent {
   }
 
   clearSelectedFiles() {
-    if (this.fileUpload) {
-      this.fileUpload.clear();  // Clear the file input from the p-fileupload component
+    if (this.fu) {
+      this.fu.clear();  // Clear the file input from the p-fileupload component
+      this.selectedFile=null;
+      this.formData=new FormData();
     }
   }
+
   onCheckboxChangeInView(event: Event) {
     this.isViewMappingForBothStocks = (
       event.target as HTMLInputElement
