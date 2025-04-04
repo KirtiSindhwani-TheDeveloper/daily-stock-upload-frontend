@@ -57,9 +57,9 @@
                           <p-fileupload #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
                           [auto]="false" accept=".xlsx,.csv,.xls" [multiple]="false" (onSelect)="onSelect($event)"  />
 
-                          <!-- <div class=" d-flex mt-1" *ngIf="slForm.get('file')?.touched && slForm?.get('file')?.invalid " >
+                          <div class=" d-flex mt-1" *ngIf="slForm.get('file')?.touched && slForm?.get('file')?.invalid " >
                             <small *ngIf="slForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
-                        </div> -->
+                        </div>
                       </div>
                     
                       
@@ -81,7 +81,7 @@
             <div class="d-flex justify-end">
               <i class="bx bx-export font-bold mb-3 cursor-pointer" style="font-size: 18px;" (click)="exportTableData()"></i>
             </div>
-            <p-table
+            <p-table #dataTable
               [scrollable]="true"
               scrollHeight="400px"
               [value]="records"

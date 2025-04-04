@@ -24,4 +24,12 @@ export class DealerLocationMappingService {
   editDealerLocationMapping(data:any):Observable<any>{
     return this.http.post(`${this.url}dl-mapping/edit`,data)
   }
+
+  viewDealerLocationMapping(data:any):Observable<any>{
+    return this.http.post(`${this.url}dl-mapping/view`,data)
+  }
+
+  deleteDealerLocationMapping(data:any):Observable<any>{
+    return this.http.post(`${this.url}dl-mapping/delete`,data);
+  }
 }

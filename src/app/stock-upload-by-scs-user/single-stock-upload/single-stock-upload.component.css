@@ -62,3 +62,11 @@
 }
 
  
+::ng-deep button.p-ripple.p-paginator-page.ng-star-inserted.p-paginator-page-selected {
+    background-color: #007bff7d !important; /* Change background color */
+    color: white !important; /* Change text color */
+    font-weight: bold !important;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }

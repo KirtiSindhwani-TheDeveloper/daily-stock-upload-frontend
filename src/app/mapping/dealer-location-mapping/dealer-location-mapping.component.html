@@ -15,7 +15,8 @@
      style="font-size: 20px;">
   </i> -->
                         </div>
- <div class=" add-mapping-card w-[70vw] h-[15vh]  !flex !flex-row !gap-6 p-3 !items-center">
+                        <div class=" add-mapping-card w-[70vw] h-[25vh]  flex flex-col">
+                          <div class="  !flex !flex-row !gap-6 p-3 !items-center">
                        
                             <div>
 
@@ -34,12 +35,7 @@
                             </div>
                             
                       <div>
-                          <!-- <p-fileupload [multiple]="false" #fu class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
-                          [auto]="false" accept=".xlsx,.csv,.xls" formControlName="file" [multiple]="false" (onSelect)="onSelect($event)" class="fileUpload"   />
-                          <span>{{addFileName}}</span>
-                          <div class=" d-flex mt-1" *ngIf="dlForm.get('file')?.touched && dlForm?.get('file')?.invalid " >
-                            <small *ngIf="dlForm?.get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small> 
-                        </div> -->
+                        
                         <p-fileupload [multiple]="false" #fu1 class=" !line-clamp-3" mode="basic" chooseLabel="Choose"  chooseIcon="pi pi-upload" name="demo[]"
                         [auto]="false" accept=".xlsx,.csv,.xls"  [multiple]="false" (onSelect)="onSelect($event)"  />
                         <!-- <span>{{addFileName}}</span> -->
@@ -49,12 +45,110 @@
                       </div>
                     
                        
-                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" [disabled]="!isDataPresent" />
-                        <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="isDataPresent" />
-                        <p-button label="Edit" class="" (onClick)="showEditPopup()" severity="secondary" [disabled]="isDataPresent" />
+                        <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" [disabled]="isDataPresent" />
+                      
+                        <p-button label="Edit" class="" (onClick)="showEditPopup()" severity="secondary" [disabled]="!isDataPresent" />
+                      </div>
+                   
+                    <div class="d-flex justify-end gap-3 me-3">
+                      <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="!isDataExist" />
+                      <p-button label="Dealer Location Not Exist Export" [ngClass]="wrongDataExist?'cursor-pointer':''" [disabled]="!wrongDataExist" (onClick)="exportWrongDealerLocation()" severity="secondary"  />
                     </div>
+                  </div>
+                        
+
                 </form>
                 </div>
+                <div
+                class="card   h-auto  p-3 bg-gray-50 rounded-lg shadow-lg mb-5 w-[70vw] mt-4 "
+                *ngIf="showTable"
+                >
+                <div class="d-flex justify-end mb-2">
+                  <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center">
+                        <p-radiobutton name="all" value="All" [(ngModel)]="exportType" inputId="all" />
+                        <label for="all" class="ml-2 mb-0">All</label>
+                    </div>
+                
+                    <div class="flex items-center">
+                        <p-radiobutton name="active" value="Active" [(ngModel)]="exportType" inputId="active" />
+                        <label for="active" class="ml-2 mb-0">Active</label>
+                    </div>
+                
+                    <div class="flex items-center">
+                        <p-radiobutton name="inactive" value="Inactive" [(ngModel)]="exportType" inputId="inactive" />
+                        <label for="inactive" class="ml-2 mb-0">Inactive</label>
+                    </div>
+                  </div>
+                  <i class="bx bx-export font-bold mb-1 ml-3 cursor-pointer" style="font-size: 18px;" (click)="exportTableData(exportType)"></i>
+                </div>
+  <p-table #dataTable
+  [scrollable]="true"
+  scrollHeight="400px"
+  [value]="records"
+  styleClass="mt-4"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[10,20, 30, 40, 50, 100]"
+  [showGridlines]="true"
+  [scrollHeight]="'400px'"
+  [scrollable]="true"
+  class="bg-white  !rounded-lg border border-gray-200 shadow-md"
+>
+  <ng-template #header let-item>
+    <tr>
+     
+      <th style="font-size: 13px;" >Brand</th>
+      <th style="font-size: 13px;" >
+        Dealer
+      </th>
+     
+      <th style="font-size: 13px;" >
+        Location
+       
+      </th>
+      <th style="font-size: 13px;">
+      Inventory Location
+      </th>
+      <th style="font-size: 13px;" >Status </th>
+      <th style="font-size: 13px;">
+         Added On
+       </th>
+       <th style="font-size: 13px;" >Added By</th>
+      
+    </tr>
+  </ng-template>
+  <ng-template #body let-rowData let-i="rowIndex">
+    <tr>
+      <td style="font-size: 11px;">
+        {{rowData.brandName}}
+    </td>
+     
+      <td style="font-size: 11px;">
+          {{rowData.dealer}}
+      </td>
+      <td style="font-size: 11px;">
+          {{rowData.location}}
+         
+      </td>
+ 
+      <td style="font-size: 11px;">
+         {{rowData.inventory_location}}
+      </td>
+      <td class="p-2" >
+        <p-toggleswitch [(ngModel)]="rowData.statusBoolean" (change)="deleteMapping(rowData)"  /></td>
+     <td style="font-size: 11px;">
+        {{rowData.addedOn}}
+     </td>
+     <td style="font-size: 11px;">
+        {{rowData.addedBy}}
+     </td>
+     
+    </tr>
+  </ng-template>
+</p-table>
+</div>
+             
             </div>
            
             <!-- <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
@@ -79,6 +173,7 @@
                     [auto]="false" accept=".xlsx,.csv,.xls" [multiple]="false" (onSelect)="onSelect($event)"   />
                     <!-- <span>{{fileName}}</span> -->
                     <p-button label="Upload" class="" (onClick)="onEdit()" severity="secondary"  />
+                  
                    
                 </div>
               </p-dialog>           

@@ -10,6 +10,7 @@ import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { StockUploadByUserService } from '../../services/stock-upload-by-user.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-single-stock-upload',
   imports: [PrimengModuleModule,SharedModule,CommonModule,ReactiveFormsModule,FormsModule],
@@ -38,6 +39,7 @@ export class SingleStockUploadComponent {
   brands:any=[];
   dealers:any=[];
   userId:any;
+  @ViewChild('dataTable') dataTable: Table | undefined;
   isDataPresent:boolean=false;
   isDataPresentForPartNotInMaster:boolean=false
   min:any;
@@ -56,7 +58,7 @@ export class SingleStockUploadComponent {
      brand:['',Validators.required],
      dealer:['',Validators.required],
      date:['',Validators.required],
-    //  file:['',Validators.required]
+    file:['',Validators.required]
    })
   }
  
@@ -73,9 +75,28 @@ export class SingleStockUploadComponent {
 
   }
  
-  onSelect(event:any){
-    this.file=event.files[0];
-    this.fileName=this.file.name;
+  onSelect(event: any) {
+    const fileControl = this.slForm.get('file'); // Get the file form control
+    
+    // Check if exactly one file is selected
+    if (event.files && event.files.length === 1) {
+      const file = event.files[0]; // Get the first selected file
+      
+      // If a file is selected, update the form control with the new file
+      fileControl?.setValue(file);
+      
+      // Set class variables for further use (e.g., for displaying the file name)
+      this.file = file;
+      this.fileName = file.name;
+    } else {
+      // If no file or more than one file is selected, reset the form control
+      fileControl?.setValue(null);
+      this.file = null;
+      this.fileName = '';
+    }
+  
+    // Trigger form control validation to ensure the validation state is updated
+    fileControl?.updateValueAndValidity();
   }
 
   getBrands(){
@@ -84,13 +105,13 @@ export class SingleStockUploadComponent {
       if(res?.data?.error){
         // console.log("res ",res.data.error)
         this.globalBlockUiService.stopLoading();
-        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Brands!'})
+        return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching Brands!'})
       }
       this.brands=res.data;
        this.globalBlockUiService.stopLoading();
     },(error:any)=>{
       this.globalBlockUiService.stopLoading();
-      this.messageService.add({severity:'error',life:30000,detail:'Error in fetching Brands'})
+      this.messageService.add({severity:'error',life:4000,detail:'Error in fetching Brands'})
     })
   }
 
@@ -114,16 +135,16 @@ export class SingleStockUploadComponent {
  
       Object.keys(this.slForm.controls).forEach((controlName:any)=>{
 
-        if(controlName=='file'){
-          return
-        }
+        // if(controlName=='file'){
+        //   return
+        // }
             this.slForm.get(controlName)?.markAsTouched();
       })
     }
     
     else{
       if(this.fileName==''||this.fileName==null){
-       return this.messageService.add({severity:'error',summary:'Select the File!!',life:300000});
+       return this.messageService.add({severity:'error',summary:'Select the File!!',life:4000});
        }
 
      let locationId=this.slForm.value.location;
@@ -147,13 +168,13 @@ export class SingleStockUploadComponent {
           this.fu?.clear();
           this.file=null;
           this.selectedFile=null;
-          return this.messageService.add({severity:'error',life:300000,summary:'Headers are not matched with the brand mapping!'})
+          return this.messageService.add({severity:'error',life:4000,summary:'Headers are not matched with the required fields!'})
         }
         if(res?.data?.mappingNotPresent){
           this.fu?.clear();
           this.file=null;
           formData=new FormData();
-          return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!!'});
+          return this.messageService.add({severity:'error',life:4000,summary:'Brand Mapping is not available!!'});
         }
 
         if(res?.data?.error){
@@ -162,7 +183,7 @@ export class SingleStockUploadComponent {
           this.file=null;
           this.fu?.clear();
           this.selectedFile=null;
-          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
+          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:4000});
         }
         if(res?.data?.currentSumQuantity){
           this.showTable=true;
@@ -180,7 +201,11 @@ export class SingleStockUploadComponent {
           this.showTable=true;
           this.prevCountRecords=res.prevCountRecords;
         }
+        this.slForm.get('file')?.reset();
         if(this.showTable){
+          if (this.dataTable) {
+            this.dataTable.reset(); // Reset the paginator after data changes
+          }
           this.messageService.add({severity:'success',summary:'Stock uploaded succesfully!',life:3000})
         }
 
@@ -196,8 +221,9 @@ export class SingleStockUploadComponent {
         this.fileName='';
         formData=new FormData();
         this.file=null;
+        this.slForm.get('file')?.reset();
         this.globalBlockUiService.stopLoading();
-        this.messageService.add({severity:'error',summary:'Error in Uploading file!!..',life:300000});
+        this.messageService.add({severity:'error',summary:'Error in Uploading file!!..',life:4000});
       })
        
     }
@@ -284,7 +310,7 @@ export class SingleStockUploadComponent {
       if(res?.data?.error){
         // console.log("res ",res.data.error)
         this.globalBlockUiService.stopLoading();
-        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Locations!'})
+        return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching Locations!'})
       }
        this.locations=res.data;
        // console.log(this.brands)

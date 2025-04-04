@@ -7,7 +7,7 @@
                         <!-- [ngClass]="showTable ? 'cursor-pointer' : 'disabled'" -->
 
                         <div class="d-flex justify-end">
-                            <span class="btn-view mb-2"   (click)="exportToExcel()">Part Not In Master Export</span>
+                            <span class="btn-view mb-2" [ngClass]="isDataPresentPartNotInMaster?'':'disabled'"  (click)="exportToExcel()">Part Not In Master Export</span>
                         </div>
                         <div class="!flex !flex-row !gap-6 p-3 !items-center">
                           <div>
@@ -42,9 +42,10 @@
                                
 
                                
-                                <div [formGroupName]="i" class="location-container">
-                                    <div class="!flex !flex-row gap-6 my-4">
-                                    <div class="">
+                              <div [formGroupName]="i" class="location-container">
+                                <div class="!flex !flex-row gap-6 my-4">
+                                    <!-- Location Selection -->
+                                    <div>
                                         <p-select 
                                             [options]="locations"
                                             formControlName="location"
@@ -53,31 +54,38 @@
                                             placeholder="Select Location"
                                             class="dropdown w-56 md:w-56"
                                             (onChange)="onLocationChange(i)"
-                                        />
-                                        <div *ngIf="locationControl.get('location')?.touched && locationControl.get('location')?.invalid" class="error-message">
-                                            <small *ngIf="locationControl.get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small>
-                                            <small *ngIf="locationControl.get('location')?.hasError('duplicateLocation')" style="color: red; font-size: 12px;">Cannot select the same location twice.</small>
+                                        ></p-select>
+                                        <div *ngIf="locationControls.controls[i].get('location')?.touched && locationControls.controls[i].get('location')?.invalid" class="error-message">
+                                            <small *ngIf="locationControls.controls[i].get('location')?.hasError('required')" style="color: red; font-size: 12px;">Location is required.</small>
+                                            <small *ngIf="locationControls.controls[i].get('location')?.hasError('duplicateLocation')" style="color: red; font-size: 12px;">Cannot select the same location twice.</small>
                                         </div>
                                     </div>
-                    
-                                    <div class="!flex !justify-center !items-center">
+                            
+                                    <!-- File Upload -->
+                                    <div class="!flex !justify-center !items-center !flex-col">
                                         <p-fileupload #fu
                                             mode="basic"
                                             chooseLabel="Choose"
                                             chooseIcon="pi pi-upload"
                                             name="file"
                                             [auto]="false"
+                                            [multiple]="false"
                                             accept=".xlsx,.csv,.xls"
                                             (onSelect)="onFileSelect($event, i)"
                                         ></p-fileupload>
-                                         <!-- Show the minus button only if it's not the first location (index > 0) -->
-                                    
-                                </div>
-                                <button *ngIf="i > 0" type="button" (click)="removeLocation(i)" class="remove-btn mt-1">-</button>
-                                <button type="button" (click)="addLocation()" class="add-btn mt-1">+</button>    
-                                   
+                            
+                                        <!-- File Validation Error -->
+                                        <div *ngIf="locationControls.controls[i].get('file')?.touched && locationControls.controls[i].get('file')?.invalid" class="error-message">
+                                            <small *ngIf="locationControls.controls[i].get('file')?.hasError('required')" style="color: red; font-size: 12px;">File is required.</small>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Add/Remove Buttons -->
+                                    <button *ngIf="i > 0" type="button" (click)="removeLocation(i)" class="remove-btn mt-1">-</button>
+                                    <button type="button" (click)="addLocation()" class="add-btn mt-1">+</button>
                                 </div>
                             </div>
+                            
                            
                     
                             
@@ -98,17 +106,19 @@
             <div class="d-flex justify-end">
               <i class="bx bx-export font-bold mb-3 cursor-pointer" style="font-size: 18px;" (click)="exportTableData()"></i>
             </div>
-            <p-table
+            <p-table #dataTable
               [scrollable]="true"
               scrollHeight="400px"
               [value]="records"
               styleClass="mt-4"
               [paginator]="true"
               [rows]="10"
+              [first]="first"
               [rowsPerPageOptions]="[10,20, 30, 40, 50, 100]"
               [showGridlines]="true"
               [scrollHeight]="'400px'"
               [scrollable]="true"
+              (onPageChange)="onPageChange($event)"
               class="bg-white  !rounded-lg border border-gray-200 shadow-md"
             >
               <ng-template #header let-item>

@@ -10,6 +10,8 @@ import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { StockUploadByUserService } from '../../services/stock-upload-by-user.service';
+import { Table } from 'primeng/table';
+import { setActiveConsumer } from '@angular/core/primitives/signals';
 @Component({
   selector: 'app-bulk-stock-upload',
   imports: [PrimengModuleModule,SharedModule,CommonModule,ReactiveFormsModule,FormsModule],
@@ -39,6 +41,7 @@ export class BulkStockUploadComponent {
   dealers:any=[];
   min:any;
   max:any;
+  @ViewChild('dataTable') dataTable: Table | undefined;
   isDataPresentForPartNotInMaster:boolean=false;
   isDataPresentForPreviousUpload:boolean=false;
   userId:any;
@@ -58,8 +61,8 @@ export class BulkStockUploadComponent {
    this.mlForm=this.fb.group({
      brand:['',Validators.required],
      dealer:['',Validators.required],
-     date:['',Validators.required]
-    //  file:['',Validators.required]
+     date:['',Validators.required],
+    file:['',Validators.required]
    })
   }
  
@@ -82,18 +85,37 @@ export class BulkStockUploadComponent {
       this.globalBlockUiService.stopLoading();
       if(res?.data?.error){
         this.globalBlockUiService.stopLoading();
-        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Brands!'})
+        return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching Brands!'})
       }
       this.brands=res.data;
     },(error:any)=>{
       this.globalBlockUiService.stopLoading()
-      this.messageService.add({severity:'error',summary:'Error in fetching the Brands! ',life:30000})
+      this.messageService.add({severity:'error',summary:'Error in fetching the Brands! ',life:4000})
     })
   }
 
-  onSelect(event:any){
-    this.file=event.files[0];
-    this.fileName=this.file.name;
+  onSelect(event: any) {
+    const fileControl = this.mlForm.get('file'); // Get the file form control
+    
+    // Check if exactly one file is selected
+    if (event.files && event.files.length === 1) {
+      const file = event.files[0]; // Get the first selected file
+      
+      // If a file is selected, update the form control with the new file
+      fileControl?.setValue(file);
+      
+      // Set class variables for further use (e.g., for displaying the file name)
+      this.file = file;
+      this.fileName = file.name;
+    } else {
+      // If no file or more than one file is selected, reset the form control
+      fileControl?.setValue(null);
+      this.file = null;
+      this.fileName = '';
+    }
+  
+    // Trigger form control validation to ensure the validation state is updated
+    fileControl?.updateValueAndValidity();
   }
 
   onBrandChange(event:any){
@@ -104,11 +126,11 @@ export class BulkStockUploadComponent {
       this.dealers=res.data;
       if(res?.data?.error){
         this.globalBlockUiService.stopLoading();
-        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Dealers!'})
+        return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching Dealers!'})
       }
     },(error:any)=>{
       this.globalBlockUiService.stopLoading();
-      this.messageService.add({severity:'error',summary:'Error in Fetching the Dealers !'})
+      this.messageService.add({severity:'error',summary:'Error in Fetching the Dealers !',life:4000})
     });
 
    this.getPartNotInMaster();
@@ -122,11 +144,11 @@ export class BulkStockUploadComponent {
     this.globalBlockUiService.stopLoading();
     if(res?.data?.error){
       this.globalBlockUiService.stopLoading();
-      return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching locations!'})
+      return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching locations!'})
     }
   },(error:any)=>{
     this.globalBlockUiService.stopLoading();
-    this.messageService.add({severity:'error',summary:'Error in Fetching the Dealers!'})
+    this.messageService.add({severity:'error',summary:'Error in Fetching the Dealers!',life:4000})
   })
 
   }
@@ -144,7 +166,7 @@ export class BulkStockUploadComponent {
     else{
     
       if(this.fileName==''||this.fileName==null){
-       return this.messageService.add({severity:'error',summary:'Select the File!',life:300000});
+       return this.messageService.add({severity:'error',summary:'Select the File!',life:4000});
        }
      let dealerId=this.mlForm.value.dealer;
     
@@ -164,17 +186,17 @@ export class BulkStockUploadComponent {
           this.fu?.clear();
           this.file=null;
           this.selectedFile=null;
-          return this.messageService.add({severity:'error',life:300000,summary:'Headers are not matched with the brand mapping!'})
+          return this.messageService.add({severity:'error',life:4000,summary:'Headers are not matched with the required fields!'})
         }
         if(res?.mappingNotPresent){
           this.mlForm.reset();
           this.showTable=false
-          this.messageService.add({severity:'error',detail:'Brand Mapping is not available!',life:300000});
+          this.messageService.add({severity:'error',detail:'Brand Mapping is not available!',life:4000});
         }
         if(res?.dealerLocationMappingNotPresent){
           this.mlForm.reset();
           this.showTable=false;
-          this.messageService.add({severity:'error',detail:'Dealer Location Mapping is not available for selected Dealer!',life:300000});
+          this.messageService.add({severity:'error',detail:'Dealer Location Mapping is not available for selected Dealer!',life:4000});
         }
         
         if(res?.error){
@@ -183,7 +205,11 @@ export class BulkStockUploadComponent {
           this.file=null;
           this.fu?.clear();
           this.selectedFile=null;
-          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
+          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:4000});
+        }
+        if(res.length==0){
+          this.mlForm.get('file')?.reset();
+          return this.messageService.add({severity:'success',detail:'No data is uploaded ',life:4000})
         }
         if(res[0]?.currentSumQuantity){
           this.showTable=true;
@@ -202,7 +228,11 @@ export class BulkStockUploadComponent {
           this.prevCountRecords=res.prevCountRecords;
         }
         
+        this.mlForm.get('file')?.reset();
         if(this.showTable){
+          if (this.dataTable) {
+            this.dataTable.reset(); // Reset the paginator after data changes
+          }
           this.messageService.add({severity:'success',detail:'Stock Uploaded Succesfully!',life:3000});
         }
         
@@ -216,7 +246,7 @@ export class BulkStockUploadComponent {
         this.file=null;
         this.selectedFile=null;
         this.globalBlockUiService.stopLoading();
-        this.messageService.add({severity:'error',summary:'Error in Uploading file!..',life:300000});
+        this.messageService.add({severity:'error',summary:'Error in Uploading file!..',life:4000});
       })
        
     }
@@ -234,7 +264,7 @@ export class BulkStockUploadComponent {
       }
     },(error:any)=>{
       this.globalBlockUiService.stopLoading();
-      this.messageService.add({severity:'error',summary:'Error in getting the part not in master !'})
+      this.messageService.add({severity:'error',summary:'Error in getting the part not in master !',life:4000})
     });
   
    }
@@ -267,7 +297,7 @@ export class BulkStockUploadComponent {
    getUploadedData(){
    
     if(this.mlForm.value.dealer==''||this.mlForm.value.dealer==null|| this.mlForm.value.dealer==undefined){
-      return this.messageService.add({severity:'error',detail:'Select Dealer',life:30000})
+      return this.messageService.add({severity:'error',detail:'Select Dealer',life:4000})
     }
     this.globalBlockUiService.startLoading();
     this.stockUploadServiceBySCSUser.getUploadedData({dealer_id:this.mlForm.value.dealer,user_id:this.userId}).subscribe((blob:any)=>{
@@ -285,7 +315,7 @@ export class BulkStockUploadComponent {
           this.messageService.add({severity:'success',detail:'File is generated succesfully for Uploaded Data',life:3000})
     },(error:any)=>{
       this.globalBlockUiService.stopLoading();
-      this.messageService.add({severity:'error',detail:'Error in downloading the file',life:30000});
+      this.messageService.add({severity:'error',detail:'Error in downloading the file',life:4000});
     })  
    }
 
@@ -345,7 +375,7 @@ export class BulkStockUploadComponent {
       this.addedOn=res.data.added_on;
       this.addedBy='Kirti'
      this.records= this.records.map((item:any)=>{
-      let locationObj=this.locations.find((obj:any)=>obj.location_id==item.location_id);
+      let locationObj=this.locations.find((obj:any)=>obj.location_id==parseInt(item.location_id));
     //  console.log("loc obj ",locationObj)
       return{
         ...item,

@@ -17,7 +17,9 @@ import { BlockUIModule } from 'primeng/blockui';
 import { DatePickerModule } from 'primeng/datepicker';
 import { PasswordModule } from 'primeng/password';
 import { PaginatorModule } from 'primeng/paginator';
-
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { RadioButtonModule } from 'primeng/radiobutton';
 const modules:any=[
   MultiSelectModule,
   ButtonModule,
@@ -35,7 +37,10 @@ const modules:any=[
     DropdownModule,
     BlockUIModule,
     PasswordModule,
-    PaginatorModule
+    PaginatorModule,
+    ToggleButtonModule,
+    ToggleSwitchModule,
+    RadioButtonModule
 
    
 ]

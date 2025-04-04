@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-single-location',
   imports: [PrimengModuleModule,SharedModule,FormsModule,ReactiveFormsModule,CommonModule],
@@ -17,6 +18,8 @@ import { FileUpload } from 'primeng/fileupload';
   styleUrl: './single-location.component.css'
 })
 export class SingleLocationComponent {
+
+  @ViewChild('dataTable') dataTable: Table | undefined;
   selectedFile:any;
   isLoading:boolean=false;
   locations:any=[];
@@ -50,7 +53,7 @@ export class SingleLocationComponent {
  
    this.slForm=this.fb.group({
      location:['',Validators.required],
-    //  file:['',Validators.required]
+      file:['',Validators.required],
     brand:[''],
     dealer:['']
    })
@@ -61,10 +64,31 @@ export class SingleLocationComponent {
    this.getBrands();  
   }
  
-  onSelect(event:any){
-    this.file=event.files[0];
-    this.fileName=this.file.name;
+  onSelect(event: any) {
+    const fileControl = this.slForm.get('file'); // Get the file form control
+    
+    // Check if exactly one file is selected
+    if (event.files && event.files.length === 1) {
+      const file = event.files[0]; // Get the first selected file
+      
+      // If a file is selected, update the form control with the new file
+      fileControl?.setValue(file);
+      
+      // Set class variables for further use (e.g., for displaying the file name)
+      this.file = file;
+      this.fileName = file.name;
+    } else {
+      // If no file or more than one file is selected, reset the form control
+      fileControl?.setValue(null);
+      this.file = null;
+      this.fileName = '';
+    }
+  
+    // Trigger form control validation to ensure the validation state is updated
+    fileControl?.updateValueAndValidity();
   }
+  
+  
  
    onUpload() {
  
@@ -78,7 +102,7 @@ export class SingleLocationComponent {
     else{
     
       if(this.fileName==''||this.fileName==null){
-       return this.messageService.add({severity:'error',summary:'Select the File!!',life:300000});
+       return this.messageService.add({severity:'error',summary:'Select the File!!',life:4000});
        }
      let locationId=this.slForm.value.location;
     this.userId=1;
@@ -96,7 +120,7 @@ export class SingleLocationComponent {
           this.fu?.clear();
           this.file=null;
           this.selectedFile=null;
-          return this.messageService.add({severity:'error',life:300000,summary:'Headers are not matched with the brand mapping!'})
+          return this.messageService.add({severity:'error',life:4000,summary:'Headers are not matched with the required fields!'})
         }
         if(res?.error){
           this.slForm.reset();
@@ -104,10 +128,10 @@ export class SingleLocationComponent {
           this.fu?.clear();
           this.selectedFile=null;
           this.showTable=false;
-          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:300000});
+          this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:4000});
         }
         if(res?.mappingNotPresent){
-          return this.messageService.add({severity:'error',life:300000,summary:'Brand Mapping is not available!'});
+          return this.messageService.add({severity:'error',life:4000,summary:'Brand Mapping is not available!'});
         }
         if(res?.currentSumQuantity){
           this.showTable=true;
@@ -127,6 +151,9 @@ export class SingleLocationComponent {
         }
         
         if(this.showTable){
+          if (this.dataTable) {
+            this.dataTable.reset(); // Reset the paginator after data changes
+          }
           this.messageService.add({severity:'success',life:3000,summary:'Stock uploaded successfully!'});
         }
        
@@ -134,12 +161,13 @@ export class SingleLocationComponent {
         this.fu?.clear();
         this.file=null;
         this.selectedFile=null;
+        this.slForm.get('file')?.reset();
        
       },(error)=>{
         this.globalBlockUiService.stopLoading();
         this.file=null;
         this.selectedFile=null;
-        this.messageService.add({severity:'error',summary:'Error in Uploading file!!..',life:300000});
+        this.messageService.add({severity:'error',summary:'Error in Uploading file!!..',life:4000});
       })
        
     }
@@ -155,7 +183,7 @@ export class SingleLocationComponent {
      
       if(res?.data?.error){
         this.globalBlockUiService.stopLoading();
-        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Dealers!'})
+        return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching Dealers!'})
       }
       else{
         this.dealers=res.data;
@@ -172,7 +200,7 @@ export class SingleLocationComponent {
       this.globalBlockUiService.stopLoading();
       if(res?.data?.error){
         this.globalBlockUiService.stopLoading();
-        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Brands!'})
+        return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching Brands!'})
       }
       this.brands=res.data;
     },(error:any)=>{
@@ -188,7 +216,7 @@ export class SingleLocationComponent {
       // console.log(this.brands)
       if(res?.data?.error){
         this.globalBlockUiService.stopLoading();
-        return this.messageService.add({severity:'error',life:300000,summary:'Error in fetching Locations!'})
+        return this.messageService.add({severity:'error',life:4000,summary:'Error in fetching Locations!'})
       }
     },(error:any)=>{
       this.globalBlockUiService.stopLoading();
