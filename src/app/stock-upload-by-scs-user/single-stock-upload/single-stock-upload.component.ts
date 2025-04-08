@@ -328,10 +328,10 @@ export class SingleStockUploadComponent {
           ['Brand']:brandObj?.brand,
           ['Dealer']:dealerObj?.dealer_name,
           ['Location']: this.locationName,
-          ['Previous Records']: item.prevStockUploadCount ,
-          ['Current Records']: item.stockUploadCount,
-          ['Previous Sum Quantity']: item.prevQuantitySum,
-          ['Current Sum Quantity']: item.quantitySum ,
+          ['Previous Records']: item.prevStockUploadCount !=null ?item.prevStockUploadCount :0,
+          ['Current Records']: item.stockUploadCount !=null ?item.stockUploadCount:0,
+          ['Previous Sum Quantity']: item.prevQuantitySum !=null ?item.prevQuantitySum :0,
+          ['Current Sum Quantity']: item.quantitySum !=null ?item.quantitySum:0 ,
           ['Added On ']: item.added_on,
           ['Added By ']:'Kirti'
          
@@ -355,7 +355,7 @@ export class SingleStockUploadComponent {
       this.records=res.data;
       let brandObj=this.brands.find((obj:any)=> obj.brand_id==this.slForm.value.brand)
       let dealerObj=this.dealers.find((obj:any)=>obj.dealer_id==this.slForm.value.dealer)
-      this.locationName=locObj.location_name;
+      this.locationName=locObj?.location_name;
       this.addedOn=res.data.added_on;
       //console.log("brands ",brandObj,this.brands)
       this.addedBy='Kirti'

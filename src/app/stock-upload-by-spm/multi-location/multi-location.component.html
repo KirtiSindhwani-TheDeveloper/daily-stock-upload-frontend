@@ -7,7 +7,7 @@
                         <!-- [ngClass]="showTable ? 'cursor-pointer' : 'disabled'" -->
 
                         <div class="d-flex justify-end">
-                            <span class="btn-view mb-2" [ngClass]="isDataPresentPartNotInMaster?'':'disabled'"  (click)="exportToExcel()">Part Not In Master Export</span>
+                            <span class="btn-view mb-2" [ngClass]="isDataPresentPartNotInMaster?'cursor-pointer':'disabled'"  (click)="exportToExcel()">Part Not In Master Export</span>
                         </div>
                         <div class="!flex !flex-row !gap-6 p-3 !items-center">
                           <div>
@@ -149,18 +149,18 @@
                   <td style="font-size: 11px;">{{rowData.locationName}}</td>
                  
                   <td style="font-size: 11px;">
-                      {{rowData.prevStockUploadCount}}
+                      {{rowData.prevStockUploadCount !=null ?rowData.prevStockUploadCount:0}}
                   </td>
                   <td style="font-size: 11px;">
-                      {{rowData.stockUploadCount}}
+                      {{rowData.stockUploadCount !=null ?rowData.stockUploadCount:0}}
                      
                   </td>
              
                   <td style="font-size: 11px;">
-                     {{rowData.prevQuantitySum}}
+                     {{rowData.prevQuantitySum !=null ?rowData.prevQuantitySum:0}}
                   </td>
                  <td style="font-size: 11px;">
-                    {{rowData.quantitySum}}
+                    {{rowData.quantitySum !=null?rowData.quantitySum:0}}
                  </td>
                  <td style="font-size: 11px;">
                     {{rowData.added_on}}
@@ -173,3 +173,11 @@
               </ng-template>
             </p-table>
           </div>
+
+          <p-dialog header="Data Upload Summary" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+            <ng-container *ngIf="response && response.length">
+              <div *ngFor="let item of response" style="margin-bottom: 1rem;">
+                <strong>{{ item.locationName }}</strong>: {{ item.status }}
+              </div>
+            </ng-container>
+        </p-dialog>         

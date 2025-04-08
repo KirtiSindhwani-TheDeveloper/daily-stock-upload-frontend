@@ -67,6 +67,7 @@
     font-size: 20px;
     background-color:rgb(23 128 189 / 42%);
     border:none;
+    z-index: auto !important;
 }
 
 :host ::ng-deep .add-btn{
@@ -80,6 +81,7 @@
     font-size: 18px;
     background-color: rgb(23 128 189 / 42%);
     border:none !important;
+    z-index: auto !important;
 }
 
 ::ng-deep button.p-ripple.p-paginator-page.ng-star-inserted.p-paginator-page-selected {

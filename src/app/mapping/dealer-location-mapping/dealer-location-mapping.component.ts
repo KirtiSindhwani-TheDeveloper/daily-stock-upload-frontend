@@ -43,11 +43,13 @@ export class DealerLocationMappingComponent {
  isDataPresent:boolean=false;
  userId=1;
  formData=new FormData();
+ multipleDealerAndLocationData:any[]=[];
  showEditPopUp:boolean=false;
  visible:boolean=false;
  activeStatus:boolean=false;
  wrongDataExist:boolean=false;
  exportType:any='All';
+ isViewMapping:boolean=false;
  constructor(private utilitiesService:UtilitiesService,
   private fb:FormBuilder,private dealerLocationService:DealerLocationMappingService,
   private globalUiService:GlobalBlockUiService,
@@ -66,7 +68,7 @@ export class DealerLocationMappingComponent {
  }
 
  onSelect(event:any){
-  this.viewMapping();
+  
    this.file=event.files[0];
     this.fileName=this.file.name;
     // this.dlForm.get('file')?.setValue(this.file);
@@ -113,17 +115,25 @@ export class DealerLocationMappingComponent {
 
       if(res?.dealerLocationNotInMasterPresent){
         this.dataNotPresentInMaster=res?.dealerLocationNotInMaster
-        console.log("data not present in master ",this.dataNotPresentInMaster)
+      //  console.log("data not present in master ",this.dataNotPresentInMaster)
         if(this.dataNotPresentInMaster.length==0){
           this.wrongDataExist=false;
         }
         else{
           this.wrongDataExist=true;
+          this.exportWrongDealerLocation();
         }
         this.messageService.add({severity:'error',summary:'Dealer and Location are not present in our database!',life:4000})
       }
+      if(res?.multipleInventoryLocations){
+
+        this.multipleDealerAndLocationData=res?.multipleInventoryLocationsData;
+        this.exportMultipleLocations(this.multipleDealerAndLocationData);
+        this.messageService.add({severity:'error',life:4000,summary:'Same Inventory Locations are associated to multiple location'})
+      }
       if(res?.insertedSuccessfully){
         this.viewMapping();
+        this.isDataPresent=true;
         this.messageService.add({severity:'success',summary:'Mapping is created successfully!',life:4000})
       }
       this.clearSelectedFiles();
@@ -167,6 +177,18 @@ export class DealerLocationMappingComponent {
    }
   }
 
+  exportMultipleLocations(data:any){
+    const ws = XLSX.utils.json_to_sheet(data);
+         
+    // Create a workbook and append the worksheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Table Data');
+
+    // Write the workbook to a file and trigger download
+    XLSX.writeFile(wb, 'Error_Logs_Multiple_InventoryLocation.xlsx');
+
+  }
+
   viewMapping(){
     this.globalUiService.startLoading();
     this.dealerLocationService.viewDealerLocationMapping({user_id:1,brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
@@ -176,10 +198,14 @@ export class DealerLocationMappingComponent {
       }
       if(res.data){
         this.records=res.data;
-        this.showTable=true;
+        if(this.records?.length>0){
+          this.isViewMapping=true;
+          this.showTable=true;
+        }
+      
         //console.log("records ",this.records)
-        let brandObj=this.brands.find((obj:any)=>obj.brand_id==this.dlForm.value.brand);
-        let userObj=this.users.find((obj:any)=>obj.id==1)
+        let brandObj=this.brands.find((obj:any)=>obj?.brand_id==this.dlForm.value.brand);
+        let userObj=this.users.find((obj:any)=>obj?.id==1)
        this.records= this.records.map((item:any)=>{
 
           return{
@@ -337,6 +363,7 @@ onBrandSelect(event:any){
 
   this.clearSelectedFiles();
   this.globalUiService.startLoading();
+  this.viewMapping()
   this.dealerLocationService.exportToExcel({brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
     this.globalUiService.stopLoading();
     this.uploadedData=res.data;
@@ -358,8 +385,6 @@ onBrandSelect(event:any){
 }
 
   exportToExcel(){
-
-    
     let modifiedData = this.uploadedData.map((item: any) => {
       let brandObj = this.brands.find((obj: any) => obj.brand_id == item.brandId);
       let arr = {
@@ -383,6 +408,7 @@ onBrandSelect(event:any){
   }
 
   onEdit(){
+
     if(this.dlForm.value.brand==''){
       return this.messageService.add({severity:'error',detail:'Select Brand',life:4000});
     }
@@ -412,7 +438,9 @@ onBrandSelect(event:any){
           this.wrongDataExist=false;
         }
         else{
-          this.wrongDataExist=true;}
+          this.wrongDataExist=true;
+          this.exportWrongDealerLocation();
+        }
         this.messageService.add({severity:'error',summary:'Dealers and Locations are not present in our database!',life:4000})
        
       }
@@ -431,6 +459,12 @@ onBrandSelect(event:any){
           this.isDataPresent=false;
           this.isDataExist=false;
         }})
+      }
+      if(res?.multipleInventoryLocations){
+
+        this.multipleDealerAndLocationData=res?.multipleInventoryLocationsData;
+        this.messageService.add({severity:'error',life:4000,summary:'Same Inventory Locations are associated to multiple location'})
+        this.exportMultipleLocations(this.multipleDealerAndLocationData)
       }
     //  this.dlForm.reset();
       this.clearSelectedFiles();

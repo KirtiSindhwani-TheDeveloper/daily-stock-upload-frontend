@@ -15,7 +15,7 @@
      style="font-size: 20px;">
   </i> -->
                         </div>
-                        <div class=" add-mapping-card w-[70vw] h-[25vh]  flex flex-col">
+                        <div class=" add-mapping-card w-[70vw] h-auto  flex flex-col">
                           <div class="  !flex !flex-row !gap-6 p-3 !items-center">
                        
                             <div>
@@ -48,12 +48,13 @@
                         <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" [disabled]="isDataPresent" />
                       
                         <p-button label="Edit" class="" (onClick)="showEditPopup()" severity="secondary" [disabled]="!isDataPresent" />
+                       
                       </div>
                    
-                    <div class="d-flex justify-end gap-3 me-3">
-                      <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="!isDataExist" />
-                      <p-button label="Dealer Location Not Exist Export" [ngClass]="wrongDataExist?'cursor-pointer':''" [disabled]="!wrongDataExist" (onClick)="exportWrongDealerLocation()" severity="secondary"  />
-                    </div>
+                    <div class="d-flex justify-start p-3 gap-3 me-3"> 
+                     <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="!isDataExist" /> 
+                      <p-button label="View" [ngClass]="isViewMapping?'cursor-pointer':''" [disabled]="!isViewMapping" (onClick)="viewMapping()" severity="secondary"  /> 
+                     </div> 
                   </div>
                         
 
@@ -132,7 +133,7 @@
          
       </td>
  
-      <td style="font-size: 11px;">
+      <td style="font-size: 11px; " class="word-break">
          {{rowData.inventory_location}}
       </td>
       <td class="p-2" >

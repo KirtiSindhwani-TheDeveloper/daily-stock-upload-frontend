@@ -35,6 +35,8 @@ export class MultiLocationComponent {
  dealers:any=[];
  first = 0;
  locationAdd=1;
+ visible:boolean=false;
+response:any=[];
  isDataPresentPartNotInMaster:boolean=false;
         locationSelected: Set<number> = new Set(); // To track selected locations
         @ViewChildren('fu') fu: QueryList<FileUpload> | undefined;
@@ -70,7 +72,7 @@ export class MultiLocationComponent {
   
     // Add new location entry (dropdown and file upload)
     addLocation() { 
-      console.log("Form Array Size:", this.locationAdd, "Locations Size:", this.locations.length);
+    //  console.log("Form Array Size:", this.locationAdd, "Locations Size:", this.locations.length);
     
       if (this.locationControls.length >= this.locations.length) {
         return this.messageService.add({
@@ -183,13 +185,14 @@ export class MultiLocationComponent {
     // Handle the submit (upload)
     onUpload() {
       let userId=1;
+     let uploadedLocations=[]
       // let dealerId=20295;
       if (this.mlForm.valid) {
         this.globalBlockUiService.startLoading();
         // const formData = new FormData();
   
         const locations = this.mlForm.get('locations')?.value;
-        console.log("locations ",locations)
+    //    console.log("locations ",locations)
       // Iterate through locations and append each file and location to FormData
       locations.forEach((location: any) => {
         if (location.file) {
@@ -202,19 +205,21 @@ export class MultiLocationComponent {
         
         this.formData.append('dealer_id', this.mlForm.value.dealer.toString());
       });
+    
 
         this.stockUploadService.uploadMultiLocation(this.formData).subscribe((res:any)=>{
+          uploadedLocations.push(locations);
           this.globalBlockUiService.stopLoading();
-          if(res?.headerNotPresent){
-            this.formData=new FormData();
-            this.clearFileUploads();
-            return this.messageService.add({severity:'error',life:4000,summary:'Headers are not matched with the required fields!'})
-          }
-          if(res?.error){
-            this.mlForm.reset();
-            this.showTable=false;
-            this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:4000});
-          }
+          // if(res?.headerNotPresent){
+          //   this.formData=new FormData();
+          //   this.clearFileUploads();
+          //   return this.messageService.add({severity:'error',life:4000,summary:'Headers are not matched with the required fields!'})
+          // }
+          // if(res?.error){
+          //   this.mlForm.reset();
+          //   this.showTable=false;
+          //   this.messageService.add({severity:'error',detail:'Error in uploading the file!',life:4000});
+          // }
           if(res?.mappingNotPresent){
             this.mlForm.reset();
             this.messageService.add({severity:'error',detail:'Brand Mapping is not available!!',life:4000});
@@ -225,10 +230,61 @@ export class MultiLocationComponent {
               this.dataTable.reset(); // Reset the paginator after data changes
             }
            this.getRecords();
-           this.messageService.add({severity:'success',detail:'Stock Upload successfully!!',life:4000});
-          }
+
+           if(res?.error){
+            this.messageService.add({severity:'error',life:4000,detail:'Error is uploaded File!'});
+           }else{
+            this.visible=true;
+            let responseData=res;
+         //   console.log("uploaded locations ",responseData)
+            uploadedLocations[0].map((item: any) => {
+         //    console.log("item ", item);
+             let locationObj = this.locations.find(
+               (obj: any) => obj.location_id == parseInt(item.location, 10)
+             );
+           //  console.log("locationObj ", locationObj);
+           
+             const locationId = parseInt(item.location, 10);
+             const alreadyExists = this.response.some(
+               (resp: any) => resp.locationId === locationId
+             );
+           
+             let statusMsg = '✅ Data uploaded successfully';
+             if (responseData?.length > 0) {
+               let obj = responseData.find(
+                 (obj: any) => obj.locationId == item.location
+               );
+            //   console.log("obj ", obj);
+           
+               if (obj) {
+                 statusMsg = '❌ Data not uploaded successfully';
+               }
+             }
+           
+             // Only push if not already added
+             if (!alreadyExists) {
+               this.response.push({
+                 locationName: locationObj?.location_name,
+                 locationId,
+                 status: statusMsg,
+               });
+             }
+           
+             //console.log("responses ", this.response);
+             
+           });
+
+           
+           
+           }
+           
+          
+          
+          
           this.formData=new FormData();
           this.clearFileUploads();
+          }
+
         },(error:any)=>{
           this.globalBlockUiService.stopLoading();
           this.messageService.add({severity:'error',detail:'Error in uploading the file!!',life:4000});
@@ -360,10 +416,10 @@ export class MultiLocationComponent {
 
        const modifiedData = this.records.map((item: any) => ({
                 ['Location']: item.locationName,
-                ['Previous Records']: item.prevStockUploadCount ,
-                ['Current Records']: item.stockUploadCount,
-                ['Previous Sum Quantity']: item.prevQuantitySum,
-                ['Current Sum Quantity']: item.quantitySum ,
+                ['Previous Records']: item.prevStockUploadCount !=null?item.prevStockUploadCount:0 ,
+                ['Current Records']: item.stockUploadCount !=null?item.stockUploadCount :0,
+                ['Previous Sum Quantity']: item.prevQuantitySum !=null ?item.prevQuantitySum:0,
+                ['Current Sum Quantity']: item.quantitySum  !=null ?item.quantitySum:0,
                 ['Added On ']: item.added_on,
                 ['Added By ']:'Kirti'
                

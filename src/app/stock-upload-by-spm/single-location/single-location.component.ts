@@ -299,10 +299,10 @@ export class SingleLocationComponent {
  
       const modifiedData = this.records.map((item: any) => ({
           ['Location']: this.locationName,
-          ['Previous Records']: item.prevStockUploadCount ,
-          ['Current Records']: item.stockUploadCount,
-          ['Previous Sum Quantity']: item.prevQuantitySum,
-          ['Current Sum Quantity']: item.quantitySum ,
+          ['Previous Records']: item.prevStockUploadCount !=null?item.prevStockUploadCount:0 ,
+          ['Current Records']: item.stockUploadCount !=null?item.stockUploadCount:0,
+          ['Previous Sum Quantity']: item.prevQuantitySum !=null ?item.prevQuantitySum:0,
+          ['Current Sum Quantity']: item.quantitySum !=null ?item.quantitySum :0,
           ['Added On ']: (item.added_on),
           ['Added By ']:'Kirti'
          
