@@ -73,8 +73,15 @@ span{
 :host ::ng-deep .dropdown{
     border: 2px solid #00000030 !important;
     margin-bottom: 10px !important;
-    width: 15rem;
+    width: 20vw;
 }
+
+:host ::ng-deep .brandDropdown{
+    border: 2px solid #00000030 !important;
+    margin-bottom: 10px !important;
+    width: 18vw;
+}
+
 
 :host ::ng-deep button.p-ripple.p-button.p-component.p-fileupload-choose-button.undefined{
     background-color: rgba(0, 0, 255, 0.164) !important;
@@ -84,13 +91,7 @@ span{
     padding: 8px !important;
 }
 
-:host ::ng-deep .p-select-list-container{
-    max-height: 260px !important;
-    /* width: 225px !important;
-    overflow-x:hidden; */
-    width: 15vw !important;
-    overflow-x: hidden !important;
-}
+
 :host ::ng-deep .disabled {
     pointer-events: none; /* Prevents clicking on the element */
     color: white; /* Optional: Change color to indicate it's disabled */
@@ -106,6 +107,19 @@ span{
     align-items: center !important;
     z-index: 11102 !important;
   }
+
+  :host ::ng-deep  .p-select-list-container{
+    max-height: 260px !important;
+    /* width: 225px !important;
+    overflow-x:hidden; */
+    width: 18vw !important;
+    overflow-x: hidden !important;
+}
+
+:host ::ng-deep  ul{
+    /* width: 16vw !important; */
+    /* overflow-x: hidden !important; */
+}
 
  
 

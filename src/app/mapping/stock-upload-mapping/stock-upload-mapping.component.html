@@ -19,7 +19,7 @@
             optionLabel="brand"
             optionValue="brand_id"
             placeholder="Select Brand"
-            class="dropdown !mt-3 "
+            class="brandDropdown !mt-3 "
             (onChange)="onBrandSelect($event)"
           />
           <span class="btn-view cursor-pointer" (click)="showDialog()" [ngClass]="isMappingExist?'':'disabled'"
@@ -35,7 +35,7 @@
           </div>
         </div> -->
         <div class="ms-2">
-             <div class="  mt-1 px-3" *ngIf="stMappingForm.get('brands')?.touched && stMappingForm?.get('brands')?.invalid " >
+             <div class="  mt-1 px-2" *ngIf="stMappingForm.get('brands')?.touched && stMappingForm?.get('brands')?.invalid " >
         <small *ngIf="stMappingForm?.get('brands')?.hasError('required')" style="color: red; font-size: 12px;">Brand is required.</small> 
        </div>
         </div>

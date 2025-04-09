@@ -201,6 +201,9 @@ export class DealerLocationMappingComponent {
         if(this.records?.length>0){
           this.isViewMapping=true;
           this.showTable=true;
+        }else{
+          
+          this.showTable=false;
         }
       
         //console.log("records ",this.records)
@@ -224,6 +227,7 @@ export class DealerLocationMappingComponent {
         }
       }
     },(error:any)=>{
+      this.isViewMapping=false;
       this.globalUiService.stopLoading();
     })
   }
@@ -363,7 +367,9 @@ onBrandSelect(event:any){
 
   this.clearSelectedFiles();
   this.globalUiService.startLoading();
-  this.viewMapping()
+  this.isViewMapping=false;
+  this.viewMapping();
+
   this.dealerLocationService.exportToExcel({brand_id:this.dlForm.value.brand}).subscribe((res:any)=>{
     this.globalUiService.stopLoading();
     this.uploadedData=res.data;
@@ -465,6 +471,9 @@ onBrandSelect(event:any){
         this.multipleDealerAndLocationData=res?.multipleInventoryLocationsData;
         this.messageService.add({severity:'error',life:4000,summary:'Same Inventory Locations are associated to multiple location'})
         this.exportMultipleLocations(this.multipleDealerAndLocationData)
+      }
+      if(res && Object.keys(res).length == 0){
+        this.messageService.add({severity:'error',life:4000,summary:'Error in Dealer Location Mapping'})
       }
     //  this.dlForm.reset();
       this.clearSelectedFiles();

@@ -185,7 +185,7 @@ response:any=[];
     // Handle the submit (upload)
     onUpload() {
       let userId=1;
-     let uploadedLocations=[]
+    
       // let dealerId=20295;
       if (this.mlForm.valid) {
         this.globalBlockUiService.startLoading();
@@ -208,6 +208,7 @@ response:any=[];
     
 
         this.stockUploadService.uploadMultiLocation(this.formData).subscribe((res:any)=>{
+          let uploadedLocations=[];
           uploadedLocations.push(locations);
           this.globalBlockUiService.stopLoading();
           // if(res?.headerNotPresent){
@@ -236,6 +237,7 @@ response:any=[];
            }else{
             this.visible=true;
             let responseData=res;
+            this.getPartNotInMasterRecords();
          //   console.log("uploaded locations ",responseData)
             uploadedLocations[0].map((item: any) => {
          //    console.log("item ", item);
@@ -277,9 +279,7 @@ response:any=[];
            
            
            }
-           
-          
-          
+                 
           
           this.formData=new FormData();
           this.clearFileUploads();
@@ -313,6 +313,9 @@ response:any=[];
           });
         }
       }        
+    }
+    clearResponse() {
+      this.response = [];
     }
    
     clearFileUploads() {

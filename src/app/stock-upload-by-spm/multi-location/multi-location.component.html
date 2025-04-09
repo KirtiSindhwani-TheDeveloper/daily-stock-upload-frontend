@@ -174,7 +174,8 @@
             </p-table>
           </div>
 
-          <p-dialog header="Data Upload Summary" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+          <p-dialog header="Data Upload Summary" [modal]="true" [(visible)]="visible" 
+          [style]="{ width: '25rem' }" (onHide)="clearResponse()">
             <ng-container *ngIf="response && response.length">
               <div *ngFor="let item of response" style="margin-bottom: 1rem;">
                 <strong>{{ item.locationName }}</strong>: {{ item.status }}
