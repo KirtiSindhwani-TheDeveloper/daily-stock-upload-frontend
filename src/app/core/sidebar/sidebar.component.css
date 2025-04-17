@@ -56,6 +56,7 @@
     padding: 3px 12px;
     padding-top: 3px;
     cursor: pointer;
+    display: block;
     /* margin-left: 13px; */
   }
   
@@ -130,8 +131,8 @@ button{
 
 li{
     font-size: 12px !important;
-    width: 240px !important;
-    display: grid !important;
+    /* width: 240px !important; */
+    /* display: grid !important; */
 }
 
 :host ::ng-deep li.menu-item.child .ng-star-inserted{

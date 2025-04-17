@@ -120,6 +120,10 @@ export class SingleStockUploadComponent {
     this.utilitiesService.getDealers({brand_id:this.slForm.value.brand}).subscribe((res:any)=>{
       this.dealers=res.data;
     })
+    this.slForm.get('date')?.reset();
+    this.slForm.get('file')?.reset();
+    this.slForm.get('location')?.reset();
+    this.showTable=false;
   }
 
   onDealerChange(event:any){

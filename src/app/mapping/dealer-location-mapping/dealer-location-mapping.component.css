@@ -23,8 +23,7 @@
   background-color: rgba(0, 0, 255, 0.164);
   padding: 8px;
   border-radius: 4px;
-  z-index: auto;
-  
+  z-index: auto; 
 }
 
 :host ::ng-deep p-button.pb-3{
@@ -58,3 +57,21 @@
  /* :host ::ng-deep span.filelabel.ng-star-inserted {
     display: none;
   }  */
+:host ::ng-deep input.p-inputtext.p-component.ng-star-inserted{
+    padding: 5px;
+}
+
+/* :host ::ng-deep button.p-ripple.p-button.p-component.p-button-secondary{
+ height: 28px;
+ width: 28px;
+  
+} */
+
+:host ::ng-deep button.p-ripple.p-button.p-component.p-button-icon-only.p-button-secondary.p-button-rounded.p-button-text.p-datatable-column-filter-button{
+    height: 28px;
+    width: 28px;
+}
+
+.pb-6px{
+    padding-bottom: 6px !important;
+}

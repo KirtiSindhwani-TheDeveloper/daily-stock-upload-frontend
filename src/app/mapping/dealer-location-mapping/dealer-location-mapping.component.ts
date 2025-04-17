@@ -11,6 +11,7 @@ import { GlobalBlockUiService } from '../../services/global-block-ui.service';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { Table } from 'primeng/table';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-dealer-location-mapping',
@@ -50,6 +51,7 @@ export class DealerLocationMappingComponent {
  wrongDataExist:boolean=false;
  exportType:any='All';
  isViewMapping:boolean=false;
+ filteredRecords:any[]=[]
  constructor(private utilitiesService:UtilitiesService,
   private fb:FormBuilder,private dealerLocationService:DealerLocationMappingService,
   private globalUiService:GlobalBlockUiService,
@@ -200,6 +202,8 @@ export class DealerLocationMappingComponent {
         this.records=res.data;
         if(this.records?.length>0){
           this.isViewMapping=true;
+          this.exportType = 'All';
+         
           this.showTable=true;
         }else{
           
@@ -220,6 +224,7 @@ export class DealerLocationMappingComponent {
           }
         })
        // console.log("records ",this.records)
+       this.filteredRecords=this.records;
         if(this.showTable){
           if (this.dataTable) {
             this.dataTable.reset(); // Reset the paginator after data changes
@@ -258,7 +263,8 @@ export class DealerLocationMappingComponent {
     let filteredData;
     if(exportType=='All'){
       modifiedData=this.records.map((item:any)=>{
-       return{ Brand:item.brandName,
+       return{ 
+        Brand:item.brandName,
         Dealer:item.dealer,
         Location:item.location,
         ["Inventory Location"]:item.inventory_location,
@@ -310,6 +316,7 @@ export class DealerLocationMappingComponent {
 
     
   }
+
   setToggleStatus(product: any, value: boolean): void {
     product.status = value ? 'Active' : 'Inactive';
   }
@@ -529,6 +536,18 @@ onBrandSelect(event:any){
     XLSX.writeFile(wb, 'Dealer_Location_Not_Exist.xlsx');
     
   }
+
+  applyFilter() {
+    if (this.exportType == 'Active') {
+      this.filteredRecords = this.records.filter((record:any) => record.statusBoolean === true);
+    } else if (this.exportType == 'Inactive') {
+      this.filteredRecords = this.records.filter((record:any) => record.statusBoolean === false);
+    } else {
+      this.filteredRecords = [...this.records]; // ALL data
+    }
+  }
+  
+
   showEditPopup(){
     this.fu?.clear();
     this.showEditPopUp=true;

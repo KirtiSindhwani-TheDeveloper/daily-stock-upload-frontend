@@ -7,12 +7,10 @@
                     <form [formGroup]="mlForm">
                         <div class="d-flex justify-end">
                             <span class="btn-view  mb-2" [ngClass]="isDataPresentForPartNotInMaster?'cursor-pointer':'disabled'"(click)="exportToExcel()" >Part Not In Master Export</span>
-                            
+                            <span class="btn-view  mb-2 ms-3 cursor-pointer" [hidden]="!isBrandKiaHyundai" (click)="downloadBrandFormat()" >Download Brand Format</span>
                         </div>
                     <div class=" add-mapping-card w-[70vw] h-auto !p-3 ">
-                       <div class="!flex !flex-row !gap-6  !items-center">
-
-                      
+                       <div class="!flex !flex-row !gap-6  !items-center">                      
                         <div>
 
                             <p-select

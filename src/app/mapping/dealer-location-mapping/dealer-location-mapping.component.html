@@ -48,12 +48,12 @@
                         <p-button label="Upload" class="" (onClick)="onUpload()" severity="secondary" [disabled]="isDataPresent" />
                       
                         <p-button label="Edit" class="" (onClick)="showEditPopup()" severity="secondary" [disabled]="!isDataPresent" />
-                       
+                        <!-- <p-button label="View" [ngClass]="isViewMapping?'cursor-pointer':''" [disabled]="!isViewMapping" (onClick)="viewMapping()" severity="secondary"  />  -->
                       </div>
                    
                     <div class="d-flex justify-start p-3 gap-3 me-3"> 
-                     <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="!isDataExist" /> 
-                      <p-button label="View" [ngClass]="isViewMapping?'cursor-pointer':''" [disabled]="!isViewMapping" (onClick)="viewMapping()" severity="secondary"  /> 
+                     <!-- <p-button label="Export" class="" (onClick)="exportToExcel()" severity="secondary" [disabled]="!isDataExist" />  -->
+                      
                      </div> 
                   </div>
                         
@@ -67,17 +67,17 @@
                 <div class="d-flex justify-end mb-2">
                   <div class="flex flex-wrap gap-4">
                     <div class="flex items-center">
-                        <p-radiobutton name="all" value="All" [(ngModel)]="exportType" inputId="all" />
+                        <p-radiobutton name="all" value="All" [(ngModel)]="exportType" (ngModelChange)="applyFilter()" inputId="all" />
                         <label for="all" class="ml-2 mb-0">All</label>
                     </div>
                 
                     <div class="flex items-center">
-                        <p-radiobutton name="active" value="Active" [(ngModel)]="exportType" inputId="active" />
+                        <p-radiobutton name="active" value="Active" [(ngModel)]="exportType" inputId="active" (ngModelChange)="applyFilter()" />
                         <label for="active" class="ml-2 mb-0">Active</label>
                     </div>
                 
                     <div class="flex items-center">
-                        <p-radiobutton name="inactive" value="Inactive" [(ngModel)]="exportType" inputId="inactive" />
+                        <p-radiobutton name="inactive" value="Inactive" [(ngModel)]="exportType" (ngModelChange)="applyFilter()" inputId="inactive" />
                         <label for="inactive" class="ml-2 mb-0">Inactive</label>
                     </div>
                   </div>
@@ -86,7 +86,7 @@
   <p-table #dataTable
   [scrollable]="true"
   scrollHeight="400px"
-  [value]="records"
+  [value]="filteredRecords"
   styleClass="mt-4"
   [paginator]="true"
   [rows]="10"
@@ -98,32 +98,48 @@
 >
   <ng-template #header let-item>
     <tr>
-     
-      <th style="font-size: 13px;" >Brand</th>
-      <th style="font-size: 13px;" >
-        Dealer
+      <th style="font-size: 13px;" class="">
+        <span class="pb-2">Brand</span>
+        <p-columnFilter type="text" field="brandName" display="menu" class="column-filter ms-2" />
       </th>
-     
-      <th style="font-size: 13px;" >
-        Location
-       
+    
+      <th style="font-size: 13px;" class=" ">
+        <span class="pb-2">Dealer</span>
+        <p-columnFilter type="text" field="dealer" display="menu" class="column-filter ms-2" />
       </th>
-      <th style="font-size: 13px;">
-      Inventory Location
+    
+      <th style="font-size: 13px;" class=" ">
+        <span class="pb-2">Location</span>
+        <p-columnFilter type="text" field="location" display="menu" class="column-filter ms-2" />
       </th>
-      <th style="font-size: 13px;" >Status </th>
-      <th style="font-size: 13px;">
-         Added On
-       </th>
-       <th style="font-size: 13px;" >Added By</th>
-      
+    
+      <th style="font-size: 13px;" class=" ">
+        <span class="pb-2">Inventory Location</span>
+        <p-columnFilter type="text" field="inventory_location" display="menu" class="column-filter ms-2" />
+      </th>
+    
+      <th style="font-size: 13px;" class="pb-6px">
+        <!-- <div class="pb-2">Status</div> -->
+         Status
+      </th>
+    
+      <th style="font-size: 13px;" class="pb-6px">
+        Added On
+      </th>
+    
+      <th style="font-size: 13px;" class="pb-6px">
+        Added By
+      </th>
     </tr>
+    
+    
+    
   </ng-template>
   <ng-template #body let-rowData let-i="rowIndex">
     <tr>
       <td style="font-size: 11px;">
         {{rowData.brandName}}
-    </td>
+  
      
       <td style="font-size: 11px;">
           {{rowData.dealer}}

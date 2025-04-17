@@ -17,8 +17,22 @@ span{
 }
 :host ::ng-deep span.p-select-label.p-placeholder.ng-star-inserted{
     font-size: 14px;
+    padding: 4px;
 }
 
+:host ::ng-deep span.p-select-label.ng-star-inserted {
+    font-size: 14px;
+    padding: 4px;
+}
+:host ::ng-deep .p-multiselect-label.p-placeholder {
+    padding: 3px;
+    font-size: 14px;
+}
+
+:host ::ng-deep .p-multiselect-label{
+    padding: 3px;
+    font-size: 14px;
+}
 .btn-view{
     border-radius: 8px;
     background-color: rgb(221, 221, 118);
@@ -33,6 +47,14 @@ span{
   border-radius: 4px;
   
   
+}
+
+.edit-btn{
+    border: none !important;
+    outline: none !important;
+    background-color: rgba(0, 0, 255, 0.164);
+    padding: 8px;
+    border-radius: 4px;
 }
 
 .mapping-card{
@@ -73,7 +95,7 @@ span{
 :host ::ng-deep .dropdown{
     border: 2px solid #00000030 !important;
     margin-bottom: 10px !important;
-    width: 20vw;
+    width: 18vw;
 }
 
 :host ::ng-deep .brandDropdown{
@@ -82,7 +104,10 @@ span{
     width: 18vw;
 }
 
-
+::ng-deep .ng-invalid .p-dropdown {
+    border: 1px solid red !important;
+  }
+  
 :host ::ng-deep button.p-ripple.p-button.p-component.p-fileupload-choose-button.undefined{
     background-color: rgba(0, 0, 255, 0.164) !important;
     border-radius: 4px;
@@ -116,9 +141,52 @@ span{
     overflow-x: hidden !important;
 }
 
-:host ::ng-deep  ul{
-    /* width: 16vw !important; */
-    /* overflow-x: hidden !important; */
+:host ::ng-deep  li{
+   display: flex !important;
+}
+
+:host ::ng-deep textarea.ng-pristine.ng-valid.ng-touched{
+    outline: white;
+    border-radius: 5px !important;
+    border: none !important;
+}
+
+:host ::ng-deep textarea.ng-pristine.ng-valid.ng-touched:focus-visible{
+    outline: white !important;
+    border: none !important;
+}
+
+:host ::ng-deep textarea{
+    border-radius: 4px !important;
+}
+/* .row{
+    margin-left: 0px;
+} */
+
+:host ::ng-deep .operator-dropdown{
+    border: 2px solid #00000030 !important;
+    margin-bottom: 10px !important;
+    width: 5vw;
+}
+
+:host ::ng-deep .st-dropdown{
+    border: 2px solid #00000030 !important;
+    margin-bottom: 10px !important;
+    width: 12vw;
+}
+
+
+:host ::ng-deep .st-dropdown .p-dropdown-panel .p-select-list-container{
+    max-height: 260px !important;
+    /* width: 225px !important;
+    overflow-x:hidden; */
+    width: 12vw !important;
+    overflow-x: hidden !important;
+}
+
+:host ::ng-deep input.p-inputtext.p-component.ng-untouched.ng-pristine.p-filled{
+    font-size: 14px;
+    padding: 4px;
 }
 
  

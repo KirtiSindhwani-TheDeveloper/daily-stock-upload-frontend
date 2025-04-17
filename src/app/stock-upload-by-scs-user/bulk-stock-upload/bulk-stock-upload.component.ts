@@ -34,6 +34,7 @@ export class BulkStockUploadComponent {
   locationName:any;
   addedOn:any;
   addedBy:any;
+  isBrandKiaHyundai:boolean=false;
   uploadedData:any=[];
   visible:boolean=false;
   partNotInMasterRecords:any;
@@ -121,6 +122,12 @@ export class BulkStockUploadComponent {
   onBrandChange(event:any){
 
   //  this.globalBlockUiService.startLoading();
+  if(this.mlForm.value.brand==33 || this.mlForm.value.brand==11){
+    this.isBrandKiaHyundai=true;
+  }
+  else{
+    this.isBrandKiaHyundai=false;
+  }
     this.utilitiesService.getDealers({brand_id:this.mlForm.value.brand}).subscribe((res:any)=>{
       this.globalBlockUiService.stopLoading();
       this.dealers=res.data;
@@ -134,6 +141,9 @@ export class BulkStockUploadComponent {
     });
 
    this.getPartNotInMaster();
+   this.mlForm.get('date')?.reset();
+   this.mlForm.get('file')?.reset();
+   this.showTable=false;
     
   }
 
@@ -268,6 +278,23 @@ export class BulkStockUploadComponent {
     });
   
    }
+
+    downloadBrandFormat = () => {
+      let link = document.createElement("a");
+
+      if (this.mlForm.value.brand == 11) {
+        link.href = "/brandFormat/Hyundai_Brand_Format.xlsx";
+        link.download = "Hyundai_Brand_Format.xlsx"; // ✅ just the file name
+      } else {
+        link.href = "/brandFormat/KIA_Brand_Format.xlsx";
+        link.download = "KIA_Brand_Format.xlsx"; // ✅ just the file name
+      }
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+  };
 
 
  
