@@ -257,6 +257,18 @@ export class DealerLocationMappingComponent {
     )
   }
 
+  downloadFormat = () => {
+    let link = document.createElement("a");
+
+      link.href = "/mappingFormat/Mapping_Format.xlsx";
+      link.download = "Mapping_Format.xlsx"; // ✅ just the file name
+  
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+};
   exportTableData(exportType:any){
    // console.log("export type ",exportType)
     let modifiedData;

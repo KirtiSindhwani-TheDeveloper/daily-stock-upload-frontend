@@ -72,6 +72,8 @@ export class StockUploadMappingComponent {
   showAddCurrentData: boolean = false;
   showAddOlderData: boolean = false;
   visibleAddPopUp: boolean = false;
+  isCurrentQtyOne:boolean=false;
+  isOlderQtyOne:boolean=false
   rowData:any=[];
   selectedFile:any;
   selectedFileName:any;
@@ -100,6 +102,7 @@ export class StockUploadMappingComponent {
       stockQty: ['', Validators.required],
       location: ['', Validators.required],
       file:[null],
+      calculativeField:[]
       
     });
     this.stockCalculationForm = this.fb.group({
@@ -112,6 +115,8 @@ export class StockUploadMappingComponent {
       location: [null, Validators.required],
       stockQty: [null, Validators.required],
       file:[null],
+      calculativeField:[]
+     
       
     });
 
@@ -120,6 +125,7 @@ export class StockUploadMappingComponent {
       location: [null, Validators.required],
       stockQty: [null, Validators.required],
       file:[null],
+      calculativeField:[]
       
     });
 
@@ -154,6 +160,7 @@ export class StockUploadMappingComponent {
     this.editCurrentDayStockForm.get('calculativeField')?.disable();
 
     this.getBrands();
+    
   }
 
   get operations(): FormArray {
@@ -174,8 +181,9 @@ export class StockUploadMappingComponent {
   // }
   
 
-  showCalculationDialog(stockType:any){
-
+  showCalculationDialog(stockType:any,addCurrentDaysStockFromTable?:any,addOlderDaysStockFromTable?:any){
+   console.log("stock type 182 ",stockType,addCurrentDaysStockFromTable,addOlderDaysStockFromTable)
+   
    this.columnsForStockCalculation=[];
     if(stockType=='current'){
       this.columnsForStockCalculation=this.currentStockForm.value.stockQty;
@@ -193,6 +201,7 @@ export class StockUploadMappingComponent {
       }
       else{
         this.onSubmit('current');
+       this.isCurrentQtyOne=true;
       }
     }
     if(stockType=='older'){
@@ -209,14 +218,15 @@ export class StockUploadMappingComponent {
          this.stockType="older"
       }
       else{
-        this.onSubmit('older')
+       this.onSubmit('older')
+    this.isOlderQtyOne=true;
       }
      
     }
 
     if(stockType=='Edit Current'){
       this.visibleStockCalculation=true;
-      console.log("edit currentt in stock Qty ",this.editCurrentDayStockForm.value)
+   //   console.log("edit currentt in stock Qty ",this.editCurrentDayStockForm.value)
       this.columnsForStockCalculation=this.editCurrentDayStockForm.value.stockQty;
     //  console.log(this.columnsForStockCalculation)
    //   this.patchStockCalculation(this.viewMappedData[0].calculativeField)
@@ -233,7 +243,8 @@ export class StockUploadMappingComponent {
         this.stockType="Edit Current"   
       }
       else{
-        this.onSubmit('Edit Current');
+      //  this.onSubmit('Edit Current');
+      this.isCurrentQtyOne=true;
       }
      
     }
@@ -257,10 +268,119 @@ export class StockUploadMappingComponent {
         this.stockType="Edit Older"   
       }
       else{
-        this.onSubmit('Edit Older');
+       // this.onSubmit('Edit Older');
+       this.isOlderQtyOne=true;
+      }
+ 
+    }
+
+    if(stockType=='Add From Table'){
+    //  console.log("is executed 269 ",addCurrentDaysStockFromTable,addOlderDaysStockFromTable)
+      this.visibleStockCalculation=true;
+      if(addCurrentDaysStockFromTable){
+      //  console.log("Add currentt from table in stock Qty ",this.currentStockForm.value)
+
+        this.columnsForStockCalculation=this.currentStockForm.value.stockQty;
+          console.log("form value ",this.columnsForStockCalculation)
+          if(this.columnsForStockCalculation.length>1){
+            this.visibleStockCalculation=true;
+            this.resetOperations(); 
+            const size = this.columnsForStockCalculation.length - 1;
+           // console.log("size ",size)
+            for (let i = 0; i < size; i++) {      
+              this.operations.push(this.createOperationGroup());
+            }
+            this.stockType="add current"
+            
+          }
+          else{
+         //   console.log("else executed ")
+            this.visibleStockCalculation=false;
+            this.isCurrentQtyOne=true
+            this.addMappingFromTable(addCurrentDaysStockFromTable,addOlderDaysStockFromTable);
+          }
+        }
+       
+        if(addOlderDaysStockFromTable){
+          this.visibleStockCalculation=true;
+         // console.log("Add older from table in stock Qty ",this.olderStockForm.value)
+          this.columnsForStockCalculation=this.olderStockForm.value.stockQty;
+          //  console.log("form value ",this.currentStockForm.value)
+            if(this.columnsForStockCalculation.length>1){
+              this.visibleStockCalculation=true;
+              this.resetOperations(); 
+              const size = this.columnsForStockCalculation.length - 1;
+             // console.log("size ",size)
+              for (let i = 0; i < size; i++) {      
+                this.operations.push(this.createOperationGroup());
+              }
+              this.stockType="add older"
+              
+            }
+          else{
+         //   this.addMappingFromTable(addCurrentDaysStockFromTable,addOlderDaysStockFromTable);
+         this.isOlderQtyOne=true;
+          }
+        }
       }
 
+      if(stockType=='Edit Current From Table'){
+        this.columnsForStockCalculation=this.editCurrentDayStockForm.value.stockQty;
+      console.log("form value ",this.editCurrentDayStockForm.value)
+      if(this.columnsForStockCalculation.length>1){
+        this.visibleStockCalculation=true;
+        this.resetOperations(); 
+        const size = this.columnsForStockCalculation.length - 1;
+       // console.log("size ",size)
+        for (let i = 0; i < size; i++) {      
+          this.operations.push(this.createOperationGroup());
+        }
+        this.stockType="Edit Current From Table"
+       // this.editFromTable(addCurrentDaysStockFromTable,addOlderDaysStockFromTable);
+       
+      }
+      else{
+        this.isCurrentQtyOne=true;
+     //   this.editFromTable(addCurrentDaysStockFromTable,addOlderDaysStockFromTable);
+      }
     }
+      if(stockType=='Edit Older From Table'){
+        this.columnsForStockCalculation=this.editOlderDaysStockForm.value.stockQty;
+    //  console.log("form value ",this.currentStockForm.value)
+      if(this.columnsForStockCalculation.length>1){
+        this.visibleStockCalculation=true;
+        this.resetOperations(); 
+        const size = this.columnsForStockCalculation.length - 1;
+       // console.log("size ",size)
+        for (let i = 0; i < size; i++) {      
+          this.operations.push(this.createOperationGroup());
+        }
+        this.stockType="Edit Older From Table"
+      // this.editFromTable(addCurrentDaysStockFromTable,addOlderDaysStockFromTable);
+      }
+      else{
+       // this.editFromTable(addCurrentDaysStockFromTable,addOlderDaysStockFromTable);
+       this.isOlderQtyOne=true;
+      }
+      }
+  }
+
+  checkStockQtySelection(stockType:any){
+    
+    if(stockType=='edit current'){
+      this.editCurrentDayStockForm.get('stockQty')?.valueChanges.subscribe((selected: any[]) => {
+        this.isCurrentQtyOne = selected.length >1 ? false:true;
+      });
+    }
+
+    if(stockType=='edit older'){
+      this.editOlderDaysStockForm.get('stockQty')?.valueChanges.subscribe((selected: any[]) => {
+        this.isOlderQtyOne = selected.length >1 ? false:true;
+      });
+    }
+
+
+   
   }
 
   resetOperations() {
@@ -323,7 +443,8 @@ export class StockUploadMappingComponent {
           part_number:item.part_number,
           loc:item.loc,
           stock_qty:item.stock_qty,
-          id:item.id
+          id:item.id,
+          current_calculativeField:item.calculativeField
           
         };
       } else if (stock_type === 'older') {
@@ -335,6 +456,7 @@ export class StockUploadMappingComponent {
           stock_qty:item.stock_qty,
           id:item.id,
           added_on: this.formatDate(item.added_on),
+          older_calculativeField:item.calculativeField
         };
       }
 
@@ -345,7 +467,7 @@ export class StockUploadMappingComponent {
 
     const finalResult = Object.keys(groupedData).map((brand_id) => {
       const data = groupedData[brand_id];
-
+    //  console.log("data ",data)
       return {
         brand_id,
         currentBrandColumns:data.current.currentBrandColumns,
@@ -365,10 +487,12 @@ export class StockUploadMappingComponent {
         older_added_on: data.older.added_on || '-',
         current_data_exists: data.current.added_by ? true : false, // Set to true if current data exists
         older_data_exists: data.older.added_by ? true : false,
+        older_calculativeField:data.older.older_calculativeField,
+        current_calculativeField:data.current.current_calculativeField
       };
     });
     this.tableData = finalResult;
-    //  console.log(this.tableData);
+    // console.log(this.tableData);
   }
 
   formatDate(dateString: string): string {
@@ -444,6 +568,7 @@ export class StockUploadMappingComponent {
     this.editCurrentDayStockForm.get('location')?.disable();
     this.editCurrentDayStockForm.get('calculativeField')?.disable();
     this.visible = true;
+   this.viewColumnMapping()
   }
 
   showEditStock(stockType: any, dataExist: any,rowData:any) {
@@ -461,7 +586,7 @@ export class StockUploadMappingComponent {
     this.editCurrentDayStockForm.get('stockQty')?.disable();
     this.editCurrentDayStockForm.get('location')?.disable();
     this.editCurrentDayStockForm.get('calculativeField')?.disable();
-
+  //  console.log("stock type 519 ",stockType)
     if (stockType == 'current') {
       if (dataExist) {
         // console.log("data exist",dataExist)
@@ -475,7 +600,7 @@ export class StockUploadMappingComponent {
           partNumber: rowData.current_part_number,
           location: rowData.current_loc,
           stockQty: rowData.current_stock_qty.split(','),
-          calculativeField:rowData.calculativeField
+          calculativeField:rowData.current_calculativeField
         });
          console.log("show current ",this.editCurrentDayStockForm.value)
       } else {
@@ -499,14 +624,15 @@ export class StockUploadMappingComponent {
         this.showforEditOlderData = true;
         // this.editCurrentDaysStock=false;
         // this.editOlderDaysStock=true;
+        console.log("older ",this.editOlderDaysStockForm.value,rowData)
         this.showCurrentStockColumnsInTable=JSON.parse(rowData.olderBrandColumns);
         this.editOlderDaysStockForm.patchValue({
           partNumber: rowData.older_part_number,
           location: rowData.older_loc,
           stockQty: rowData.older_stock_qty.split(','),
-          calculativeField:rowData.calculativeField
+          calculativeField:rowData.older_calculativeField
         });
-       console.log("older ",this.editOlderDaysStockForm)
+    //   console.log("older ",this.editOlderDaysStockForm)
       } else {
         this.showforEditCurrentData = false;
         this.showforAddOlderData = true;
@@ -523,8 +649,9 @@ export class StockUploadMappingComponent {
     }
   }
 
-  editFromTable(isCurrent:any,isOlder:any){
+  editFromTable(isCurrent:any,isOlder:any,formula?:any){
     // console.log("edit fromtable ",isCurrent,isOlder)
+    
     if (isCurrent) {
       if (this.editCurrentDayStockForm.valid) {
         if(this.showCurrentStockColumnsInTable.length==0){
@@ -536,6 +663,7 @@ export class StockUploadMappingComponent {
             brandId: this.rowData?.brand_id,
             values: this.editCurrentDayStockForm.value,
             brandColumns: this.showCurrentStockColumnsInTable,
+            calculativeField:formula,
             userId: 1,
             stockType: 'current',
             id: this.rowData.current_id,
@@ -543,6 +671,7 @@ export class StockUploadMappingComponent {
           .subscribe(
             (res: any) => {
               this.globalBlockUIService.stopLoading();
+              this.visibleStockCalculation=false;
               this.viewAllExistingMapping();
               this.messageService.add({
                 severity: 'success',
@@ -552,6 +681,7 @@ export class StockUploadMappingComponent {
             },
             (error: any) => {
               this.globalBlockUIService.stopLoading();
+              this.visibleStockCalculation=false;
               this.messageService.add({
                 severity: 'error',
                 summary:
@@ -563,6 +693,7 @@ export class StockUploadMappingComponent {
               this.globalBlockUIService.stopLoading();
               this.visibleViewEditPopUp=false
               this.clearSelectedFiles();
+              this.visibleStockCalculation=false;
             }
           );
       }
@@ -586,6 +717,7 @@ export class StockUploadMappingComponent {
             brandId: this.rowData?.brand_id,
             values: this.editOlderDaysStockForm.value,
             brandColumns: this.showOlderStockColumnsInTable,
+            calculativeField:formula,
             userId: 1,
             stockType: 'older',
             id: this.rowData.older_id,
@@ -594,6 +726,7 @@ export class StockUploadMappingComponent {
             (res: any) => {
               this.globalBlockUIService.stopLoading();
               this.viewAllExistingMapping();
+              this.visibleStockCalculation=false
               this.messageService.add({
                 severity: 'success',
                 summary: 'Mapping has been successfully updated !',
@@ -607,11 +740,13 @@ export class StockUploadMappingComponent {
                   'Error in updating the mapping for current stocks !',
                 life: 4000,
               });
+              this.visibleStockCalculation=false
             },
             () => {
               this.globalBlockUIService.stopLoading();
               this.visibleViewEditPopUp=false
               this.clearSelectedFiles();
+              this.visibleStockCalculation=false;
             }
           );
       }
@@ -632,6 +767,33 @@ export class StockUploadMappingComponent {
 
   addMappingFromTable(isCurrent:any,isOlder:any){
 
+    let formula=''
+    if(this.visibleStockCalculation){
+      if (this.stockCalculationForm.invalid) {
+        this.stockCalculationForm.markAllAsTouched(); // show errors
+        return;
+      }else{
+      this.calculativeFormula='';
+    //  console.log("this cal form ",this.stockCalculationForm.value)
+      const formValue = this.stockCalculationForm.value;
+  
+    this.calculativeFormula = formValue?.firstColumn?.trim() || '';
+  
+    if (formValue.operations && formValue.operations.length > 0) {
+      for (const op of formValue.operations) {
+        const operator = op.operator?.trim();
+        const column = op.column?.trim();
+  
+        if (operator && column) {
+          this.calculativeFormula += ` ${operator} ${column}`;
+        }
+      }
+    }
+
+   formula=this.calculativeFormula
+  }
+    }
+
     this.selectedFile=''
     this.selectedFileName=''
    // console.log("row data ",this.rowData)
@@ -642,6 +804,7 @@ export class StockUploadMappingComponent {
           brandId: this.rowData?.brand_id,
             values: this.currentStockForm.value,
             brandColumns: this.currentStockColumns,
+            calculativeField:formula,
             userId: 1,
             stockType: 'current',
         }).subscribe((res:any)=>{
@@ -681,6 +844,7 @@ export class StockUploadMappingComponent {
           brandId: this.rowData?.brand_id,
             values: this.olderStockForm.value,
             brandColumns: this.olderStockColumns,
+            calculativeField:formula,
             userId: 1,
             stockType: 'older',
         }).subscribe((res:any)=>{
@@ -910,9 +1074,10 @@ export class StockUploadMappingComponent {
 
 
   editMappingWithViewEditBtn(formula?:any){
-    for (let i = 0; i < this.viewMappedData.length; i++) {
+    for (let i = 0; i < this.viewMappedData?.length; i++) {
       this.globalBlockUIService.startLoading();
      // console.log("edit current ",this.editCurrentDayStockForm.value)
+     console.log("stok type 1007 ",this.stockType)
       if (this.editCurrentDayStockForm.valid) {
         if (this.viewMappedData[i].stock_type == 'current' && this.stockType=='Edit Current') {
           this.stockUploadMappingService
@@ -956,6 +1121,7 @@ export class StockUploadMappingComponent {
         }
        
       } else {
+        this.globalBlockUIService.stopLoading()
         Object.keys(this.editCurrentDayStockForm.controls).forEach(
           (controlName: any) => {
             this.editCurrentDayStockForm
@@ -1024,7 +1190,7 @@ patchStockCalculation(formula: string) {
 
   // Step 1: Patch the first column value
   const first = parts[0];
-  this.stockCalculationForm.patchValue({ firstColumn: first });
+ // this.stockCalculationForm.patchValue({ firstColumn: first });
 
   // Step 2: Clear previous operations and reset columns array
   this.operations.clear();
@@ -1082,21 +1248,28 @@ patchStockCalculation(formula: string) {
     .subscribe(
       (res: any) => {
         this.viewMappedData = res.data;
-        // console.log(this.viewMappedData);
+         console.log(this.viewMappedData);
         if (this.viewMappedData.length > 0) {
           this.isMappingExist = true;
           this.visibleMapping = true;
+        //  console.log("view mapped data ",this.viewMappedData)
+
           if(this.viewMappedData.length==1){
             if (this.viewMappedData[0].stock_type == 'current') {
               this.editOlderStockColumns=[];
               this.editCurrentStockColumns = JSON.parse(
                 this.viewMappedData[0]?.brandColumns
               );
+              let calcField = this.viewMappedData[0].calculativeField;
+              // if (calcField == null) {
+              //   this.isQtyOne = true;
+              // }
+              
               this.editCurrentDayStockForm.patchValue({
                 partNumber: this.viewMappedData[0].part_number,
                 location: this.viewMappedData[0].loc,
                 stockQty: this.viewMappedData[0].stock_qty.split(','),
-                calculativeField:this.viewMappedData[0].calculativeField
+                calculativeField: calcField
               });
              // this.patchStockCalculation(this.viewMappedData[0].calculativeField)
             }else{
@@ -1105,11 +1278,16 @@ patchStockCalculation(formula: string) {
                 this.viewMappedData[0]?.brandColumns
               );
               //  console.log("edit older stock columns",this.editOlderStockColumns)
-              this.editOlderDaysStockForm.patchValue({
+              let calcField = this.viewMappedData[0].calculativeField;
+              // if (calcField == null) {
+              //   this.isQtyOne = true;
+              // }
+              
+              this.editCurrentDayStockForm.patchValue({
                 partNumber: this.viewMappedData[0].part_number,
                 location: this.viewMappedData[0].loc,
                 stockQty: this.viewMappedData[0].stock_qty.split(','),
-                calculativeField:this.viewMappedData[0].calculativeField
+                calculativeField: calcField
               });
            //   this.patchStockCalculation(this.viewMappedData[0].calculativeField)
             }
@@ -1123,12 +1301,19 @@ patchStockCalculation(formula: string) {
               this.editCurrentStockColumns = JSON.parse(
                 this.viewMappedData[i]?.brandColumns
               );
+              let calcField = this.viewMappedData[i].calculativeField;
+              // if (calcField == null) {
+              //   this.isQtyOne = true;
+              // }
+              
               this.editCurrentDayStockForm.patchValue({
+
                 partNumber: this.viewMappedData[i].part_number,
                 location: this.viewMappedData[i].loc,
                 stockQty: this.viewMappedData[i].stock_qty.split(','),
-                calculativeField:this.viewMappedData[i].calculativeField
+                calculativeField: calcField
               });
+             
               //this.patchStockCalculation(this.viewMappedData[0].calculativeField)
               // console.log(this.editCurrentStockColumns)
             }
@@ -1138,11 +1323,16 @@ patchStockCalculation(formula: string) {
                 this.viewMappedData[i]?.brandColumns
               );
               //  console.log("edit older stock columns",this.editOlderStockColumns)
+              let calcField = this.viewMappedData[i].calculativeField;
+              // if (calcField == null) {
+              //   this.isQtyOne = true;
+              // }
+              
               this.editOlderDaysStockForm.patchValue({
                 partNumber: this.viewMappedData[i].part_number,
                 location: this.viewMappedData[i].loc,
                 stockQty: this.viewMappedData[i].stock_qty.split(','),
-                calculativeField:this.viewMappedData[i].calculativeField
+                calculativeField: calcField
               });
             //  this.patchStockCalculation(this.viewMappedData[0].calculativeField)
             }
@@ -1471,8 +1661,8 @@ patchStockCalculation(formula: string) {
     this.editCurrentDayStockForm.get('location')?.enable();
   }
 
-  onSubmit(stockType?:any) {
-    // console.log("clicked ",this.isMappingForBothOlder)
+  onSubmit(stockType?:any,editCurrentFromTable?:any,editOlderFromTable?:any) {
+     console.log("clicked ",stockType,this.stockCalculationForm.invalid)
     if(this.visibleStockCalculation){
       if (this.stockCalculationForm.invalid) {
         this.stockCalculationForm.markAllAsTouched(); // show errors
@@ -1497,8 +1687,21 @@ patchStockCalculation(formula: string) {
   }
     }
    
-    if(stockType='Edit Current'){
+    if(stockType=='Edit Current'){
       this.editMappingWithViewEditBtn(this.calculativeFormula)
+    }
+
+    if(stockType=='Edit Older'){
+      this.editMappingWithViewEditBtn(this.calculativeFormula)
+    }
+
+    if(stockType=='Edit Current From Table'){
+  //    console.log("executed ")
+      this.editFromTable(true,false,this.calculativeFormula)
+    }
+
+    if(stockType=='Edit Older From Table'){
+      this.editFromTable(false,true,this.calculativeFormula)
     }
   // console.log("calculative formula ",this.calculativeFormula)
     if (this.isMappingForBothOlder) {
@@ -1676,6 +1879,8 @@ patchStockCalculation(formula: string) {
           );
       }
     }
+
+   
   }
 
 }

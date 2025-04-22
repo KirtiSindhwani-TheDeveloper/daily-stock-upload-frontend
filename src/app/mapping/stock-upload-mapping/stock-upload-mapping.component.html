@@ -366,14 +366,16 @@
                 placeholder="Select"
                 class="dropdown !mt-3 "
               /> -->
-              <p-multiselect [options]="editCurrentStockColumns" appendTo="body" placeholder="Select" styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
+              <p-multiselect [options]="editCurrentStockColumns"
+               appendTo="body" placeholder="Select" (onChange)="checkStockQtySelection('edit current')"
+                styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
             </div>
           </div>
         
           <div class="  mt-1" *ngIf="editCurrentDayStockForm.get('stockQty')?.touched && editCurrentDayStockForm?.get('stockQty')?.invalid " >
             <small *ngIf="editCurrentDayStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
            </div>
-           <div class="row">
+           <div class="row" *ngIf="!isCurrentQtyOne">
             <div class="col-6 d-flex  align-items-center mt-2">
               <span>Stock Calculation:</span>
             </div>
@@ -386,7 +388,7 @@
                 class="dropdown !mt-3 "
               /> -->
               <input type="text" pInputText formControlName="calculativeField" />
-              <i class='bx bx-edit-alt ms-2 cursor-pointer'  *ngIf="editCurrentDaysStock" (click)="showCalculationDialog('Edit Current')"></i>
+              <i class='bx bx-edit-alt ms-2 cursor-pointer'  *ngIf="editCurrentDaysStock ||  !isCurrentQtyOne" (click)="showCalculationDialog('Edit Current')"></i>
             </div>
           </div>
            <!-- <div class="d-flex justify-start">
@@ -486,13 +488,15 @@
                 formControlName="stockQty"
                 class="dropdown !mt-3 "
               /> -->
-              <p-multiselect [options]="editOlderStockColumns" appendTo="body" placeholder="Select" styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
+              <p-multiselect [options]="editOlderStockColumns"
+               appendTo="body" placeholder="Select" (onChange)="checkStockQtySelection('edit older')"
+                styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
             </div>
           </div>
           <div class="  mt-1" *ngIf="editOlderDaysStockForm.get('stockQty')?.touched && editOlderDaysStockForm?.get('stockQty')?.invalid " >
             <small *ngIf="editOlderDaysStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
            </div>
-           <div class="row">
+           <div class="row" *ngIf="!isOlderQtyOne">
             <div class="col-6 d-flex  align-items-center mt-2">
               <span>Stock Calculation:</span>
             </div>
@@ -505,7 +509,7 @@
                 class="dropdown !mt-3 "
               /> -->
               <input type="text" pInputText formControlName="calculativeField" />
-              <i class='bx bx-edit-alt ms-2 cursor-pointer'  *ngIf="editOlderDaysStock" (click)="showCalculationDialog('Edit Older')"></i>
+              <i class='bx bx-edit-alt ms-2 cursor-pointer'  *ngIf="editOlderDaysStock "  (click)="showCalculationDialog('Edit Older')"></i>
             </div>
           </div>
         </form>
@@ -513,24 +517,27 @@
     </div>
   </div>
   <ng-template #footer>
-    <p-button 
-      label="Ok"
-      [text]="true"
-      severity="secondary"
-      (click)="visible = false"
-    />
-    <!-- <p-button *ngIf="editCurrentDaysStock || editOlderDaysStock"
+ 
+    <p-button
+    label="Ok"
+    [text]="true"
+    severity="secondary"
+    *ngIf=" !editCurrentDaysStock && !editOlderDaysStock "
+    (click)="visibleViewEditPopUp = false"
+  />
+    <p-button *ngIf="editCurrentDaysStock || editOlderDaysStock || isCurrentQtyOne || isOlderQtyOne"
       label="Cancel"
       [text]="true"
       severity="secondary"
       (click)="visible = false"
     />
-    <p-button *ngIf="editCurrentDaysStock || editOlderDaysStock"
+    <p-button *ngIf="editCurrentDaysStock || editOlderDaysStock ||  isCurrentQtyOne || isOlderQtyOne"
       label="Save"
       [outlined]="true"
       severity="secondary"
+      [disabled]="(!isCurrentQtyOne && calculativeFormula=='') || (!isOlderQtyOne && calculativeFormula=='')"
        (click)="editMappingWithViewEditBtn()"
-    /> -->
+    />
   </ng-template>
 </p-dialog>
 
@@ -666,6 +673,7 @@
                   class="pb-3"
                 />
               </div>
+
             </div>
             <form [formGroup]="editCurrentDayStockForm">
               <div class="row">
@@ -714,13 +722,32 @@
                     placeholder="Select"
                     class="dropdown !mt-3 "
                   /> -->
-                  <p-multiselect [options]="showCurrentStockColumnsInTable" appendTo="body" placeholder="Select" styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
+                  <p-multiselect 
+                  [options]="showCurrentStockColumnsInTable"
+                   appendTo="body" 
+                   (onchange)="checkStockQtySelection('edit current')" placeholder="Select" styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
                 </div>
               </div>
               <div class="  mt-1" *ngIf="editCurrentDayStockForm.get('stockQty')?.touched && editCurrentDayStockForm?.get('stockQty')?.invalid " >
                 <small *ngIf="editCurrentDayStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
                </div>
-
+ <div class="row" *ngIf="!isCurrentQtyOne">
+            <div class="col-6 d-flex  align-items-center mt-2">
+              <span>Stock Calculation:</span>
+            </div>
+            <div class="col-6">
+              <!-- <p-select  appendTo="body"
+                [options]="editCurrentStockColumns"
+                formControlName="stockQty"
+               
+                placeholder="Select"
+                class="dropdown !mt-3 "
+              /> -->
+              <input type="text" pInputText formControlName="calculativeField" />
+              <i class='bx bx-edit-alt ms-2 cursor-pointer'  *ngIf="editCurrentDaysStock"
+               (click)="showCalculationDialog('Edit Current From Table',editCurrentDaysStock,editOlderDaysStock)"></i>
+            </div>
+          </div>
             </form>
           </div>
         </div>
@@ -809,12 +836,30 @@
                     formControlName="stockQty"
                     class="dropdown !mt-3 "
                   /> -->
-                  <p-multiselect [options]="showCurrentStockColumnsInTable" appendTo="body" placeholder="Select" styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
+                  <p-multiselect [options]="showCurrentStockColumnsInTable"
+                  (onChange)="checkStockQtySelection('edit older')" appendTo="body" placeholder="Select" styleClass="w-full md:w-80" class="dropdown !mt-3 " formControlName="stockQty"/>
                 </div>
               </div>
               <div class="  mt-1" *ngIf="editOlderDaysStockForm.get('stockQty')?.touched && editOlderDaysStockForm?.get('stockQty')?.invalid " >
                 <small *ngIf="editOlderDaysStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
                </div>
+
+               <div class="row" *ngIf="!isOlderQtyOne">
+                <div class="col-6 d-flex  align-items-center mt-2">
+                  <span>Stock Calculation:</span>
+                </div>
+                <div class="col-6">
+                  <!-- <p-select  appendTo="body"
+                    [options]="editCurrentStockColumns"
+                    formControlName="stockQty"
+                   
+                    placeholder="Select"
+                    class="dropdown !mt-3 "
+                  /> -->
+                  <input type="text" pInputText formControlName="calculativeField" />
+                  <i class='bx bx-edit-alt ms-2 cursor-pointer'  *ngIf="editOlderDaysStock" (click)="showCalculationDialog('Edit Older From Table',editCurrentDaysStock,editOlderDaysStock)"></i>
+                </div>
+              </div>
             </form>
           </div>
         </div>
@@ -838,6 +883,7 @@
           label="Save"
           [outlined]="true"
           severity="secondary"
+          [disabled]="(!isCurrentQtyOne && calculativeFormula=='') || (!isOlderQtyOne && calculativeFormula=='')"
           (click)="editFromTable(editCurrentDaysStock,editOlderDaysStock)"
           *ngIf="editOlderDaysStock || editCurrentDaysStock"
         />
@@ -942,7 +988,7 @@
               <div class="  mt-1" *ngIf="currentStockForm.get('stockQty')?.touched && currentStockForm?.get('stockQty')?.invalid " >
                 <small *ngIf="currentStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
                </div>
-             
+              
             </form>
           </div>
         </div>
@@ -1036,7 +1082,6 @@
                 <small *ngIf="olderStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
                </div>
 
-              
             </form>
           </div>
         </div>
@@ -1053,16 +1098,16 @@
           label="Save"
           [outlined]="true"
           severity="secondary"
-          (click)="addMappingFromTable(showAddCurrentData,showAddOlderData)"
+          (click)="showCalculationDialog('Add From Table',showAddCurrentData,showAddOlderData)"
         />
       </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="visibleStockCalculation" header="Stock Calculation" [modal]="true" [style]="{ width: '45rem' }">
+<p-dialog [(visible)]="visibleStockCalculation" header="Stock Calculation" [modal]="true" [style]="{ width: '45rem' }" >
   <form [formGroup]="stockCalculationForm">
     <div class="d-flex flex-row">
       <!-- First fixed dropdown -->
-      <div class="d-flex align-items-center">
+      <div class="">
         <p-select appendTo="body"
           formControlName="firstColumn"
           [options]="columnsForStockCalculation"
@@ -1070,6 +1115,9 @@
           [ngClass]="{ 'ng-invalid': stockCalculationForm.get('firstColumn')?.invalid && stockCalculationForm.get('firstColumn')?.touched }"
           class="st-dropdown">
         </p-select>
+        <small class="text-danger d-flex" *ngIf="stockCalculationForm.get('firstColumn')?.touched && stockCalculationForm.get('firstColumn')?.hasError('required')">
+          Column is required.
+        </small>
       </div>
   
       <!-- Operator + Column pairs -->
@@ -1083,6 +1131,9 @@
               [ngClass]="{ 'ng-invalid': op.get('operator')?.invalid && op.get('operator')?.touched }"
               class="operator-dropdown">
             </p-select>
+            <small class="text-danger d-flex" *ngIf="op.get('operator')?.touched && op.get('operator')?.hasError('required')">
+              Operator is required.
+            </small>
           </div>
           <div class="ms-2">
             <p-select appendTo="body"
@@ -1093,6 +1144,9 @@
               [ngClass]="{ 'ng-invalid': op.get('column')?.invalid && op.get('column')?.touched }"
               class="st-dropdown">
             </p-select>
+            <small class="text-danger d-flex" *ngIf="op.get('column')?.touched && op.get('column')?.hasError('required')">
+              Column is required.
+            </small>
           </div>
         </div>
       </div>

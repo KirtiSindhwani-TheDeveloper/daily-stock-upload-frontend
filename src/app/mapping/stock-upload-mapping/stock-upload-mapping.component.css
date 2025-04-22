@@ -187,6 +187,11 @@ span{
 :host ::ng-deep input.p-inputtext.p-component.ng-untouched.ng-pristine.p-filled{
     font-size: 14px;
     padding: 4px;
+   
+}
+
+:host ::ng-deep input.p-inputtext.p-component{
+    width: 230px;
 }
 
  
