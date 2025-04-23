@@ -172,6 +172,9 @@ export class SingleStockUploadComponent {
           this.fu?.clear();
           this.file=null;
           this.selectedFile=null;
+          if(res?.data?.missingFields){
+            return this.messageService.add({severity:'error',life:4000,summary:`Required Fields for Quantity are not present ${res?.data?.missingFields}!`})
+          }
           return this.messageService.add({severity:'error',life:4000,summary:'Headers are not matched with the required fields!'})
         }
         if(res?.data?.mappingNotPresent){
