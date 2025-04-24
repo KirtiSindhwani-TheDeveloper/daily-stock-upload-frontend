@@ -731,7 +731,7 @@
               <div class="  mt-1" *ngIf="editCurrentDayStockForm.get('stockQty')?.touched && editCurrentDayStockForm?.get('stockQty')?.invalid " >
                 <small *ngIf="editCurrentDayStockForm?.get('stockQty')?.hasError('required')" style="color: red; font-size: 12px;">Stock Quantity is required.</small> 
                </div>
- <div class="row" >
+ <div class="row" *ngIf="!isCurrentQtyOne">
             <div class="col-6 d-flex  align-items-center mt-2">
               <span>Stock Calculation:</span>
             </div>

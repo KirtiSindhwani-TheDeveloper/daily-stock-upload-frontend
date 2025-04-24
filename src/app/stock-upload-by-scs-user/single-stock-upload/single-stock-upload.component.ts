@@ -200,11 +200,11 @@ export class SingleStockUploadComponent {
           this.showTable=true;
           this.prevUploadQuantity=res.prevUploadQuantity;
         }
-        if(res?.data.currentRecords){
+        if(res?.data?.currentRecords){
           this.showTable=true;
           this.currentCountRecords=res.currentRecords;
         }
-        if(res?.data.prevRecords){
+        if(res?.data?.prevRecords){
           this.showTable=true;
           this.prevCountRecords=res.prevCountRecords;
         }

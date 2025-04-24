@@ -377,14 +377,16 @@ export class StockUploadMappingComponent {
   checkStockQtySelection(stockType:any){
     
     if(stockType=='edit current'){
+      this.isOlderQtyOne=false;
       this.editCurrentDayStockForm.get('stockQty')?.valueChanges.subscribe((selected: any[]) => {
-        this.isCurrentQtyOne = selected.length >1 ? false:true;
+        this.isCurrentQtyOne = selected?.length >1 ? false:true;
       });
     }
 
     if(stockType=='edit older'){
+      this.isCurrentQtyOne=false
       this.editOlderDaysStockForm.get('stockQty')?.valueChanges.subscribe((selected: any[]) => {
-        this.isOlderQtyOne = selected.length >1 ? false:true;
+        this.isOlderQtyOne = selected?.length >1 ? false:true;
       });
     }
 
@@ -1438,7 +1440,7 @@ patchStockCalculation(formula: string) {
     } else if (stockType == 'Older' || stockType=='Add Older From Table') {
      
       this.globalBlockUIService.startLoading();
-
+      this.formData.append('stock_type','older')
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.globalBlockUIService.stopLoading();
@@ -1477,6 +1479,7 @@ patchStockCalculation(formula: string) {
       this.editCurrentStockColumns = [];
       this.globalBlockUIService.startLoading();
       this.editCurrentDayStockForm?.get('stockQty')?.reset();
+     
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.globalBlockUIService.stopLoading();
@@ -1518,6 +1521,7 @@ patchStockCalculation(formula: string) {
       this.globalBlockUIService.startLoading();
       this.editOlderStockColumns = [];
       this.editOlderDaysStockForm?.get('stockQty')?.reset();
+      this.formData.append('stock_type','older')
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
 
@@ -1599,6 +1603,7 @@ patchStockCalculation(formula: string) {
       this.showOlderStockColumnsInTable = [];
       this.editOlderDaysStockForm?.get('stockQty')?.reset();
       this.globalBlockUIService.startLoading();
+      this.formData.append('stock_type','older')
       this.utilitiesService.singleUploadFile(this.formData).subscribe(
         (res: any) => {
           this.showOlderStockColumnsInTable = this.validateArray(res.data.headers);
